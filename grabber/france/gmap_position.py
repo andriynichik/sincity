@@ -24,9 +24,9 @@ log = FileLog('./log/gmaps_position_france_{date}.log'.format(date=datetime.date
 log.add('Start', log.INFO)
 log.add('Params: [{0}]'.format(repr(opts).encode('utf-8')), log.INFO)
 
-use_address = opts.lat and opts.lng
-latitude = opts.lat if use_address else ''
-longitude = opts.lng if use_address else ''
+use_position = opts.lat and opts.lng
+latitude = opts.lat if use_position else ''
+longitude = opts.lng if use_position else ''
 force_update = opts.f
 
 def update_meta(request, document):
@@ -36,9 +36,9 @@ def update_meta(request, document):
     document.update(actual_doc)
 
 try:
-    if use_address:
-        address_content = loader.by_position(lat=latitude, lng=longitude)
-        objects = MapFactory.france(address_content)
+    if use_position:
+        position_content = loader.by_position(lat=latitude, lng=longitude)
+        objects = MapFactory.france(position_content)
         for object in objects:
             code = object.get_place_id()
             if object.get_place_id():
