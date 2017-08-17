@@ -6,8 +6,8 @@ cd $PROJECT_PATH
 
 docker-compose -f $PROJECT_PATH/docker/docker-compose.yml build --no-cache
 
-docker-compose -f $PROJECT_PATH/docker/docker-compose.yml rm -f -s
-
 docker-compose -f $PROJECT_PATH/docker/docker-compose.yml stop
+
+docker-compose -f $PROJECT_PATH/docker/docker-compose.yml rm -f -s
 
 docker-compose -f $PROJECT_PATH/docker/docker-compose.yml up -d
