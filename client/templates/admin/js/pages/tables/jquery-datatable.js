@@ -1,14 +1,21 @@
 $(function () {
-    $('.js-basic-example').DataTable({
-        responsive: true
-    });
-
+    var table;
     //Exportable table
-    $('.js-exportable').DataTable({
+    table = $('.js-exportable').DataTable({
         dom: 'Bfrtip',
         responsive: true,
         buttons: [
-            'copy', 'csv', 'excel', 'pdf', 'print'
+            'csv', 'excel', 'pdf', 'print'
         ]
     });
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+
+        // Get the column API object
+        var column = table.column( $(this).attr('data-column') );
+
+        // Toggle the visibility
+        column.visible( ! column.visible() );
+    } );
 });
