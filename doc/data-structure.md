@@ -224,12 +224,12 @@ i18n - dict названия на разных языках
 admin_hierarchy - list список в порядке убывания  всех уровней админ делений до этого пункта (позволит миксовать запросы к тому-же гуглу)
 ```text
   [
-    {name:France, type:country, i18n:{en:{name:France, url:http://en.wiki...}, ru:{name:Франция, url:http://ru.wiki...}},
+    {name:France, type:country, url:'http://fr.wiki....', i18n:{en:{name:France, url:http://en.wiki...}, ru:{name:Франция, url:http://ru.wiki...}},
     {...},
-    {name:Île-de-France, type:region, i18n:{...}},
-    {name:Paris, type:department, i18n:{...}},
+    {name:Île-de-France, type:region, url:'http://fr.wiki....', i18n:{...}},
+    {name:Paris, type:department, url:'http://fr.wiki....', i18n:{...}},
     {...},
-    {name:Paris, type:district, i18n:{...}}
+    {name:Paris, type:district, url:'http://fr.wiki....', i18n:{...}}
     {...}
   ]
 ```
