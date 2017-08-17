@@ -155,7 +155,7 @@ class GMap(Parser):
     def _parse_admin_element(self, element):
         result = {}
         if 'long_name' in element:
-            result.update(long_name=element.get('long_name'))
+            result.update(name=element.get('long_name'))
         if 'short_name' in element:
             result.update(short_name=element.get('short_name'))
 

@@ -1,10 +1,15 @@
 from lib.job.storage.Storage import Storage
+from pymongo import MongoClient
 
 
 class MongoDB(Storage):
 
-    def __init__(self, job_name, db):
-        self.collection = db[job_name]
+    def __init__(self, job_name, storage_config):
+        connection = MongoClient(storage_config['host'], storage_config['port'])
+        self.collection = connection.job[job_name]
+
+    def add(self, job):
+        self.collection.insert_one(job)
 
     def get_active(self):
         return self.collection.find_all({'status': self.STATUS_ACTIVE})
