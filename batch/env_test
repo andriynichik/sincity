@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+
+if type "python3.6 --version" > /dev/null; then
+    PYTHON='python3.6'
+elif type "python3 --version" > /dev/null; then
+    PYTHON='python3'
+else
+    PYTHON='python'
+fi
+
+mongo --version
+
+git --version
+
+$PYTHON --version
+
+nginx --version
+
+$PYTHON -m pip freeze | grep -i pymongo
+
+$PYTHON -m pip freeze | grep -i geopy
+
+$PYTHON -m pip freeze | grep -i beautifulsoup4
+
+$PYTHON -m pip freeze | grep -i pyyaml
+
+$PYTHON -m pip freeze | grep -i matplotlib
+
+$PYTHON -m pip freeze | grep -i pandas
+
+$PYTHON -m pip freeze | grep -i googlemaps
+
+$PYTHON -m pip freeze | grep -i Flask
+

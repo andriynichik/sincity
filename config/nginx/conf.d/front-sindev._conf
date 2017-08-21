@@ -2,18 +2,18 @@ server {
     listen 80 default_server;
 	server_name _;
 
-    #access_log  /var/www/log/nginx/access.log;
-    #error_log   /var/www/log/nginx/error.log;
+    access_log  /var/www/webcrawler/log/nginx_access.log;
+    error_log   /var/www/webcrawler/log/nginx_error.log;
 
-    root        /app/client/templates/admin;
+    root        /var/www/webcrawler/client/templates/admin;
     index       index.html;
 
     location / {
-        proxy_pass http://wiki_parser_python:5000/;
+        proxy_pass http://localhost:5000/;
     }
 
     location ~ /AdminBSB(.*) {
-        root /app/client/templates/AdminBSB;
+        root /var/www/webcrawler/client/templates/AdminBSB;
         try_files $1 =404;
     }
 
