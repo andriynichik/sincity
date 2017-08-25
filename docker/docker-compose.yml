@@ -5,8 +5,6 @@ services:
       context: ./../
       dockerfile: ./docker/python3.dockerfile
     image: python3:wiki_parser
-    volumes:
-      - datavolume:/app
     links:
       - wiki_parser_mongodb
     expose:
@@ -27,12 +25,7 @@ services:
       context: ./../
       dockerfile: ./docker/nginx.dockerfile
     image: nginx:wiki_parser
-    volumes:
-      - datavolume:/app
     ports:
       - 80:80
     links:
       - wiki_parser_python
-
-volumes:
-  datavolume: {}
