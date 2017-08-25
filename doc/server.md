@@ -1,3 +1,9 @@
+Sindev
+
+Run flask
+PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 flask run
+
+
 digitalocean.com
 
 Войти в учетную запись

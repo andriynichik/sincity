@@ -4,6 +4,13 @@ class Storage:
     STATUS_ACTIVE = 'active'
     STATUS_COMPLETE = 'done'
 
+    TYPE_GMAP_POSITION = 'gmap_position'
+    TYPE_GMAP_ADDRESS = 'gmap_address'
+
+    TYPE_WIKI_PAGE = 'wiki_page'
+    TYPE_WIKI_REQUEST = 'wiki_request'
+    TYPE_WIKI_RECURSIVE = 'wiki_recursive'
+
     def __init__(self):
         pass
 

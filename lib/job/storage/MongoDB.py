@@ -5,6 +5,7 @@ from pymongo import MongoClient
 class MongoDB(Storage):
 
     def __init__(self, job_name, storage_config):
+        super(MongoDB, self).__init__()
         connection = MongoClient(storage_config['host'], storage_config['port'])
         self.collection = connection.job[job_name]
 

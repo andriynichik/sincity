@@ -13,10 +13,10 @@ class AddressTask(MapTask):
 
         address_content = loader.by_address(address=address)
         objects = parser(address_content)
-        for object in objects:
-            code = object.get_place_id()
-            if object.get_place_id():
+        for obj in objects:
+            code = obj.get_place_id()
+            if obj.get_place_id():
                 doc = doc_factory.gmaps(code)
                 if doc.is_new() or force_update:
-                    doc.update(object.as_dictionary())
+                    doc.update(obj.as_dictionary())
                 self.update_meta(request=address, document=doc)

@@ -14,10 +14,10 @@ class PositionTask(MapTask):
 
         position_content = loader.by_position(lat=latitude, lng=longitude)
         objects = parser(position_content)
-        for object in objects:
-            code = object.get_place_id()
-            if object.get_place_id():
+        for obj in objects:
+            code = obj.get_place_id()
+            if obj.get_place_id():
                 doc = doc_factory.gmaps(code)
                 if doc.is_new() or force_update:
-                    doc.update(object.as_dictionary())
+                    doc.update(obj.as_dictionary())
                 self.update_meta(request=(latitude, longitude), document=doc)
