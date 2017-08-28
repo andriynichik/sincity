@@ -3,6 +3,8 @@ from lib.job.map.google.MapTask import MapTask
 
 class PositionTask(MapTask):
 
+    TYPE = 'gmap_position'
+
     def execute(self):
 
         latitude = self._options.lat

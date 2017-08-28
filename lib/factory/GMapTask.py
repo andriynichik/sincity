@@ -1,5 +1,5 @@
 from lib.factory.Loader import Loader as LoaderFactory
-from lib.factory.Storage import Storage as DocFactory
+from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
 from lib.job.map.google.AddressTask import AddressTask
 from lib.job.map.google.PositionTask import PositionTask

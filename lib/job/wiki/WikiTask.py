@@ -1,6 +1,14 @@
 from lib.job.Task import Task
 
+
 class WikiTask(Task):
+
+    def __init__(self, options, storage, log):
+        super(WikiTask, self).__init__(options=options, storage=storage, log=log)
+        self.loader = self._options.loader
+        self.parser = self._options.parser
+        self.headers = self._options.headers
+        self.document_factory = self._options.document_factory
 
     @staticmethod
     def update_meta(url, request, document):

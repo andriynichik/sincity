@@ -1,6 +1,6 @@
 from flask import Flask
 from flask import render_template
-from lib.factory.Storage import Storage as DocFactory
+from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
 
 

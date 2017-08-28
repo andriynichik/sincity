@@ -15,6 +15,9 @@ class MongoDB(Storage):
     def get_active(self):
         return self.collection.find_all({'status': self.STATUS_ACTIVE})
 
+    def get_one_active(self):
+        return self.collection.find_one({'status': self.STATUS_ACTIVE})
+
     def get_in_progress(self):
         return self.collection.find_all({'status': self.STATUS_IN_PROGRESS})
 

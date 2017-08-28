@@ -3,6 +3,8 @@ from lib.job.map.google.MapTask import MapTask
 
 class AddressTask(MapTask):
 
+    TYPE = 'gmap_address'
+
     def execute(self):
 
         address = self._options.address

@@ -36,3 +36,7 @@ class Parser:
     @staticmethod
     def _url_decode(content):
         return urllib.parse.unquote(content)
+
+    def get_all_links(self):
+        soup = self._content_soap.findAll('a', href=True)
+        return [(lambda x: x['href'])(x) for x in soup]

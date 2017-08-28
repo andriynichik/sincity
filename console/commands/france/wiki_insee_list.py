@@ -4,7 +4,7 @@ import sys
 from lib.factory.Loader import Loader
 from lib.parser.wiki.France import France as WikiFr
 from lib.config.Yaml import Yaml as Config
-from lib.factory.Storage import Storage as DocFactory
+from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.logger.File import File as FileLog
 from argparse import ArgumentParser
 

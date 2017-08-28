@@ -1,4 +1,4 @@
-from lib.factory.Storage import Storage as DocFactory
+from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.config.Yaml import Yaml as Config
 from lib.parser.wiki.France import France as WikiParser

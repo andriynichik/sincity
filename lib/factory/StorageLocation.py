@@ -4,7 +4,7 @@ from lib.location.Wiki import Wiki
 from lib.location.GMap import GMap
 
 
-class Storage:
+class StorageLocation:
 
     def __init__(self, storage_config):
         self._hash_lib = sha512()
