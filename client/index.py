@@ -2,6 +2,7 @@ from flask import Flask
 from flask import render_template
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
+from lib.job.storage.MongoDB import MongoDB as JobStorage
 
 
 app = Flask(__name__)
@@ -74,7 +75,13 @@ def wiki_test():
 
 @app.route('/tasks/<string:jornal_id>')
 def tasks_list(jornal_id):
-    return render_template('admin/tasks/list.html')
+    config = Config('./config/config.yml')
+    storage = JobStorage(job_name=jornal_id,storage_config=config.get('mongodb'))
+    return render_template('admin/tasks/list.html',
+                           active=storage.get_active(),
+                           in_progress=storage.get_in_progress(),
+                           complete=storage.get_complete()
+                           )
 
 
 @app.route('/logs/')

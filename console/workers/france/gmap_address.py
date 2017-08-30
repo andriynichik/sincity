@@ -1,15 +1,38 @@
 from lib.job.TaskListMongoDB import TaskListMongoDB
 from lib.job.map.google.AddressTask import AddressTask
+from lib.job.Executor import Executor
+from lib.job.storage.MongoDB import MongoDB as Storage
 from lib.config.Yaml import Yaml as Config
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.factory.StorageLocation import StorageLocation as DocFactory
+from lib.parser.map.google.France import France
+from lib.logger.MongoDB import MongoDB as Log
 
+force = False
 
 config = Config('./config/config.yml')
+
+options = {}
 
 loader = LoaderFactory.loader_gmaps_with_cache(
     gmaps_config=config.get('googlemaps'),
     storage_config=config.get('mongodb')
 )
+options.update(loader=loader)
 
-document_factory = DocFactory(config.get('mongodb'))
+doc_factory = DocFactory(config.get('mongodb'))
+options.update(doc_factory=doc_factory)
+
+options.update(force_update=force)
+
+options.update(parser=France)
+
+storage = Storage(job_name=AddressTask.TYPE, storage_config=config.get('mongodb'))
+
+log = Log(log_name=AddressTask.TYPE, config=config.get('mongodb'))
+
+task_list = TaskListMongoDB(task_type=AddressTask.TYPE, options=options, storage=storage, log=log)
+
+executor = Executor(task_list)
+
+executor.run()

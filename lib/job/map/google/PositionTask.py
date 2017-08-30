@@ -7,8 +7,8 @@ class PositionTask(MapTask):
 
     def execute(self):
 
-        latitude = self._options.lat
-        longitude = self._options.lng
+        latitude = self._options.request.lat
+        longitude = self._options.request.lng
         loader = self._options.loader
         doc_factory = self._options.doc_factory
         force_update = self._options.force_update

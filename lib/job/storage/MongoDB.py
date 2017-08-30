@@ -1,5 +1,6 @@
 from lib.job.storage.Storage import Storage
 from pymongo import MongoClient
+from datetime import datetime
 
 
 class MongoDB(Storage):
@@ -10,19 +11,24 @@ class MongoDB(Storage):
         self.collection = connection.job[job_name]
 
     def add(self, job):
-        self.collection.insert_one(job)
+        task = {
+            'request': job,
+            'created': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'status': self.STATUS_ACTIVE
+        }
+        self.collection.insert_one(task)
 
     def get_active(self):
-        return self.collection.find_all({'status': self.STATUS_ACTIVE})
+        return self.collection.find({'status': self.STATUS_ACTIVE})
 
     def get_one_active(self):
         return self.collection.find_one({'status': self.STATUS_ACTIVE})
 
     def get_in_progress(self):
-        return self.collection.find_all({'status': self.STATUS_IN_PROGRESS})
+        return self.collection.find({'status': self.STATUS_IN_PROGRESS})
 
     def get_complete(self):
-        return self.collection.find_all({'status': self.STATUS_COMPLETE})
+        return self.collection.find({'status': self.STATUS_COMPLETE})
 
     def as_active(self, id):
         self._update_status(id, self.STATUS_ACTIVE)

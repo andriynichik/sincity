@@ -6,8 +6,8 @@ class RequestTask(WikiTask):
     TYPE = 'wiki_request'
 
     def execute(self):
-        url = self._options.url_format.format(self._options.request)
-        force_update = self._options.force_update
+        url = self._options.get('url_format').format(self._options.get('request'))
+        force_update = self._options.get('force_update')
         content, code = self.loader.load(url, headers=self.headers)
         parsed_page = self.parser(content)
         if parsed_page.is_many_answers():

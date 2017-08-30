@@ -5,10 +5,10 @@ class WikiTask(Task):
 
     def __init__(self, options, storage, log):
         super(WikiTask, self).__init__(options=options, storage=storage, log=log)
-        self.loader = self._options.loader
-        self.parser = self._options.parser
-        self.headers = self._options.headers
-        self.document_factory = self._options.document_factory
+        self.loader = self._options.get('loader')
+        self.parser = self._options.get('parser')
+        self.headers = self._options.get('headers')
+        self.document_factory = self._options.get('doc_factory')
 
     @staticmethod
     def update_meta(url, request, document):

@@ -8,10 +8,10 @@ class PageRecursiveTask(WikiTask):
 
     def __init__(self, options, storage, log):
         super(PageRecursiveTask, self).__init__(options=options, storage=storage, log=log)
-        self.correct_link_template = self._options.link_template
         self.link = self._options.request
         self.page_parsed = []
         self.url_pool = [self.link]
+        self.host = self._options.host
 
     def execute(self):
         force_update = self._options.force_update
@@ -31,13 +31,13 @@ class PageRecursiveTask(WikiTask):
                     links_on_page = parsed_page.get_all_links()
                     for link_on_page in links_on_page:
                         if self._is_correct_link(link_on_page):
-                            self._add_link_to_pool(link_on_page)
+                            self._add_link_to_pool(self.host + link_on_page)
                 self._page_parsed(link)
             except:
                 self._page_parsed(link)
 
     def _is_correct_link(self, link):
-        result = re.search(self.correct_link_template, link)
+        result = re.search(r'^/wiki/', link)
 
         return True if result else False
 

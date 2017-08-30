@@ -7,7 +7,7 @@ class AddressTask(MapTask):
 
     def execute(self):
 
-        address = self._options.address
+        address = self._options.request
         loader = self._options.loader
         doc_factory = self._options.doc_factory
         force_update = self._options.force_update

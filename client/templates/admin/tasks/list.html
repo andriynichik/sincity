@@ -1,1 +1,9 @@
-list
+{% for item in active %}
+    {{ item }}
+{% endfor %}
+{% for item in in_progress %}
+    {{ item }}
+{% endfor %}
+{% for item in complete %}
+    {{ item }}
+{% endfor %}
