@@ -1,6 +1,6 @@
 from lib.job.storage.Storage import Storage
 from pymongo import MongoClient
-from datetime import datetime
+from time import time
 
 
 class MongoDB(Storage):
@@ -13,7 +13,7 @@ class MongoDB(Storage):
     def add(self, job):
         task = {
             'request': job,
-            'created': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+            'created': time(),
             'status': self.STATUS_ACTIVE
         }
         self.collection.insert_one(task)

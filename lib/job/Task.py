@@ -5,7 +5,7 @@ class Task:
         self._log = log
 
     def mark_as_complete(self):
-        self._storage.as_complete(self._options.id)
+        self._storage.as_complete(self._options.get('id'))
 
     def execute(self):
         pass

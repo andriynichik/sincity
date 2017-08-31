@@ -3,6 +3,7 @@ from flask import render_template
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
 from lib.job.storage.MongoDB import MongoDB as JobStorage
+from pymongo import MongoClient
 
 
 app = Flask(__name__)
@@ -85,5 +86,8 @@ def tasks_list(jornal_id):
 
 
 @app.route('/logs/')
-def logs(id):
-    return render_template('admin/logs/entity.html')
+def logs(id=None):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    collection = connection.log['wiki_request']
+    return render_template('admin/logs/list.html', logs=collection.find({'message': {'$exists': True}}))

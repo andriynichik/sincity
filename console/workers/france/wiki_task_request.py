@@ -36,5 +36,6 @@ task_list = TaskListMongoDB(task_type=RequestTask.TYPE, options=options, storage
 
 executor = Executor(task_list)
 
-
-executor.run()
+while True:
+    executor.run()
+    sleep(10)

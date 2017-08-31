@@ -213,26 +213,26 @@
                                     <tbody>
                                     {% for item in items %}
                                         <tr>
-                                            <td><a href="{{item.url}}">{{ item.name }}</a></td>
-                                            <td>{{ item.type }}</td>
+                                            <td><a href="{{item.get('url')}}" target="_blank">{{ item.get('name') }}</a></td>
+                                            <td>{{ item.get('type') }}</td>
                                             <td>
-                                                {% for lang, i18n in item.i18n.items():  %}
-                                                    <a href="{{i18n.url}}">{{ lang }}: {{ i18n.name }}</a>
+                                                {% for lang, i18n in item.get('i18n', {}).items():  %}
+                                                    <a href="{{i18n.url}}">{{ lang }}: {{ i18n.get('name') }}</a>
                                                 {% endfor %}
                                             </td>
                                             <td>
-                                                {% for admin in item.admin_hierarchy %}
-                                                    <a href="{{admin.url}}">{{ admin.name }}({{ admin.type }})</a> &gt;
+                                                {% for admin in item.get('admin_hierarchy', {}) %}
+                                                    <a href="{{admin.url}}">{{ admin.get('name') }}({{ admin.get('type') }})</a> &gt;
                                                 {% endfor %}
                                             </td>
                                             <td>
-                                                <a href="{{ item.capital.url if item.get('capital') else 'javascript:void(0);' }}">
-                                                    {{ item.capital.name if item.get('capital') else '' }}
+                                                <a href="{{ item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);' }}">
+                                                    {{ item.get('capital', {}).get('name') if item.get('capital') else '' }}
                                                 </a>
                                             </td>
                                             <td>
-                                                <a href="https://www.google.com.ua/maps/@{{item.center.lat}},{{item.center.lng}},12z" target="_blank">
-                                                    {{item.center.lat}}, {{item.center.lng}}
+                                                <a href="https://www.google.com.ua/maps/@{{item.get('center', {}).get('lat')}},{{item.get('center', {}).get('lng')}},12z" target="_blank">
+                                                    {{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}
                                                 </a>
                                             </td>
                                             <td>{{item.get('altitude','')}}</td>

@@ -114,7 +114,7 @@ class France(Wiki):
 
     def get_altitude(self):
         result = {}
-        data = self._get_value(u'Altitude', self._main_block)
+        data = str(self._get_value(u'Altitude', self._main_block))
 
         min = self._get_min_altitude(data)
         if min is not None:

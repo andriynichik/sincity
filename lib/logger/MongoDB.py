@@ -10,9 +10,9 @@ class MongoDB(Log):
         self.collection = connection.log[log_name]
 
     def add(self, message, type=Log.WARNING):
-        message = {
-            time: time(),
-            type: type,
-            message: message
+        data = {
+            'time': time(),
+            'type': type,
+            'message': message
         }
-        self.collection.insert_one(message)
+        self.collection.insert_one(data)
