@@ -1,7 +1,7 @@
 Sindev
 
 Run flask
-PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 flask run
+PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 flask run >& ./foobar.log &
 
 
 digitalocean.com
