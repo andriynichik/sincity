@@ -2,10 +2,10 @@ $(function () {
     var table;
     //Exportable table
     table = $('.js-exportable').DataTable({
+        "bSortClasses": false,
         dom: 'Bfrtip',
-        responsive: true,
         buttons: [
-            'csv', 'excel', 'pdf', 'print'
+            'csv', 'excel'
         ]
     });
 
