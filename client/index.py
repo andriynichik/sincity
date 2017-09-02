@@ -79,14 +79,13 @@ def tasks_list(jornal_id):
     config = Config('./config/config.yml')
     storage = JobStorage(job_name=jornal_id,storage_config=config.get('mongodb'))
     return render_template('admin/tasks/list.html',
-                           active=storage.get_active(),
-                           in_progress=storage.get_in_progress(),
-                           complete=storage.get_complete()
+                           name=jornal_id,
+                           tasks=storage.get_active()
                            )
 
 
 @app.route('/logs/')
-def logs(id=None):
+def logs():
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
     collection = connection.log['wiki_request']
