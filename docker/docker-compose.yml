@@ -17,6 +17,7 @@ services:
     image: mongodb:wiki_parser
     volumes:
       - /project/storages/wiki_gmaps_parser_mongodb:/data/db
+      - /project/storages/wiki_gmaps_parser_mongodb_bu:/data/backup
     expose:
       - 27017
 
