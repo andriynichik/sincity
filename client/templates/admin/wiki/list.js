@@ -1,12 +1,24 @@
 $(function () {
     var table;
-    //Exportable table
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
         dom: 'Bfrtip',
         buttons: [
             'csv', 'excel'
-        ]
+        ],
+        "data": [
+{% for item in items %}
+[['{{e(item.get('name'))}}', '{{e(item.get('url', ''))}}'],
+'{{e(item.get('type'))}}',
+[{% for lang, i18n in item.get('i18n', {}).items(): %}
+['{{e(i18n.get('url'))}}', '{{e(lang)}}', '{{e(i18n.get('name'))}}'],
+{% endfor %}],
+{% for admin in item.get('admin_hierarchy', {}) %}
+['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
+{% endfor %},
+'asdf', 'adsf', 'asdf', 'asdf', 'asdf', 'adsf', 'asdf'],
+{% endfor %}
+        ],
     });
 
     $.each($('[data-hide]'), function (e) {
