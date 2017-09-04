@@ -33,6 +33,60 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="/css/themes/all-themes.css" rel="stylesheet" />
+
+        <!-- Jquery Core Js -->
+    <script src="/plugins/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core Js -->
+    <script src="/plugins/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Select Plugin Js -->
+    <script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
+
+    <!-- Slimscroll Plugin Js -->
+    <script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
+
+    <!-- Waves Effect Plugin Js -->
+    <script src="/plugins/node-waves/waves.js"></script>
+
+    <!-- Jquery CountTo Plugin Js -->
+    <script src="/plugins/jquery-countto/jquery.countTo.js"></script>
+
+    <!-- Morris Plugin Js -->
+    <script src="/plugins/raphael/raphael.min.js"></script>
+    <script src="/plugins/morrisjs/morris.js"></script>
+
+    <!-- ChartJs -->
+    <script src="/plugins/chartjs/Chart.bundle.js"></script>
+
+    <!-- Flot Charts Plugin Js -->
+    <script src="/plugins/flot-charts/jquery.flot.js"></script>
+    <script src="/plugins/flot-charts/jquery.flot.resize.js"></script>
+    <script src="/plugins/flot-charts/jquery.flot.pie.js"></script>
+    <script src="/plugins/flot-charts/jquery.flot.categories.js"></script>
+    <script src="/plugins/flot-charts/jquery.flot.time.js"></script>
+
+    <!-- Sparkline Chart Plugin Js -->
+    <script src="/plugins/jquery-sparkline/jquery.sparkline.js"></script>
+
+    <!-- Jquery DataTable Plugin Js -->
+    <script src="/plugins/jquery-datatable/jquery.dataTables.js"></script>
+    <script src="/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
+    <script src="/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
+
+
+    <!-- Custom Js -->
+    <script src="/js/admin.js"></script>
+    <!--script src="/js/pages/tables/jquery-datatable.js"></script-->
+    <!-- Demo Js -->
+    <script src="/js/demo.js"></script>
+
 </head>
 
 <body class="theme-red">
@@ -63,6 +117,7 @@
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
                 <a class="navbar-brand" href="/">Sinoptik Wiki Gmaps Parser</a>
+                {{debug}}
             </div>
         </div>
     </nav>
@@ -87,22 +142,22 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="/internal/france">
+                                <a href="/internal/France">
                                     <span>Internal</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/matcher/france">
+                                <a href="/matcher/France">
                                     <span>Matching</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/wiki/france">
+                                <a href="/wiki/France">
                                     <span>Wikipedia</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/gmaps/france">
+                                <a href="/gmaps/France">
                                     <span>Google Maps</span>
                                 </a>
                             </li>
@@ -166,58 +221,6 @@
 
     {% block body %}{% endblock %}
 
-    <!-- Jquery Core Js -->
-    <script src="/plugins/jquery/jquery.min.js"></script>
-
-    <!-- Bootstrap Core Js -->
-    <script src="/plugins/bootstrap/js/bootstrap.js"></script>
-
-    <!-- Select Plugin Js -->
-    <script src="/plugins/bootstrap-select/js/bootstrap-select.js"></script>
-
-    <!-- Slimscroll Plugin Js -->
-    <script src="/plugins/jquery-slimscroll/jquery.slimscroll.js"></script>
-
-    <!-- Waves Effect Plugin Js -->
-    <script src="/plugins/node-waves/waves.js"></script>
-
-    <!-- Jquery CountTo Plugin Js -->
-    <script src="/plugins/jquery-countto/jquery.countTo.js"></script>
-
-    <!-- Morris Plugin Js -->
-    <script src="/plugins/raphael/raphael.min.js"></script>
-    <script src="/plugins/morrisjs/morris.js"></script>
-
-    <!-- ChartJs -->
-    <script src="/plugins/chartjs/Chart.bundle.js"></script>
-
-    <!-- Flot Charts Plugin Js -->
-    <script src="/plugins/flot-charts/jquery.flot.js"></script>
-    <script src="/plugins/flot-charts/jquery.flot.resize.js"></script>
-    <script src="/plugins/flot-charts/jquery.flot.pie.js"></script>
-    <script src="/plugins/flot-charts/jquery.flot.categories.js"></script>
-    <script src="/plugins/flot-charts/jquery.flot.time.js"></script>
-
-    <!-- Sparkline Chart Plugin Js -->
-    <script src="/plugins/jquery-sparkline/jquery.sparkline.js"></script>
-
-    <!-- Jquery DataTable Plugin Js -->
-    <script src="/plugins/jquery-datatable/jquery.dataTables.js"></script>
-    <script src="/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/buttons.flash.min.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/jszip.min.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/pdfmake.min.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/vfs_fonts.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/buttons.html5.min.js"></script>
-    <script src="/plugins/jquery-datatable/extensions/export/buttons.print.min.js"></script>
-
-
-    <!-- Custom Js -->
-    <script src="/js/admin.js"></script>
-    <script src="/js/pages/tables/jquery-datatable.js"></script>
-    <!-- Demo Js -->
-    <script src="/js/demo.js"></script>
 </body>
 
 </html>

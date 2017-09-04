@@ -4,9 +4,14 @@ from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
 from lib.job.storage.MongoDB import MongoDB as JobStorage
 from pymongo import MongoClient
+import re
 
 
 app = Flask(__name__)
+
+
+def escape(val):
+    return re.escape(str(val))
 
 
 @app.route("/")
@@ -20,10 +25,22 @@ def show_post(post_id):
     return 'Post %d' % post_id
 
 
-@app.route('/home/')
-@app.route('/home/<name>')
-def home(name=None):
-    return render_template('home.html', name=name)
+@app.route('/data/<string:type>.js')
+@app.route('/data/<string:type>/<string:country>.js')
+def data_provider(type, country=None):
+    config = Config('./config/config.yml')
+
+    factory = DocFactory(config.get('mongodb'))
+    wiki = factory.wiki_collection()
+    if country:
+        filter = {
+            'name': {'$exists': True, '$not': {'$size': 0}},
+            'admin_hierarchy': {'$elemMatch': {'name': country}}
+        }
+    else:
+        filter = {'name': {'$exists': True, '$not': {'$size': 0}}}
+    objects = wiki.find(filter)
+    return render_template('admin/wiki/list.js', e=escape, items=objects, debug=filter)
 
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
@@ -53,20 +70,7 @@ def gmaps_test():
 @app.route('/wiki/')
 @app.route('/wiki/<string:country>')
 def wiki_list(country=None):
-    config = Config('./config/config.yml')
-
-    factory = DocFactory(config.get('mongodb'))
-    wiki = factory.wiki_collection()
-    if country:
-        filter = {
-            'name': { '$exists': True, '$not': {'$size': 0}},
-            'admin_hierarchy.0.name': '/^{}$/i'.format(country)
-        }
-    else:
-        filter = {'name': { '$exists': True, '$not': {'$size': 0}}}
-    objects = wiki.find(filter)
-    count = objects.count()
-    return render_template('admin/wiki/list.html', items=objects, count=count)
+    return render_template('admin/wiki/list.html', country=country)
 
 
 @app.route('/wiki/test')

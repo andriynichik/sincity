@@ -10,15 +10,15 @@ $(function () {
     });
 
     $.each($('[data-hide]'), function (e) {
-        var column = table.column( $(this).attr('data-column') );
-        column.visible( ! column.visible() );
+        var column = table.column($(this).attr('data-column') );
+        column.visible(false);
     } );
 
-    var column = table.column( $(this).attr('data-column') );
+    var column = table.column($(this).attr('data-column'));
 
     $('a.toggle-link-vis').on( 'click', function (e) {
         e.preventDefault();
-        var column = table.column( $(this).attr('data-column') );
-        column.visible( ! column.visible() );
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
     } );
 });

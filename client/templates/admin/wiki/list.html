@@ -1,5 +1,11 @@
 {% extends "admin/layout.html" %}
 {% block body %}
+{% if country: %}
+<script type="text/javascript" src="/data/wiki/{{country}}.js"></script>
+{% else %}
+<script type="text/javascript" src="/data/wiki.js"></script>
+{% endif %}
+
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
@@ -62,39 +68,7 @@
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                {% for item in items %}
-                                <tr>
-                                    <td><a href="{{item.get('url')}}" target="_blank">{{ item.get('name') }}</a></td>
-                                    <td>{{ item.get('type') }}</td>
-                                    <td>
-                                        {% for lang, i18n in item.get('i18n', {}).items(): %}
-                                        <a href="{{i18n.url}}">{{ lang }}: {{ i18n.get('name') }}</a>
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        {% for admin in item.get('admin_hierarchy', {}) %}
-                                        <a href="{{admin.url}}">{{ admin.get('name') }}({{ admin.get('type') }})</a>
-                                        &gt;
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        <a href="{{ item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);' }}">
-                                            {{ item.get('capital', {}).get('name') if item.get('capital') else '' }}
-                                        </a>
-                                    </td>
-                                    <td>
-                                        <a href="http://maps.google.com/maps?q={{item.get('center', {}).get('lat')}},{{item.get('center', {}).get('lng')}}&ll={{item.get('center', {}).get('lat')}},{{item.get('center', {}).get('lng')}}&z=12"
-                                           target="_blank">
-                                            {{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}
-                                        </a>
-                                    </td>
-                                    <td>{{item.get('altitude','')}}</td>
-                                    <td>{{item.get('population', 0)}}</td>
-                                    <td>{{item.get('density', 0)}}</td>
-                                    <td>{{item.get('area', 0)}}</td>
-                                    <td>{{item.get('postal_codes', '')}}</td>
-                                </tr>
-                                {% endfor %}
+
                                 </tbody>
                             </table>
                         </div>
