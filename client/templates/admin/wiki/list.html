@@ -1,5 +1,11 @@
 {% extends "admin/layout.html" %}
 {% block body %}
+{% if country: %}
+<script type="text/javascript" src="/data/wiki/{{country}}.js"></script>
+{% else %}
+<script type="text/javascript" src="/data/wiki.js"></script>
+{% endif %}
+
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
