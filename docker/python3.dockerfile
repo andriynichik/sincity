@@ -21,6 +21,7 @@ RUN pip install Flask==0.12.2
 ENV PYTHONPATH "$PYTHONPATH:/app/"
 ENV PYTHONIOENCODING "utf-8"
 ENV FLASK_APP "/app/client/index.py"
+ENV FLASK_DEBUG 1
 
 WORKDIR /app
 
