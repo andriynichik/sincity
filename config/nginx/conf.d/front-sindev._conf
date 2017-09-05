@@ -9,7 +9,20 @@ server {
     index       index.html;
 
     location / {
+        proxy_connect_timeout       600;
+        proxy_send_timeout          600;
+        proxy_read_timeout          600;
+        send_timeout                600;
         proxy_pass http://127.0.0.1:5000/;
+    }
+
+    location /data/wiki.js {
+        proxy_connect_timeout       600;
+        proxy_send_timeout          600;
+        proxy_read_timeout          600;
+        send_timeout                600;
+        expires    24h;
+        proxy_pass http://127.0.0.1:5000$request_uri;
     }
 
     location ~ /AdminBSB(.*) {
@@ -17,8 +30,11 @@ server {
         try_files $1 =404;
     }
 
-    # uncomment to avoid processing of calls to non-existing static files
-    location ~ (\.(js|txt|eot|svg|ttf|woff|woff2|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar)$) {
+    location ~ ^/(plugins|js)/.*\.js {
+        try_files $uri =404;
+    }
+
+    location ~ (\.(map|txt|eot|svg|ttf|woff|woff2|css|png|jpg|gif|swf|ico|pdf|mov|fla|zip|rar)$) {
         try_files $uri =404;
     }
 
