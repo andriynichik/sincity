@@ -5,6 +5,7 @@ from lib.config.Yaml import Yaml as Config
 from lib.job.storage.MongoDB import MongoDB as JobStorage
 from pymongo import MongoClient
 import re
+from lib.logger.MongoDB import MongoDB as MongoDBLog
 
 
 app = Flask(__name__)
@@ -19,10 +20,9 @@ def index():
     return render_template('admin/index.html')
 
 
-@app.route('/post/<int:post_id>')
-def show_post(post_id):
-    # show the post with the given id, the id is an integer
-    return 'Post %d' % post_id
+@app.route('/internal/<string:country>')
+def internal(country):
+    return country
 
 
 @app.route('/data/<string:type>.js')
@@ -88,9 +88,22 @@ def tasks_list(jornal_id):
                            )
 
 
-@app.route('/logs/')
-def logs():
+@app.route('/logs/<string:name>/<int:status>')
+def logs(name, status=None):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
-    collection = connection.log['wiki_request']
-    return render_template('admin/logs/list.html', logs=collection.find({'message': {'$exists': True}}))
+    collection = connection.log[name]
+    if status == 1:
+        query = {'$and': [{'message': {'$exists': True}}, {'$or': [{'status': status}, {'status': {'$exists': False}}]}]}
+    elif status:
+        query = {'message': {'$exists': True}, 'status': status}
+    else:
+        query = {'message': {'$exists': True}}
+    return render_template('admin/logs/list.html', logs=collection.find(query), name=name)
+
+
+@app.route('/logs/close/<string:name>/<string:id>')
+def log_close(name, id):
+    config = Config('./config/config.yml').get('mongodb')
+    log = MongoDBLog(log_name=name, config=config)
+    return 'Ok' if log.close(id) else 'Not'

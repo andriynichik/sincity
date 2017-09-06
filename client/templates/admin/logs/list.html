@@ -22,6 +22,8 @@
                                     <th>Message</th>
                                     <th>Time</th>
                                     <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Control</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -29,6 +31,8 @@
                                     <th>Message</th>
                                     <th>Time</th>
                                     <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Control</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
@@ -37,6 +41,12 @@
                                     <td>{{ item.message }}</td>
                                     <td>{{ item.time }}</td>
                                     <td>{{ item.type }}</td>
+                                    <td>{{ 'new' if item.get('status', 1) == 1 else 'close' }}</td>
+                                    {% if item.get('status', 1) == 1 %}
+                                    <td><a href="{{url_for('log_close', name=name, id=item.get('_id'))}}" data-log-close title="close">xXx</a></td>
+                                    {% else %}
+                                    <td>-</td>
+                                    {% endif %}
                                 </tr>
                                 {% endfor %}
                                 </tbody>
@@ -52,4 +62,5 @@
 </section>
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
+<script type="text/javascript" src="/js/pages/logs/list.js"></script>
 {% endblock %}
