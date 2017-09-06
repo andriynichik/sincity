@@ -1,4 +1,22 @@
 $(function () {
+/*    console.log(
+[
+['{{e(items[0].get('name'))}}', '{{e(items[0].get('url'))}}'],
+'{{e(items[0].get('type'))}}',
+[{% for lang, i18n in items[0].get('i18n', {}).items(): %}
+['{{e(i18n.get('url'))}}', '{{e(lang)}}', '{{e(i18n.get('name'))}}'],
+{% endfor %}],
+{% for admin in items[0].get('admin_hierarchy', {}) %}
+['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
+{% endfor %},
+['{{e(items[0].get('capital', {}).get('url') if items[0].get('capital') else 'javascript:void(0);')}}', '{{e(items[0].get('capital', {}).get('name'))}}'],
+['http://maps.google.com/maps?q={{e(items[0].get('center', {}).get('lat'))}},{{e(items[0].get('center', {}).get('lng'))}}&ll={{e(items[0].get('center', {}).get('lat'))}},{{e(items[0].get('center', {}).get('lng'))}}&z=12', '{{items[0].get('center', {}).get('lat')}}, {{items[0].get('center', {}).get('lng')}}'],
+'{{e(items[0].get('altitude'))}}',
+'{{e(items[0].get('population'))}}',
+'{{e(items[0].get('density'))}}',
+'{{e(items[0].get('area'))}}',
+'{{e(items[0].get('postal_codes'))}}'
+]);*/
     var table;
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
@@ -7,16 +25,13 @@ $(function () {
             'csv', 'excel'
         ],
         data: [
-{% for item in items %}
+        {% for item in items %}
 [
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
 '{{e(item.get('type'))}}',
-[{% for lang, i18n in item.get('i18n', {}).items(): %}
-['{{e(i18n.get('url'))}}', '{{e(lang)}}', '{{e(i18n.get('name'))}}'],
-{% endfor %}],
-{% for admin in item.get('admin_hierarchy', {}) %}
+[{% for admin in item.get('admin_hierarchy', {}) %}
 ['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
-{% endfor %},
+{% endfor %}],
 ['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
 '{{e(item.get('altitude'))}}',
@@ -26,11 +41,12 @@ $(function () {
 '{{e(item.get('postal_codes'))}}'
 ],
 {% endfor %}
+
         ],
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    return '<a href="'+ data[1] +'" target="_blank">'+ data[0] +'</a>';
                 },
                 targets: 0
             },
@@ -38,21 +54,27 @@ $(function () {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: [1,6,7,8,9,10]
+                targets: 1
             },
+            //{
+            //    render: function ( data, type, row ) {
+            //        return data.reduce(function(previousValue, data, index) {
+            //            return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +': '+ data[2] +'</a>';
+            //        }, '')
+            //    },
+            //    targets: 2
+            //},
             {
                 render: function ( data, type, row ) {
                     return data.reduce(function(previousValue, data, index) {
-                        return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +': '+ data[2] +'</a>';
+                        return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
                     }, '')
                 },
                 targets: 2
             },
             {
                 render: function ( data, type, row ) {
-                    return data.reduce(function(previousValue, data, index) {
-                        return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
-                    }, '')
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                 },
                 targets: 3
             },
@@ -64,9 +86,27 @@ $(function () {
             },
             {
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    return data;
                 },
                 targets: 5
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: 6
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: 7
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: 8
             },
         ]
     });
