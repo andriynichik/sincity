@@ -2,6 +2,9 @@ server {
     listen 80 default_server;
 	server_name _;
 
+	gzip  on;
+    gzip_comp_level 9;
+
     access_log  /var/www/webcrawler/log/nginx_access.log;
     error_log   /var/www/webcrawler/log/nginx_error.log;
 
