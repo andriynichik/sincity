@@ -54,7 +54,7 @@ $(function () {
                 render: function ( data, type, row ) {
                     var lat = data[0];
                     var lng = data[1];
-                    return '<a href="http://maps.google.com/maps?q='+lat+','+lng+'&ll='+lat+','+lng+'&z=12">'+lat+', '+lng+'</a>';
+                    return '<a href="http://maps.google.com/maps?q='+lat+','+lng+'&ll='+lat+','+lng+'&z=12" target="_blank">'+lat+', '+lng+'</a>';
                 },
                 targets: 4
             },
