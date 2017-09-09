@@ -20,5 +20,7 @@ class AddressTask(MapTask):
             if obj.get_place_id():
                 doc = doc_factory.gmaps(code)
                 if doc.is_new() or force_update:
-                    doc.update(obj.as_dictionary())
+                    dic = obj.as_dictionary()
+                    if dic.get('type'):
+                        doc.update(dic)
                 self.update_meta(request=address, document=doc)

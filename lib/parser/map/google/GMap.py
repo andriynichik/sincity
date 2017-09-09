@@ -147,7 +147,7 @@ class GMap(Parser):
             admin_elements = reversed(self._content.get('address_components')[1:])
             for element in admin_elements:
                 parsed_element = self._parse_admin_element(element)
-                if 'type' in parsed_element and ('short_name' in parsed_element or 'long_name' in parsed_element):
+                if parsed_element.get('type') and ('short_name' in parsed_element or 'name' in parsed_element):
                     result.append(parsed_element)
 
         return result

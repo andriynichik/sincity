@@ -56,31 +56,17 @@ def data_provider(provider_type, country=None):
         document_filter = {'name': {'$exists': True, '$not': {'$size': 0}}}
 
     objects = data.find(document_filter)
-    return render_template('admin/wiki/list.js', e=escape, items=objects)
+    return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
 def gmaps_list(country=None):
-    config = Config('./config/config.yml')
-
-    factory = DocFactory(config.get('mongodb'))
-    gmaps = factory.gmaps_collection()
-    if country:
-        filter = {
-            'name': { '$exists': True, '$not': {'$size': 0}},
-            'admin_hierarchy.0.name': '/^{}$/i'.format(country)
-        }
-    else:
-        filter = {'name': { '$exists': True, '$not': {'$size': 0}}}
-
-    objects = gmaps.find(filter)
-    count = objects.count()
-    return render_template('admin/gmaps/list.html', items=objects, filter=filter)
+    return render_template('admin/gmap/list.html', country=country)
 
 
 @app.route('/gmaps/test')
 def gmaps_test():
-    return render_template('admin/gmaps/test.html')
+    return render_template('admin/gmap/test.html')
 
 
 @app.route('/wiki/')
