@@ -136,7 +136,7 @@ class France(Wiki):
         data = self._get_value(u"Densité", self._main_block)
         first_numbers = self._first_numbers(str(data))
 
-        return int(first_numbers) if first_numbers else 0
+        return float(first_numbers) if first_numbers else 0
 
     def get_area(self):
         data = self._get_value(u'Superficie', self._main_block)

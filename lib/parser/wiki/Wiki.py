@@ -185,7 +185,7 @@ class Wiki(Parser):
 
     def get_answers_links(self):
         tags = self._content_soap.find_all("div", {"class": "mw-search-result-heading"})
-        return [(self.HOST + x.a["href"]) for x in tags]
+        return [(self.HOST + x.a["href"]) for x in tags if re.match(r"(/wiki/)", x.a["href"])]
 
         #match = re.search(r"<div[^>]*?class=[\"']mw-search-result-heading[\"'][^>]*?>\s*<a href=[\"'](?P<url>/wiki/[^\"]+)[\"']", self.content)
         #return [(self.HOST + x) for x in match.group('url')]
