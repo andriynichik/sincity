@@ -5,6 +5,8 @@ from lib.config.Yaml import Yaml as Config
 from lib.job.storage.MongoDB import MongoDB as JobStorage
 from pymongo import MongoClient
 import re
+from lib.location.Wiki import Wiki
+from lib.location.GMap import GMap
 
 
 app = Flask(__name__)
@@ -25,22 +27,36 @@ def show_post(post_id):
     return 'Post %d' % post_id
 
 
-@app.route('/data/<string:type>.js')
-@app.route('/data/<string:type>/<string:country>.js')
-def data_provider(type, country=None):
+@app.route('/data/<string:provider_type>.js')
+@app.route('/data/<string:provider_type>/<string:country>.js')
+def data_provider(provider_type, country=None):
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
-    wiki = factory.wiki_collection()
-    if country:
-        filter = {
-            'name': {'$exists': True, '$not': {'$size': 0}},
-            'admin_hierarchy': {'$elemMatch': {'name': country}}
-        }
+    document_filter = {}
+
+    if provider_type == Wiki.TYPE:
+        data = factory.wiki_collection()
+        if country:
+            document_filter = {
+                'name': {'$exists': True, '$not': {'$size': 0}},
+                'admin_hierarchy': {'$elemMatch': {'name': country}}
+            }
+    elif provider_type == GMap.TYPE:
+        data = factory.gmaps_collection()
+        if country:
+            document_filter = {
+                'name': {'$exists': True, '$not': {'$size': 0}},
+                'admin_hierarchy': {'$elemMatch': {'name': country}}
+            }
     else:
-        filter = {'name': {'$exists': True, '$not': {'$size': 0}}}
-    objects = wiki.find(filter)
-    return render_template('admin/wiki/list.js', e=escape, items=objects, debug=filter)
+        data = factory.internal_collection()
+
+    if not document_filter:
+        document_filter = {'name': {'$exists': True, '$not': {'$size': 0}}}
+
+    objects = data.find(document_filter)
+    return render_template('admin/wiki/list.js', e=escape, items=objects)
 
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
@@ -79,12 +95,21 @@ def wiki_test():
 
 
 @app.route('/tasks/<string:jornal_id>')
-def tasks_list(jornal_id):
+@app.route('/tasks/<string:jornal_id>/<string:status>')
+def tasks_list(jornal_id, status='active'):
     config = Config('./config/config.yml')
     storage = JobStorage(job_name=jornal_id,storage_config=config.get('mongodb'))
+
+    if status == storage.STATUS_COMPLETE:
+        tasks = storage.get_complete()
+    elif status == storage.STATUS_IN_PROGRESS:
+        tasks = storage.get_in_progress()
+    else:
+        tasks = storage.get_active()
+
     return render_template('admin/tasks/list.html',
                            name=jornal_id,
-                           tasks=storage.get_active()
+                           tasks=tasks
                            )
 
 

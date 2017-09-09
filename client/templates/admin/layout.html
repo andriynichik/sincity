@@ -187,9 +187,27 @@
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
-                                        <a href="/tasks/wiki_request">
+                                        <a href="javascript:void(0);" class="menu-toggle">
                                             <span>Request</span>
                                         </a>
+                                        <ul class="ml-menu">
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='active')}}">
+                                                    <span>Active</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='done')}}">
+                                                    <span>Done</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='in_progress')}}">
+                                                    <span>In progress</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
                                     </li>
                                 </ul>
                             </li>
