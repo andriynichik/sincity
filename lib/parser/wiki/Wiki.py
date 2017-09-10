@@ -216,3 +216,18 @@ class Wiki(Parser):
         match = re.search(r"^(?P<number>([\d,\.]+))", content.replace(' ', ''))
         return match.group('number').strip(',.').replace(',', '.') if match else 0
 
+    def _get_value_with_link(self, column_name, content):
+        match = re.search(
+            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>.*?<a[^>]*href=\"(?P<url>/wiki/[^\"]*)\"[^>]*>(?P<name>[^<]*)</a>.*?<[^>]*td>",
+            content,
+            re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+
+        return {"url": self.HOST + match.group('url'), "name": self.replace_html(match.group('name'))} if match else {}
+
+    def _get_value(self, column_name, content):
+        match = re.search(
+            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>(?P<name>.*?)<[^>]*td>",
+            content,
+            re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+
+        return self.replace_html(match.group('name')) if match else None

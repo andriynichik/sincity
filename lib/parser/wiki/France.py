@@ -1,7 +1,5 @@
 import re
-from bs4 import BeautifulSoup
 from lib.parser.wiki.Wiki import Wiki as Wiki
-
 
 
 class France(Wiki):
@@ -75,14 +73,6 @@ class France(Wiki):
             admin.append(city)
 
         return admin
-
-    def _get_value_with_link(self, column_name, content):
-        match = re.search(
-            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>.*?<a[^>]*href=\"(?P<url>/wiki/[^\"]*)\"[^>]*>(?P<name>[^<]*)</a>.*?<[^>]*td>",
-            content,
-            re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
-
-        return {"url": self.HOST + match.group('url'), "name": self.replace_html(match.group('name'))} if match else {}
 
     def _get_country(self):
         result = self._get_value_with_link(u"Pays", self._main_block)
@@ -163,15 +153,6 @@ class France(Wiki):
             return capital
 
         return None
-
-
-    def _get_value(self, column_name, content):
-        match = re.search(
-            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>(?P<name>.*?)<[^>]*td>",
-            content,
-            re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
-
-        return self.replace_html(match.group('name')) if match else None
 
     def get_postal_codes(self):
         data = self._get_value('Code postal', self._main_block)
