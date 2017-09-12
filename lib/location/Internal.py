@@ -3,6 +3,8 @@ from lib.location.Location import Location
 
 class Internal(Location):
 
+    TYPE = 'internal'
+
     def _add_source(self, name, value):
         data = self._get_obj()
         if not data[name]:

@@ -1,5 +1,10 @@
 {% extends "admin/layout.html" %}
 {% block body %}
+{% if country: %}
+<script type="text/javascript" src="/data/gmap/{{country}}.js"></script>
+{% else %}
+<script type="text/javascript" src="/data/gmap.js"></script>
+{% endif %}
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
@@ -23,6 +28,7 @@
                         - <a class="toggle-link-vis" data-column="4">Position</a>
                         - <a class="toggle-link-vis" data-column="5" data-hide>Bounds</a>
                         - <a class="toggle-link-vis" data-column="6">Postal code</a>
+                        - <a class="toggle-link-vis" data-column="7" data-hide>Requests</a>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -36,6 +42,7 @@
                                     <th>Position</th>
                                     <th>Bounds</th>
                                     <th>Postal code</th>
+                                    <th>Requests</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -46,32 +53,11 @@
                                     <th>Parents</th>
                                     <th>Position</th>
                                     <th>Bounds</th>
-                                    <th>Postal</th>
+                                    <th>Postal code</th>
+                                    <th>Requests</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
-                                {% for item in items %}
-                                <tr>
-                                    <td>{{ item.name }}</td>
-                                    <td>{{ item.short_name }}</td>
-                                    <td>{{ item.type }}</td>
-                                    <td>
-                                        {% for admin in item.admin_hierarchy %}
-                                        <a href="javascript:void(0);">{{ admin.long_name }}({{ admin.type }})</a> &gt;
-                                        {% endfor %}
-                                    </td>
-                                    <td>
-                                        <a href="https://www.google.com.ua/maps/@{{item.center.lat}},{{item.center.lng}}"
-                                           target="_blank">
-                                            {{item.center.lat}}, {{item.center.lng}}
-                                        </a>
-                                    </td>
-                                    <td>({{item.bounds.left.lat}}, {{item.bounds.left.lng}}),
-                                        ({{item.bounds.right.lat}}, {{item.bounds.right.lng}})
-                                    </td>
-                                    <td>{{item.get('postal_code', '')}}</td>
-                                </tr>
-                                {% endfor %}
                                 </tbody>
                             </table>
                         </div>

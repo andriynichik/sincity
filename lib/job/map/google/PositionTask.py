@@ -7,8 +7,8 @@ class PositionTask(MapTask):
 
     def execute(self):
 
-        latitude = self._options.request.lat
-        longitude = self._options.request.lng
+        latitude = self._options.request.get('lat')
+        longitude = self._options.request.get('lng')
         loader = self._options.loader
         doc_factory = self._options.doc_factory
         force_update = self._options.force_update
@@ -21,5 +21,7 @@ class PositionTask(MapTask):
             if obj.get_place_id():
                 doc = doc_factory.gmaps(code)
                 if doc.is_new() or force_update:
-                    doc.update(obj.as_dictionary())
+                    dic = obj.as_dictionary()
+                    if dic.get('type'):
+                        doc.update(dic)
                 self.update_meta(request=(latitude, longitude), document=doc)

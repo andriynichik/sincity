@@ -2,6 +2,7 @@ from lib.hashlib.sha512 import sha512
 from pymongo import MongoClient
 from lib.location.Wiki import Wiki
 from lib.location.GMap import GMap
+from lib.location.Internal import Internal
 
 
 class StorageLocation:
@@ -24,3 +25,6 @@ class StorageLocation:
 
     def wiki_collection(self):
         return self._db[Wiki.TYPE]
+
+    def internal_collection(self):
+        return self._db[Internal.TYPE]

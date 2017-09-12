@@ -37,7 +37,8 @@ custom_request = opts.q if use_request else ''
 def update_meta(url, request, document):
     actual_doc = document.get_document()
     actual_doc.update(url=url)
-    added_requests = actual_doc.get('requests', []) + [request]
+    added_requests = [tuple(x) for x in actual_doc.get('requests', ())]
+    added_requests.append(request)
     actual_doc.update(requests=list(set(added_requests)))
     document.update(actual_doc)
 
