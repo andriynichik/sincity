@@ -1,5 +1,6 @@
 import datetime
 import sys
+import csv
 from lib.factory.Loader import Loader
 from lib.parser.wiki.France import France as WikiFr
 from lib.config.Yaml import Yaml as Config
@@ -40,34 +41,48 @@ def update_meta(url, request, document):
     actual_doc.update(requests=list(set(added_requests)))
     document.update(actual_doc)
 
-try:
-    if use_request:
-        url = url_format.format(custom_request)
-        log.add(message_format.format(custom_request), log.INFO)
-        content, code = loader.load(url, headers=headers)
-        parser = WikiFr(content)
+def check_error(custom_request):
+    try:
+        if use_request:
+            url = url_format.format(custom_request)
+            log.add(message_format.format(custom_request), log.INFO)
+            content, code = loader.load(url, headers=headers)
+            parser = WikiFr(content)
 
-        if parser.is_many_answers():
-            urls = parser.get_answers_links()
-            for answer_url in urls:
-                doc = document_factory.wiki(answer_url)
-                if doc.is_new() or force_update:
-                    page, code = loader.load(answer_url, headers=headers)
-                    page_parser = WikiFr(page)
-                    if page_parser.is_location_page():
-                        doc.update(page_parser.as_dictionary())
-                update_meta(url=answer_url, request=url, document=doc)
-        elif parser.is_location_page():
-            doc = document_factory.wiki(url)
-            if doc.is_new() or force_update:
-                doc.update(parser.as_dictionary())
-            update_meta(url=url, request=url, document=doc)
-    else:
-        log.add('Wrong command', log.ERROR)
-        print('use parameters like -q query string for search in wiki in url format')
-except:
-    message = str(sys.exc_info())
-    log.add('Unexpected error: [{0}]'.format(message), log.ERROR)
-    raise
+            if parser.is_many_answers():
+                urls = parser.get_answers_links()
+                for answer_url in urls:
+                    # print(answer_url)
+                    doc = document_factory.wiki(answer_url)
+                    if doc.is_new() or force_update:
+                        page, code = loader.load(answer_url, headers=headers)
+                        page_parser = WikiFr(page)
+                        print(page_parser.as_dictionary())
+                        # if page_parser.is_location_page():
+                        #     doc.update(page_parser.as_dictionary())
+                    # update_meta(url=answer_url, request=url, document=doc)
+            elif parser.is_location_page():
+                # doc = document_factory.wiki(url)
+                # if doc.is_new() or force_update:
+                #     doc.update(parser.as_dictionary())
+                # update_meta(url=url, request=url, document=doc)
+                # print(parser.as_dictionary())
+                pass
+        else:
+            # log.add('Wrong command', log.ERROR)
+            print('use parameters like -q query string for search in wiki in url format')
+    except:
+        message = str(sys.exc_info())
+        log.add('Unexpected error: [{0}]'.format(message), log.ERROR)
+        raise
+check_error(custom_request)
+# with open('./log/log_error.csv', 'r') as csvfile:
+#     error_list = csv.reader(csvfile)
+#     successful_attempts = 0
+#     for error in list(error_list):
+#         insee_error = (error[0].split())[0]
+#         check_error(insee_error)
+#         successful_attempts += 1
+#     print(successful_attempts)
 
 log.add('Finish', log.INFO)
