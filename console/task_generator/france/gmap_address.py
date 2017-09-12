@@ -4,7 +4,7 @@ from lib.config.Yaml import Yaml as Config
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 
 country = 'France'
-lst_adress = []
+lst_address = []
 
 config = Config('./config/config.yml').get('mongodb')
 
@@ -20,20 +20,20 @@ filter = {
 
 for search_result in wiki.find(filter):
     try:
-        new_adress = ''
+        new_address = ''
         for admin in search_result['admin_hierarchy']:
             name_admin = admin['name']
-            new_adress += name_admin
-            if new_adress not in lst_adress:
-                lst_adress.append(new_adress)
-                new_adress += ', '
+            new_address += name_admin
+            if new_address not in lst_address:
+                lst_address.append(new_address)
+                new_address += ', '
             else:
-                new_adress += ', '
+                new_address += ', '
                 continue
     except KeyError:
         continue
 
-for adress in lst_adress:
+for address in lst_address:
     # job_list.add(adress)
-    print(adress)
+    print(address)
 
