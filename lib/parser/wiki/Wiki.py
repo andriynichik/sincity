@@ -102,6 +102,12 @@ class Wiki(Parser):
         if block:
             result = float(block["data-lat"])
 
+        if not result:
+            block = self._content_soap.find("span", {"class": "geo"})
+            match = re.search(r"(?P<lat>[\d\.]+);", str(block))
+            if match:
+                result = match.group('lat')
+
         #match = re.search(r"data-lat=\"(?P<lat>[\d\.]+)\"", self.content)
         #if match.group('lat'):
         #    result = match.group('lat')
@@ -113,6 +119,12 @@ class Wiki(Parser):
         block = self._content_soap.find("a", {"class": "mw-kartographer-maplink"})
         if block:
             result = float(block["data-lon"])
+
+        if not result:
+            block = self._content_soap.find("span", {"class": "geo"})
+            match = re.search(r";\s*(?P<lon>[\d\.]+)", str(block))
+            if match:
+                result = match.group('lon')
 
         #match = re.search(r"data-lon=\"(?P<lon>[\d\.]+)\"", self.content)
         #if match.group('lon'):
@@ -159,7 +171,7 @@ class Wiki(Parser):
 
         tags = self._content_soap.find_all('li', {"class": "interlanguage-link"})
         for tag in tags:
-            match = re.search(r"(?P<name>.*?)\s*—", tag.a['title'])
+            match = re.search(r"(?P<name>.*?)\s*[-—]", tag.a['title'])
             if match:
                 name = match.group('name')
                 result[tag.a["lang"]] = {"name": name, "url": tag.a["href"]}
@@ -218,7 +230,7 @@ class Wiki(Parser):
 
     def _get_value_with_link(self, column_name, content):
         match = re.search(
-            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>.*?<a[^>]*href=\"(?P<url>/wiki/[^\"]*)\"[^>]*>(?P<name>[^<]*)</a>.*?<[^>]*td>",
+            r"<th[^>]*>(.(?!<th))*" + re.escape(column_name) + r"(.(?!<th))*<[^>]*th>\s*<td[^>]*>.*?<a[^>]*href=\"(?P<url>/wiki/[^\"]*)\"[^>]*>(?P<name>[^<]*)</a>.*?<[^>]*td>",
             content,
             re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
@@ -231,3 +243,7 @@ class Wiki(Parser):
             re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
         return self.replace_html(match.group('name')) if match else None
+
+    def get_all_links(self):
+        links = super(Wiki, self).get_all_links()
+        return [(self.HOST + x) for x in links if re.match(r"(/wiki/)", x)]

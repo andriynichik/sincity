@@ -3,7 +3,7 @@ from lib.parser.wiki.Italy import Italy as WikiFr
 
 loader = Factory.loader()
 
-url = 'https://it.wikipedia.org/w/index.php?search=insee+74298&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=7uw18iziltcdfvvdo87qvyxu8'
+url = 'https://it.wikipedia.org/w/index.php?search=Italia,Roma&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=7uw18iziltcdfvvdo87qvyxu8'
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 content, code = loader.load(url, headers=headers)

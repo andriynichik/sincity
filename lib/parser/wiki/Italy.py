@@ -21,11 +21,6 @@ class Italy(Wiki):
 
     def as_dictionary(self):
         dic = super(Italy, self).as_dictionary()
-
-        commune_codes = self.get_commune_codes()
-        if commune_codes:
-            dic.update(commune_codes=commune_codes)
-
         return dic
 
     def get_name(self):
@@ -155,6 +150,7 @@ class Italy(Wiki):
     def _parse_postal_codes(self, content):
         codes = []
         content = re.sub(r"(?i)\s*a\s*", "-", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r"–", "-", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         content = re.sub(r"(?i)\s*da\s*", ",", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         content = re.sub(r"\s+", "", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         for code_bloc in content.split(','):

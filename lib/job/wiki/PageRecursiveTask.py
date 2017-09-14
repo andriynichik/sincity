@@ -42,7 +42,7 @@ class PageRecursiveTask(WikiTask):
         return True if result else False
 
     def _add_link_to_pool(self, link):
-        if not link in self.page_parsed:
+        if not (link in self.page_parsed):
             self.url_pool.append(link)
 
     def _page_parsed(self, link):
