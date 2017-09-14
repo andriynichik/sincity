@@ -8,14 +8,15 @@ class PageRecursiveTask(WikiTask):
 
     def __init__(self, options, storage, log):
         super(PageRecursiveTask, self).__init__(options=options, storage=storage, log=log)
-        self.link = self._options.request
+        self.link = self._options.request.get('link')
+        self.max_level = self._options.request.get('level', 1)
         self.page_parsed = []
-        self.url_pool = [self.link]
+        self.url_pool = [(1, self.link)]
         self.host = self._options.host
 
     def execute(self):
         force_update = self._options.force_update
-        for link in self.url_pool:
+        for level, link in self.url_pool:
             try:
                 content, code = self.loader.load(link, headers=self.headers)
                 parsed_page = self.parser(content)
@@ -32,6 +33,11 @@ class PageRecursiveTask(WikiTask):
                     for link_on_page in links_on_page:
                         if self._is_correct_link(link_on_page):
                             self._add_link_to_pool(self.host + link_on_page)
+                elif self.max_level >= level:
+                    links_on_page = parsed_page.get_all_links()
+                    for link_on_page in links_on_page:
+                        if self._is_correct_link(link_on_page):
+                            self._add_link_to_pool(self.host + link_on_page, level + 1)
                 self._page_parsed(link)
             except:
                 self._page_parsed(link)
@@ -41,9 +47,9 @@ class PageRecursiveTask(WikiTask):
 
         return True if result else False
 
-    def _add_link_to_pool(self, link):
+    def _add_link_to_pool(self, link, level=1):
         if not (link in self.page_parsed):
-            self.url_pool.append(link)
+            self.url_pool.append((level, link))
 
     def _page_parsed(self, link):
         self.page_parsed.append(link)

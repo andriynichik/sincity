@@ -10,6 +10,7 @@ class Italy(Wiki):
     ADMIN_LEVEL_3 = u'provincia'
     ADMIN_LEVEL_4 = u'città metropolitana'
     ADMIN_LEVEL_5 = u'comune'
+    ADMIN_LEVEL_6 = u'frazione'
 
     def __init__(self, content):
         super(Italy, self).__init__(content)
@@ -33,6 +34,11 @@ class Italy(Wiki):
     def get_type(self):
         element = str(self._content_soap.select_one('table.sinottico > tr.sinottico_testata'))
         if element:
+            match = re.search(r"(?P<type>{})".format(self.ADMIN_LEVEL_6), element,
+                              re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+            if match:
+                return self.ADMIN_LEVEL_6
+
             match = re.search(r"(?P<type>{})".format(self.ADMIN_LEVEL_5), element, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
             if match:
                 return self.ADMIN_LEVEL_5
@@ -158,5 +164,7 @@ class Italy(Wiki):
 
         return codes
 
-    def _parse_commune_codes(self, content):
-        return self._parse_postal_codes(content)
+    def is_location_page(self):
+        match = re.search(r"href=[\"']/wiki/Template:Divisione_amministrativa/man[\"']",
+            self._main_block, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        return bool(match)

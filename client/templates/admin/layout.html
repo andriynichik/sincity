@@ -165,6 +165,35 @@
                     </li>
 
                     <li>
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">widgets</i>
+                            <span>Italy</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="/internal/France">
+                                    <span>Internal</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="/matcher/France">
+                                    <span>Matching</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{url_for('wiki_list', country='Italia')}}">
+                                    <span>Wikipedia</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="{{url_for('gmaps_list', country='Italia')}}">
+                                    <span>Google Maps</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
                         <a href="{{url_for('wiki_list')}}">
                             <span>Wikipedia</span>
                         </a>
@@ -203,6 +232,29 @@
                                             </li>
                                             <li>
                                                 <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='in_progress')}}">
+                                                    <span>In progress</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+
+                                    </li>
+                                    <li>
+                                        <a href="javascript:void(0);" class="menu-toggle">
+                                            <span>Page recursive</span>
+                                        </a>
+                                        <ul class="ml-menu">
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='active')}}">
+                                                    <span>Active</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='done')}}">
+                                                    <span>Done</span>
+                                                </a>
+                                            </li>
+                                            <li>
+                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='in_progress')}}">
                                                     <span>In progress</span>
                                                 </a>
                                             </li>
