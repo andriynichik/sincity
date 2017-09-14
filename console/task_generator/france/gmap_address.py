@@ -22,18 +22,12 @@ for search_result in wiki.find(filter):
     try:
         new_address = ''
         for admin in search_result['admin_hierarchy']:
-            name_admin = admin['name']
-            new_address += name_admin
+            new_address += admin['name']
             if new_address not in lst_address:
                 lst_address.append(new_address)
-                new_address += ', '
-            else:
-                new_address += ', '
-                continue
+            new_address += ', '
     except KeyError:
-        continue
+        pass
 
 for address in lst_address:
-    # job_list.add(adress)
-    print(address)
-
+    job_list.add(adress)
