@@ -18,6 +18,7 @@ $(function () {
 '{{e(items[0].get('postal_codes'))}}'
 ]);*/
     var table;
+    var i = 0;
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
         dom: 'Bfrtip',
@@ -27,6 +28,7 @@ $(function () {
         data: [
         {% for item in items %}
 [
+'{{e(item.get('_id'))}}',
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
 '{{e(item.get('type'))}}',
 [{% for admin in item.get('admin_hierarchy', {}) %}
@@ -38,7 +40,8 @@ $(function () {
 '{{e(item.get('population'))}}',
 '{{e(item.get('density'))}}',
 '{{e(item.get('area'))}}',
-'{{e(item.get('postal_codes'))}}'
+'{{e(item.get('postal_codes'))}}',
+'{{e(item.get('requests'))}}'
 ],
 {% endfor %}
 
@@ -46,15 +49,21 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
+                    return '<a href="#'+ data +'">#</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
                     return '<a href="'+ data[1] +'" target="_blank">'+ data[0] +'</a>';
                 },
-                targets: 0
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 1
+                targets: i++
             },
             //{
             //    render: function ( data, type, row ) {
@@ -62,7 +71,7 @@ $(function () {
             //            return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +': '+ data[2] +'</a>';
             //        }, '')
             //    },
-            //    targets: 2
+            //    targets: i++
             //},
             {
                 render: function ( data, type, row ) {
@@ -70,43 +79,43 @@ $(function () {
                         return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
                     }, '')
                 },
-                targets: 2
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                 },
-                targets: 3
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                 },
-                targets: 4
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 5
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 6
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 7
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 8
+                targets: i++
             },
         ]
     });
