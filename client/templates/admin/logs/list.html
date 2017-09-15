@@ -43,7 +43,7 @@
                                     <td>{{ item.type }}</td>
                                     <td>{{ 'new' if item.get('status', 1) == 1 else 'close' }}</td>
                                     {% if item.get('status', 1) == 1 %}
-                                    <td><a href="{{url_for('log_close', name=name, id=item.get('_id'))}}" data-log-close title="close">xXx</a></td>
+                                    <td><a href="{{url_for('log_close', name=name, id=item.get('_id'))}}" data-log-close title="close">X</a></td>
                                     {% else %}
                                     <td>-</td>
                                     {% endif %}

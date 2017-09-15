@@ -1,6 +1,7 @@
 from lib.logger.Log import Log
 from time import time
 from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 
 class MongoDB(Log):
@@ -21,4 +22,4 @@ class MongoDB(Log):
         self._storage.insert_one(data)
 
     def close(self, id):
-        return self._storage.update_one({'_id': id}, {'$set': {'status': self.STATUS_CLOSE}}).acknowledged
+        return self._storage.update_one({'_id': ObjectId(id)}, {'$set': {'status': self.STATUS_CLOSE}}).acknowledged
