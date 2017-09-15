@@ -13,4 +13,4 @@ job_list = Storage(PageRecursiveTask.TYPE, config.get('mongodb'))
 df = pd.read_csv('./WorkBaseFile/ItalyUrlMainList', delimiter="\t")
 for index, row in df.iterrows():
     link = row[0]
-    job_list.add({'link': '', 'level': max_dig_level})
+    job_list.add({'link': link, 'level': max_dig_level})

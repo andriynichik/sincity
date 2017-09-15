@@ -8,7 +8,7 @@ class File(Log):
         self._fh = open(file_name, 'a+')
 
     def add(self, message, type=Log.WARNING):
-        message = "[{time}][{type}] {message}\n".format(time=time(), type=type, message=message)
+        message = "[{time}][{type}] {message}\n".format(time=time(), type=type, message=str(message))
         self._fh.write(message)
 
     def __del__(self):

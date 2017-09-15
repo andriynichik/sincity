@@ -10,7 +10,7 @@ from time import sleep
 from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
 
 
-force = False
+force = True
 
 config = Config('./config/config.yml')
 
