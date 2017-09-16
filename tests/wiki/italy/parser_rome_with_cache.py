@@ -26,8 +26,6 @@ parser = WikiParser(content)
 
 dic = parser.as_dictionary()
 
-print(dic)
-
 print('.' if dic.get('name') == 'Roma' else 'E', end='')
 print('.' if dic.get('type') == 'comune' else 'E', end='')
 print('.' if len(dic.get('admin_hierarchy')) == 3 else 'E', end='')

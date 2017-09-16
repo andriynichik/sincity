@@ -25,6 +25,7 @@ options.update(doc_factory=doc_factory)
 options.update(force_update=force)
 
 options.update(parser=Italy)
+options.update(host='it.wikipedia.org')
 options.update(headers={'User-Agent': 'Mozilla/5.0'})
 storage = Storage(job_name=PageRecursiveTask.TYPE, storage_config=config.get('mongodb'))
 
