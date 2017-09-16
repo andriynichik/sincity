@@ -1,0 +1,39 @@
+version: '2'
+services:
+  wiki_parser_python_pycharm:
+    build:
+      context: ./../
+      dockerfile: ./docker/python3.dockerfile
+    command: ifconfig
+    image: python3:wiki_parser
+    links:
+      - wiki_parser_mongodb_pycharm
+    volumes:
+      - ./../:/app
+    expose:
+      - 5000
+
+  wiki_parser_mongodb_pycharm:
+    build:
+      context: ./../
+      dockerfile: ./docker/mongodb.dockerfile
+    image: mongodb:wiki_parser
+    volumes:
+      - ./../../data/wiki_parser_mongodb:/data/db
+      - ./../../data/wiki_gmaps_parser_mongodb_bu:/data/backup
+
+    expose:
+      - 27017
+
+  nginx_wiki_parser_pycharm:
+    build:
+      context: ./../
+      dockerfile: ./docker/nginx.dockerfile
+    image: nginx:wiki_parser
+    volumes:
+      - ./../config/nginx:/etc/nginx
+      - ./../:/app
+    ports:
+      - 8080:8080
+    links:
+      - wiki_parser_python_pycharm
