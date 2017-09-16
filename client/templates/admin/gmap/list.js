@@ -1,5 +1,6 @@
 $(function () {
     var table;
+    var i = 0;
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
         dom: 'Bfrtip',
@@ -9,6 +10,7 @@ $(function () {
         data: [
         {% for item in items %}
 [
+'{{e(item.get('_id'))}}',
 '{{e(item.get('name'))}}',
 '{{e(item.get('short_name'))}}',
 '{{e(item.get('type'))}}',
@@ -26,21 +28,27 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return data;
+                    return '<a href="#' + data + '">#</a>';
                 },
-                targets: 0
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 1
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 2
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
@@ -48,7 +56,7 @@ $(function () {
                         return previousValue + ' '+ data[0] +'('+ data[1] +') > ';
                     }, '')
                 },
-                targets: 3
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
@@ -56,25 +64,25 @@ $(function () {
                     var lng = data[1];
                     return '<a href="http://maps.google.com/maps?q='+lat+','+lng+'&ll='+lat+','+lng+'&z=12" target="_blank">'+lat+', '+lng+'</a>';
                 },
-                targets: 4
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return '('+data[0]+','+data[1]+'),('+data[2]+','+data[3]+')';
                 },
-                targets: 5
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 6
+                targets: i++
             },
             {
                 render: function ( data, type, row ) {
                     return data;
                 },
-                targets: 7
+                targets: i++
             },
         ]
     });

@@ -278,10 +278,36 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="{{url_for('logs')}}">
+                        <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">assignment</i>
                             <span>Logs</span>
                         </a>
+                        <ul class="ml-menu">
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>New</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="{{url_for('logs', name='wiki_request', status=1)}}">
+                                            <span>Wiki request</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0);" class="menu-toggle">
+                                    <span>Close</span>
+                                </a>
+                                <ul class="ml-menu">
+                                    <li>
+                                        <a href="{{url_for('logs', name='wiki_request', status=2)}}">
+                                            <span>Wiki request</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
                     </li>
                 </ul>
             </div>
