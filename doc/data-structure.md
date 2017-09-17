@@ -4,6 +4,8 @@
 
 документ который по нашим соображениям включает в себя максимально точные заначения(названия без шума, полная админ структура, дополнительные свойства местоположения, указатели ни источники)
 
+code - string уникальный идентификатор получаемый из названия, админ уровня и иерархии админ делений
+
 name - string название админ деления
 ```text
   Paris
@@ -14,6 +16,12 @@ type - string уровень местоположения
   ADMIN_LEVEL_1
 ```
 
+У каждой страны свое число админ делений, по этому тут будет храниться только уровень
+Но уровень можно сопоставить с названием при внедрении в другую систему
+Всего на данный момент будет 8 уровней админ делений, при необходимости список расширим
+ADMIN_LEVEL_1 ADMIN_LEVEL_2 ADMIN_LEVEL_3 ADMIN_LEVEL_4
+ADMIN_LEVEL_5 ADMIN_LEVEL_6 ADMIN_LEVEL_7 ADMIN_LEVEL_8
+
 i18n - dict названия на разных языках
 ```text
   {
@@ -22,7 +30,7 @@ i18n - dict названия на разных языках
   }
 ```
 
-admin_hierarchy - list список в порядке убывания  всех уровней админ делений до этого пункта (позволит миксовать запросы к тому-же гуглу)
+admin_hierarchy - list список в порядке убывания  всех уровней админ делений до этого пункта, названия на родном языке (позволит миксовать запросы к тому-же гуглу)
 ```text
   [
     {name:France, type:ADMIN_LEVEL_1},
@@ -137,6 +145,44 @@ sources - dict - список ключей на связаные данные и
   }
 ```
 
+## файл импорта/экспорта
+
+Плоская таблица с данными, в формате csv с разделителем полей \t
+и разделителем строк \n
+
+* обязательно к заполнению
+
+Поле в csv -> поле в документе на сервере
+
+code -> code - если код отсутсвует, то он будет сгенерирован автоматически
+name -> name - *
+type -> type - *
+i18n -> i18n - поле будет записано в формате lang:name|lang:name|...
+ADMIN_LEVEL_1 -> admin_hierarchy[0].name - *
+ADMIN_LEVEL_2 -> admin_hierarchy[1].name
+ADMIN_LEVEL_3 -> admin_hierarchy[2].name
+ADMIN_LEVEL_4 -> admin_hierarchy[3].name
+ADMIN_LEVEL_5 -> admin_hierarchy[4].name
+ADMIN_LEVEL_6 -> admin_hierarchy[5].name
+ADMIN_LEVEL_7 -> admin_hierarchy[6].name
+ADMIN_LEVEL_8 -> admin_hierarchy[7].name
+capital -> capital
+lat -> center.lat
+lng -> center.lng
+borders -> borders - границы будут заполнены в одно поле в формате (lat,lng),(lat,lng),(lat,lng)
+bounds -> bounds - область окна карты будет записана в одну ячейку (lat,lng),(lat,lng)
+altitude_min -> altitude.min
+altitude_max -> altitude.max
+altitude_mean -> altitude.mean
+altitude_median -> altitude.median
+population -> population
+density -> density
+area -> area
+postal_codes -> postal_codes - формат записи в csv будет через запятую 45684,46465,45654
+timezone -> time.timezone
+UTC -> time.UTC
+DST -> time.DST
+other -> other.raw - сюда просто вставится строка как есть, без какой либо обработки
 
 # page_cache
 
