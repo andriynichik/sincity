@@ -1,4 +1,5 @@
 $(function () {
+    {% if items.count() %}
 /*    console.log(
 [
 ['{{e(items[0].get('name'))}}', '{{e(items[0].get('url'))}}'],
@@ -17,6 +18,7 @@ $(function () {
 '{{e(items[0].get('area'))}}',
 '{{e(items[0].get('postal_codes'))}}'
 ]);*/
+    {% endif %}
     var table;
     var i = 0;
     table = $('.js-exportable').DataTable({
