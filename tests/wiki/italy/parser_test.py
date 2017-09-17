@@ -8,7 +8,8 @@ config = Config('./config/config.yml')
 
 loader = Factory.loader_with_mongodb(config.get('mongodb'))
 
-url = 'https://it.wikipedia.org/wiki/Variazioni_amministrative_della_Calabria'
+#url = 'https://it.wikipedia.org/wiki/Variazioni_amministrative_della_Calabria'
+url = 'https://it.wikipedia.org/wiki/Provincia_di_Biella'
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 content, code = loader.load(url, headers=headers)
@@ -21,6 +22,7 @@ else:
     print('E')
     sys.exit()
 
+#print(content)
 
 parser = WikiParser(content)
 
@@ -28,5 +30,7 @@ dic = parser.as_dictionary()
 
 print('is location: {}'.format(('yes' if parser.is_location_page() else 'no')))
 print('is list: {}'.format(('yes' if parser.is_many_answers() else 'no')))
+
+dic.pop('i18n', None)
 
 print(dic)
