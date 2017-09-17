@@ -4,11 +4,18 @@ from lib.job.storage.MongoDB import MongoDB as Storage
 from lib.config.Yaml import Yaml as Config
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.factory.StorageLocation import StorageLocation as DocFactory
+from lib.job.storage.RecursiveParser import RecursiveParser
 from lib.parser.wiki.Italy import Italy
 from lib.logger.MongoDB import MongoDB as Log
+from lib.logger.File import File as LogHistory
 from time import sleep
 from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
+import datetime
 
+
+title = 'italy_recursive_{}'.format(datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+
+print('START {}'.format(title))
 
 force = True
 
@@ -28,6 +35,11 @@ options.update(parser=Italy)
 options.update(host='it.wikipedia.org')
 options.update(headers={'User-Agent': 'Mozilla/5.0'})
 storage = Storage(job_name=PageRecursiveTask.TYPE, storage_config=config.get('mongodb'))
+
+options.update()
+
+options.update(log_history=LogHistory('log/{}.log'.format(title)))
+options.update(recursive_storage=RecursiveParser(title, config.get('mongodb')))
 
 log = Log(log_name=PageRecursiveTask.TYPE, config=config.get('mongodb'))
 

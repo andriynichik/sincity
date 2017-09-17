@@ -41,3 +41,6 @@ class MongoDB(Storage):
 
     def _update_status(self, id, status):
         self.collection.update_one({'_id': id}, {'$set': {'status': status}})
+
+    def clear(self):
+        self.collection.delete_many({})
