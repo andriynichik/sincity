@@ -64,24 +64,41 @@ class Italy(Wiki):
     def get_admin_hierarchy(self):
         admin = []
 
+        min_level = self.get_type()
+
+        if min_level == self.ADMIN_LEVEL_1:
+            return admin
+
         country = self._get_country()
-        if country:
+        if country and country.get('name', None):
             admin.append(country)
 
+        if min_level == self.ADMIN_LEVEL_2:
+            return admin
+
         region = self._get_region()
-        if region:
+        if region and region.get('name', None):
             admin.append(region)
 
+        if min_level == self.ADMIN_LEVEL_3:
+            return admin
+
         department = self._get_department()
-        if department:
+        if department and department.get('name', None):
             admin.append(department)
 
+        if min_level == self.ADMIN_LEVEL_4:
+            return admin
+
         borough = self._get_borough()
-        if borough:
+        if borough and borough.get('name', None):
             admin.append(borough)
 
+        if min_level == self.ADMIN_LEVEL_5:
+            return admin
+
         city = self._get_city()
-        if city:
+        if city and city.get('name', None):
             admin.append(city)
 
         return admin
@@ -126,6 +143,7 @@ class Italy(Wiki):
     def get_population(self):
         population = self._get_value(u"Abitanti", self._main_block)
         first_numbers = self._first_numbers(str(population))
+        first_numbers = re.sub(r".", "", str(first_numbers), re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
         return int(first_numbers) if first_numbers else 0
 
@@ -155,14 +173,32 @@ class Italy(Wiki):
 
     def _parse_postal_codes(self, content):
         codes = []
-        content = re.sub(r"(?i)\s*a\s*", "-", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r"(?i)(\s+|^)a(\s+|$)", "-", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r"(?i)(\s+|^)e(\s+|$)", ",", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r";", ",", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         content = re.sub(r"–", "-", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         content = re.sub(r"(?i)\s*da\s*", ",", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
-        content = re.sub(r"\s+", "", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
-        for code_bloc in content.split(','):
-            codes += self._parse_postal_code(code_bloc)
+        content = re.sub(r"(\D|^)\s*-\s*(\D|$)", " ", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r"[^\d,-]+", " ", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        content = re.sub(r"\s+", ",", content, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
-        return codes
+        for code_bloc in content.split(','):
+            if code_bloc:
+                codes += self._parse_postal_code(code_bloc)
+
+        good_codes = []
+
+        for code in codes:
+            code = str(code)
+            code_len = len(code)
+            if code_len < 5:
+                zeros = ['0'] * (5 - code_len)
+                zeros.append(code)
+                good_codes.append(''.join(zeros))
+            else:
+                good_codes.append(code)
+
+        return good_codes
 
     def is_location_page(self):
         match = re.search(r"href=[\"']/wiki/Template:Divisione_amministrativa/man[\"']",

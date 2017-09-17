@@ -44,10 +44,9 @@ class Wiki(Parser):
 
         dic.update(i18n=self.get_lang_links())
 
-        # TODO: currently it is working so bad, and parser are useless, need more analyse
-        #capital = self.get_capital()
-        #if capital:
-        #    dic.update(capital=capital)
+        capital = self.get_capital()
+        if capital:
+            dic.update(capital=capital)
 
         lat = self.get_latitude()
         lng = self.get_longitude()
