@@ -1,8 +1,10 @@
 Sindev
 
 Run flask
-PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 flask run >& ./foobar.log &
+PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 flask run >& ./log.txt &
 
+Worker run
+python3.6 console/workers/italy/wiki_task_recursive.py >& ./log/wiki_task_recursive.txt &
 
 digitalocean.com
 
