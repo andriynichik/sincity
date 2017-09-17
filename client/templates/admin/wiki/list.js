@@ -43,7 +43,7 @@ $(function () {
 '{{e(item.get('postal_codes'))}}',
 '{{e(item.get('requests'))}}'
 ],
-{% endfor %}
+        {% endfor %}
 
         ],
         columnDefs: [
@@ -76,7 +76,7 @@ $(function () {
             {
                 render: function ( data, type, row ) {
                     return data.reduce(function(previousValue, data, index) {
-                        return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                        return previousValue + '[<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>]';
                     }, '')
                 },
                 targets: i++
