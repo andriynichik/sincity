@@ -1,0 +1,52 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<section class="content">
+    <div>
+    Logs
+        <ul>
+            <li>
+                <a href="{{ url_for('clear_logs', name='wiki_request') }}" target="_blank">Clear wiki request error logs</a>
+            </li>
+            <li>
+                <a href="{{ url_for('clear_logs', name='wiki_page_recursive') }}" target="_blank">Clear wiki page recursive error logs</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+    Tasks
+        <ul>
+            <li>
+                <a href="{{ url_for('clear_tasks', journal_id='wiki_request') }}" target="_blank"> Clear tasks for wiki request</a>
+            </li>
+            <li>
+                <a href="{{ url_for('clear_tasks', journal_id='wiki_page_recursive') }}" target="_blank">Clear tasks for wiki page recursive</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+    Wiki Data
+        <ul>
+            <li>
+                <a href="{{ url_for('clear_wiki_country', name='France') }}" target="_blank">Clear France wiki data</a>
+            </li>
+            <li>
+                <a href="{{ url_for('clear_wiki_country', name='Italia') }}" target="_blank">Clear Italy wiki data</a>
+            </li>
+        </ul>
+    </div>
+
+    <div>
+    Gmaps Data
+        <ul>
+            <li>
+                <a href="#" target="_blank">Clear France gmaps data (todo)</a>
+            </li>
+            <li>
+                <a href="#" target="_blank">Clear Italy gmaps data (todo)</a>
+            </li>
+        </ul>
+    </div>
+</section>
+{% endblock %}

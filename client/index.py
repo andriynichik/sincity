@@ -8,6 +8,7 @@ import re
 from lib.location.Wiki import Wiki
 from lib.location.GMap import GMap
 from lib.logger.MongoDB import MongoDB as MongoDBLog
+import hashlib
 
 
 app = Flask(__name__)
@@ -80,11 +81,11 @@ def wiki_test():
     return render_template('admin/wiki/test.html')
 
 
-@app.route('/tasks/<string:jornal_id>')
-@app.route('/tasks/<string:jornal_id>/<string:status>')
-def tasks_list(jornal_id, status='active'):
+@app.route('/tasks/<string:journal_id>')
+@app.route('/tasks/<string:journal_id>/<string:status>')
+def tasks_list(journal_id, status='active'):
     config = Config('./config/config.yml')
-    storage = JobStorage(job_name=jornal_id,storage_config=config.get('mongodb'))
+    storage = JobStorage(job_name=journal_id, storage_config=config.get('mongodb'))
 
     if status == storage.STATUS_COMPLETE:
         tasks = storage.get_complete()
@@ -94,9 +95,17 @@ def tasks_list(jornal_id, status='active'):
         tasks = storage.get_active()
 
     return render_template('admin/tasks/list.html',
-                           name=jornal_id,
+                           name=journal_id,
                            tasks=tasks
                            )
+
+
+@app.route('/tasks/remove/<string:journal_id>')
+def clear_tasks(journal_id):
+    config = Config('./config/config.yml')
+    storage = JobStorage(job_name=journal_id, storage_config=config.get('mongodb'))
+    storage.clear()
+    return render_template('admin/empty.html', data='ok', auto_close=True)
 
 
 @app.route('/logs/<string:name>/<int:status>')
@@ -113,8 +122,37 @@ def logs(name, status=None):
     return render_template('admin/logs/list.html', logs=collection.find(query), name=name)
 
 
+@app.route('/logs/remove/<string:name>')
+def clear_logs(name):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    connection.log[name].delete_many({})
+    return render_template('admin/empty.html', data='ok', auto_close=True)
+
+
 @app.route('/logs/close/<string:name>/<string:id>')
 def log_close(name, id):
     config = Config('./config/config.yml').get('mongodb')
     log = MongoDBLog(log_name=name, config=config)
     return 'Ok' if log.close(id) else 'Not'
+
+
+@app.route('/clear/wiki/<string:name>')
+def clear_wiki_country(name):
+    config = Config('./config/config.yml').get('mongodb')
+    factory = DocFactory(config)
+    collection = factory.wiki_collection()
+    result = collection.delete_many({'admin_hierarchy': {'$elemMatch': {'name': name}}})
+    return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
+
+
+@app.route('/worth-it/<string:word>')
+def secret_page(word):
+    md5 = hashlib.md5()
+    md5.update(word.encode('utf-8'))
+    code = md5.hexdigest()
+    if code != 'e37d7c242913151ee9d7d794f2027128':
+        return render_template('admin/empty.html', data=403)
+
+    return render_template('admin/worth-it/debug.html')
+

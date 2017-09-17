@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
-    <title>Welcome To | Bootstrap Based Admin Template - Material Design</title>
+    <title>Sinoptik Parser</title>
     <!-- Favicon-->
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
 
@@ -221,17 +221,17 @@
                                         </a>
                                         <ul class="ml-menu">
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='active')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='active')}}">
                                                     <span>Active</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='done')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='done')}}">
                                                     <span>Done</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_request', status='in_progress')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='in_progress')}}">
                                                     <span>In progress</span>
                                                 </a>
                                             </li>
@@ -244,17 +244,17 @@
                                         </a>
                                         <ul class="ml-menu">
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='active')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='active')}}">
                                                     <span>Active</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='done')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='done')}}">
                                                     <span>Done</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', jornal_id='wiki_page_recursive', status='in_progress')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='in_progress')}}">
                                                     <span>In progress</span>
                                                 </a>
                                             </li>
@@ -293,6 +293,11 @@
                                             <span>Wiki request</span>
                                         </a>
                                     </li>
+                                    <li>
+                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=1)}}">
+                                            <span>Wiki page recursive</span>
+                                        </a>
+                                    </li>
                                 </ul>
                             </li>
                             <li>
@@ -303,6 +308,12 @@
                                     <li>
                                         <a href="{{url_for('logs', name='wiki_request', status=2)}}">
                                             <span>Wiki request</span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=2)}}">
+                                            <span>Wiki page recursive</span>
                                         </a>
                                     </li>
                                 </ul>
@@ -318,7 +329,7 @@
                     &copy; 2017 <a href="javascript:void(0);">Sinoptik.ua</a>.
                 </div>
                 <div class="version">
-                    <b>Version: </b> 0.1.2
+                    <b>Version: </b> 0.1.5
                 </div>
             </div>
             <!-- #Footer -->
