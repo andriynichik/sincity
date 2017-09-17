@@ -25,9 +25,7 @@ for search_result in wiki.find(filter):
             new_address += admin['name']
             if new_address not in lst_address:
                 lst_address.append(new_address)
+                job_list.add(new_address)
             new_address += ', '
     except KeyError:
         pass
-
-for address in lst_address:
-    job_list.add(adress)
