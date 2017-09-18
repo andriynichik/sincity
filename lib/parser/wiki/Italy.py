@@ -143,7 +143,7 @@ class Italy(Wiki):
     def get_population(self):
         population = self._get_value(u"Abitanti", self._main_block)
         first_numbers = self._first_numbers(str(population))
-        first_numbers = re.sub(r".", "", str(first_numbers), re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
+        first_numbers = re.sub(r"\.", "", str(first_numbers), re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
         return int(first_numbers) if first_numbers else 0
 
