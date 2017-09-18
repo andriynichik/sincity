@@ -1,0 +1,29 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+    <section class="content">
+    <div>
+    Parsed pages
+        <ul>
+            {% for url in parsed_page %}
+            <li>
+                <a href="{{ url_for('recursive_parsed_page_cache', name=url) }}" target="_blank">{{ url }}</a>
+                <a href="{{ url_for('recursive_parsed_page_drop', name=url) }}">X</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div>
+    Url pool
+        <ul>
+            {% for url in url_pool %}
+            <li>
+                <a href="{{ url_for('recursive_url_pool_cache', name=url) }}" target="_blank">{{ url }}</a>
+                <a href="{{ url_for('recursive_url_pool_drop', name=url) }}">X</a>
+
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</section>
+{% endblock %}

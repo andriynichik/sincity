@@ -1,0 +1,67 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>GMAPS</h2>
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            GMAPS {{ country }}
+                        </h2>
+                    </div>
+                    <div class="text">
+                        Toggle column:
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="1">Name</a>
+                        - <a class="toggle-link-vis" data-column="2">Short name</a>
+                        - <a class="toggle-link-vis" data-column="3">Admin Level</a>
+                        - <a class="toggle-link-vis" data-column="4">Parents</a>
+                        - <a class="toggle-link-vis" data-column="5">Position</a>
+                        - <a class="toggle-link-vis" data-column="6" data-hide>Bounds</a>
+                        - <a class="toggle-link-vis" data-column="7">Postal code</a>
+                        - <a class="toggle-link-vis" data-column="8" data-hide>Requests</a>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Level</th>
+                                    <th>From url</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>URL</th>
+                                    <th>Level</th>
+                                    <th>From url</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                {% for item in items %}
+                                <tr>
+                                    <td>{{ item.get('url') }}</td>
+                                    <td>{{ item.get('level') }}</td>
+                                    <td>{{ item.get('from_url') }}</td>
+                                </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+</section>
+
+<script src="/js/pages/tables/jquery-datatable.js"></script>
+{% endblock %}

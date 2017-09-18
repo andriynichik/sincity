@@ -146,6 +146,52 @@ def clear_wiki_country(name):
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
 
 
+@app.route('/recursive/parsed_page/<string:name>')
+def recursive_parsed_page_cache(name):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    objects = connection.parsed_page[name].find()
+
+    return render_template('admin/recursive/list.html', items=objects, name='Parsed page')
+
+
+@app.route('/recursive/parsed_page/drop/<string:name>')
+def recursive_parsed_page_drop(name):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    connection.parsed_page[name].drop()
+
+    return render_template('admin/empty.html', data='ok', auto_close=True)
+
+
+@app.route('/recursive/url_pool/drop/<string:name>')
+def recursive_url_pool_drop(name):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    connection.url_pool[name].drop()
+
+    return render_template('admin/empty.html', data='ok', auto_close=True)
+
+
+@app.route('/recursive/url_pool/<string:name>')
+def recursive_url_pool_cache(name):
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    objects = connection.url_pool[name].find({})
+
+    return render_template('admin/recursive/list.html', items=objects, name='Url pool')
+
+
+@app.route('/recursive')
+def recursive_cache_list():
+    config = Config('./config/config.yml').get('mongodb')
+    connection = MongoClient(config['host'], config['port'])
+    parsed_page = connection.parsed_page.collection_names(False)
+    url_pool = connection.url_pool.collection_names(False)
+
+    return render_template('admin/recursive/link_list.html', parsed_page=parsed_page, url_pool=url_pool)
+
+
 @app.route('/worth-it/<string:word>')
 def secret_page(word):
     md5 = hashlib.md5()
