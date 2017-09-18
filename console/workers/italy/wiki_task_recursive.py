@@ -11,9 +11,14 @@ from lib.logger.File import File as LogHistory
 from time import sleep
 from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
 import datetime
+from argparse import ArgumentParser
 
 
-title = 'italy_recursive_{}'.format(datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
+arg_parser = ArgumentParser(description='Worker with recursive parse in wiki')
+arg_parser.add_argument('-t', help='title of history')
+opts = arg_parser.parse_args()
+
+title = opts.t if opts.t else 'italy_recursive_{}'.format(datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
 
 print('START {}'.format(title))
 

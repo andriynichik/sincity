@@ -6,7 +6,7 @@ from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
 
 config = Config('./config/config.yml')
 
-max_dig_level = 6
+max_dig_level = 4
 
 job_list = Storage(PageRecursiveTask.TYPE, config.get('mongodb'))
 

@@ -28,12 +28,12 @@ class PageRecursiveTask(WikiTask):
                 content, code = self.loader.load(link, headers=self.headers)
                 parsed_page = self.parser(content)
                 if parsed_page.is_many_answers():
-                    self.log_history.add('[{}] {}'.format('is_many_answers', link))
+                    self.log_history.add('[{}] {} {}'.format('is_many_answers', code, link))
                     urls = parsed_page.get_answers_links()
                     for url in urls:
                         self._add_link_to_pool(url, link)
                 elif parsed_page.is_location_page():
-                    self.log_history.add('[{}] {}'.format('is_location_page', link))
+                    self.log_history.add('[{}] {} {}'.format('is_location_page', code, link))
                     doc = self.document_factory.wiki(link)
                     if doc.is_new() or force_update:
                         doc.update(parsed_page.as_dictionary())
@@ -43,7 +43,7 @@ class PageRecursiveTask(WikiTask):
                         if self._is_correct_link(link_on_page):
                             self._add_link_to_pool(link_on_page, link)
                 elif self.max_level >= level:
-                    self.log_history.add('[{}] {}'.format('intermediate_page', link))
+                    self.log_history.add('[{}] {} {}'.format('intermediate_page', code, link))
                     links_on_page = parsed_page.get_all_links()
                     for link_on_page in links_on_page:
                         if self._is_correct_link(link_on_page):
