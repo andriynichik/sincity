@@ -13,8 +13,8 @@ class RecursiveParser:
         self.parsed_page_collection.drop_indexes()
         self.url_pool_collection.drop_indexes()
 
-        self.parsed_page_collection.create_index({'code': 1})
-        self.url_pool_collection.drop_indexes({'code': 1})
+        self.parsed_page_collection.create_index([('code', 1)])
+        self.url_pool_collection.create_index([('code', 1)])
 
         self.hash_lib = sha512()
 
