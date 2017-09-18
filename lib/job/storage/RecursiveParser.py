@@ -9,6 +9,13 @@ class RecursiveParser:
         connection = MongoClient(config['host'], config['port'])
         self.parsed_page_collection = connection.parsed_page[name]
         self.url_pool_collection = connection.url_pool[name]
+
+        self.parsed_page_collection.drop_indexes()
+        self.url_pool_collection.drop_indexes()
+
+        self.parsed_page_collection.create_index({'code': 1})
+        self.url_pool_collection.drop_indexes({'code': 1})
+
         self.hash_lib = sha512()
 
     def is_page_parsed(self, url):
