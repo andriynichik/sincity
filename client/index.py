@@ -59,6 +59,7 @@ def data_provider(provider_type, country=None):
     objects = data.find(document_filter)
     return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
+
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
 def gmaps_list(country=None):
@@ -114,7 +115,10 @@ def logs(name, status=None):
     connection = MongoClient(config['host'], config['port'])
     collection = connection.log[name]
     if status == 1:
-        query = {'$and': [{'message': {'$exists': True}}, {'$or': [{'status': status}, {'status': {'$exists': False}}]}]}
+        query = {'$and': [{
+            'message': {'$exists': True}},
+            {'$or': [{'status': status}, {'status': {'$exists': False}}]}
+        ]}
     elif status:
         query = {'message': {'$exists': True}, 'status': status}
     else:
@@ -186,10 +190,18 @@ def recursive_url_pool_cache(name):
 def recursive_cache_list():
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
-    parsed_page = connection.parsed_page.collection_names(False)
-    url_pool = connection.url_pool.collection_names(False)
+    parsed_page = connection.parsed_page
+    parsed_page_names = parsed_page.collection_names(False)
 
-    return render_template('admin/recursive/link_list.html', parsed_page=parsed_page, url_pool=url_pool)
+    url_pool = connection.url_pool
+    url_pool_names = url_pool.collection_names(False)
+
+    return render_template('admin/recursive/link_list.html',
+                           parsed_page=parsed_page,
+                           url_pool=url_pool,
+                           parsed_page_names=parsed_page_names,
+                           url_pool_names=url_pool_names
+                           )
 
 
 @app.route('/worth-it/<string:word>')
@@ -201,4 +213,3 @@ def secret_page(word):
         return render_template('admin/empty.html', data=403)
 
     return render_template('admin/worth-it/debug.html')
-
