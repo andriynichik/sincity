@@ -2,16 +2,44 @@ from lib.hashlib.sha512 import sha512 as hash
 import csv
 import re
 
-url = 'https://fr.wikipedia.org'
+wiki_france = 'https://fr.wikipedia.org/'
+
+
+def get_url(row):
+    try:
+        url = row['Wiki_Url']
+    except KeyError:
+        return None
+    return url
+
+
+def different_languages(row):
+    in_18 = {}
+    for key, val in row.items():
+        if re.match(r'^(W_Name_){1}[a-z]{2}', key):
+            if row.get(key):
+                country = key[-2:]
+                url_lang = row.get('W_Url_{}'.format(country))
+                in_18[country] = {'name': val}
+                if url_lang:
+                    in_18.update({country: {'url': url_lang}})
+    return in_18
+
 
 with open('arrondissements_25_08_17_cards.csv', encoding='utf-8') as csvfile:
     for line in csv.DictReader(csvfile, delimiter='\t'):
+
+        dct = {
+            'wiki': {},
+            'gmap': {},
+            'other': {},
+        }
 
 
         name_pays = line.get('W_Pays')
         name_region = line.get('W_Region')
         name_departement = line.get('W_Departement')
-        name_arrondissement = line.get('I_Nccent')
+        name_arrondissement = line.get('Wiki_name_arrondissement')
 
         admin_hierarchy = [
             {'name': name_pays, 'type': 'ADMIN_LEVEL_1'},
@@ -20,22 +48,31 @@ with open('arrondissements_25_08_17_cards.csv', encoding='utf-8') as csvfile:
             {'name': name_arrondissement, 'type': 'ADMIN_LEVEL_4'},
         ]
 
-        in_18 = {}
-        for key, val in line.items():
-            if re.match(r'^(W_Name_){1}[a-z]{2}', key):
-                if line.get(key):
-                    in_18[key[-2:]] = val
-### wiki
-        wiki_url = line.get('Wiki_Url')
+        in_18 = different_languages(line)
 
-        code = hash().make([name_arrondissement, url + wiki_url])
+        dct['wiki'].update({'in_18': in_18})
+        dct['wiki'].update({'name': name_arrondissement})
+
+        for admin_division in admin_hierarchy:
+            if admin_division['name'] == dct['wiki']['name']:
+                dct['wiki'].update({'type': admin_division['type']})
+
+### wiki
+        wiki_url = get_url(line)
+        if wiki_url:
+            url = wiki_france + wiki_url
+            code = hash().make([url])
+            dct['wiki'].update({'url': url})
+            dct['wiki'].update({'code': code})
+
+
 
         code_arrondissements = line.get('I_Code_Arrondissements')
         req = (
             'https://fr.wikipedia.org/w/index.php?search="code+arrondissement+{}"'.format(code_arrondissements)
         )
 
-        print(req)
+        print(dct)
 
 
         break
