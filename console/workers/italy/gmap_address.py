@@ -5,7 +5,7 @@ from lib.job.storage.MongoDB import MongoDB as Storage
 from lib.config.Yaml import Yaml as Config
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.factory.StorageLocation import StorageLocation as DocFactory
-from lib.parser.map.google.I import France
+from lib.parser.map.google.Italy import Italy
 from lib.logger.MongoDB import MongoDB as Log
 
 force = False
@@ -27,7 +27,7 @@ options.update(doc_factory=doc_factory)
 
 options.update(force_update=force)
 
-options.update(parser=France)
+options.update(parser=Italy)
 
 storage = Storage(job_name=AddressTask.get_name(country), storage_config=config.get('mongodb'))
 
