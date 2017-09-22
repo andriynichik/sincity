@@ -3,7 +3,7 @@ from lib.job.map.google.AddressTask import AddressTask
 from lib.config.Yaml import Yaml as Config
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 
-country = 'France'
+country = 'Italia'
 lst_address = []
 
 config = Config('./config/config.yml').get('mongodb')

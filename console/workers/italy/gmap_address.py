@@ -5,14 +5,14 @@ from lib.job.storage.MongoDB import MongoDB as Storage
 from lib.config.Yaml import Yaml as Config
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.factory.StorageLocation import StorageLocation as DocFactory
-from lib.parser.map.google.France import France
+from lib.parser.map.google.I import France
 from lib.logger.MongoDB import MongoDB as Log
 
 force = False
 
-country = 'France'
-
 config = Config('./config/config.yml')
+
+country = 'Italia'
 
 options = {}
 

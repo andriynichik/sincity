@@ -5,7 +5,9 @@ import pandas as pd
 
 config = Config('./config/config.yml')
 
-job_list = Storage(RequestTask.TYPE, config.get('mongodb'))
+country = 'France'
+
+job_list = Storage(RequestTask.get_name(country), config.get('mongodb'))
 
 df = pd.read_csv('./WorkBaseFile/BaseCommuneInInseeFR', delimiter="\t")
 for index, row in df.iterrows():

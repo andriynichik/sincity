@@ -5,6 +5,10 @@ class PositionTask(MapTask):
 
     TYPE = 'gmap_position'
 
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(PositionTask.TYPE, name)
+
     def execute(self):
 
         latitude = self._options.request.get('lat')

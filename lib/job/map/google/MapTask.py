@@ -3,6 +3,12 @@ from lib.job.Task import Task
 
 class MapTask(Task):
 
+    TYPE = 'map_task'
+
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(MapTask.TYPE, name)
+
     @staticmethod
     def update_meta(request, document):
         actual_doc = document.get_document()

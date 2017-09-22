@@ -14,6 +14,8 @@ force = False
 
 config = Config('./config/config.yml')
 
+country = 'France'
+
 options = {}
 
 loader = LoaderFactory.loader_with_mongodb(storage_config=config.get('mongodb'))
@@ -28,11 +30,11 @@ options.update(parser=France)
 options.update(headers={'User-Agent': 'Mozilla/5.0'})
 options.update(url_format="https://fr.wikipedia.org/w/index.php?search={0}&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=ac9zaxa1lggzxpdhc5ukg06t6")
 
-storage = Storage(job_name=RequestTask.TYPE, storage_config=config.get('mongodb'))
+storage = Storage(job_name=RequestTask.get_name(country), storage_config=config.get('mongodb'))
 
-log = Log(log_name=RequestTask.TYPE, config=config.get('mongodb'))
+log = Log(log_name=RequestTask.get_name(country), config=config.get('mongodb'))
 
-task_list = TaskListMongoDB(task_type=RequestTask.TYPE, options=options, storage=storage, log=log)
+task_list = TaskListMongoDB(task_type=RequestTask.get_name(country), options=options, storage=storage, log=log)
 
 executor = Executor(task_list)
 

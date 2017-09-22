@@ -3,7 +3,7 @@ from lib.job.map.google.PositionTask import PositionTask
 from lib.config.Yaml import Yaml as Config
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 
-country = 'France'
+country = 'Italia'
 
 config = Config('./config/config.yml').get('mongodb')
 

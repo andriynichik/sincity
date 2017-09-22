@@ -5,6 +5,10 @@ class AddressTask(MapTask):
 
     TYPE = 'gmap_address'
 
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(AddressTask.TYPE, name)
+
     def execute(self):
 
         address = self._options.request

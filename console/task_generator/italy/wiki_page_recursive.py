@@ -6,9 +6,11 @@ from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
 
 config = Config('./config/config.yml')
 
+country = 'Italia'
+
 max_dig_level = 4
 
-job_list = Storage(PageRecursiveTask.TYPE, config.get('mongodb'))
+job_list = Storage(PageRecursiveTask.get_name(country), config.get('mongodb'))
 
 df = pd.read_csv('./WorkBaseFile/ItalyUrlMainList', delimiter="\t")
 for index, row in df.iterrows():
