@@ -4,9 +4,134 @@
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
-            <h2>GMAPS</h2>
+            <h2>GMAP</h2>
         </div>
+        <!-- Tabs With Icon Title -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                {{ data.get('name') }}
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#main_tab" data-toggle="tab">
+                                        <i class="material-icons">home</i>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#place_tab" data-toggle="tab">
+                                        <i class="material-icons">place</i>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#info_tab" data-toggle="tab">
+                                        <i class="material-icons">info</i>
+                                    </a>
+                                </li>
+                            </ul>
 
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="main_tab">
+
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>{{data.get('name')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Short name</td>
+                                                    <td>{{data.get('short_name')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td>{{data.get('type')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                {% for admin in data.get('admin_hierarchy', {}) %}
+                                                <tr>
+                                                    <td>{{admin.get('type')}}</td>
+                                                    <td>{{admin.get('name')}}</td>
+                                                    <td>{{admin.get('short_name')}}</td>
+                                                </tr>
+                                                {% endfor %}
+                                               <tr>
+                                                    <td>Center</td>
+                                                    <td>{{data.get('center')}}</td>
+                                                    <td><a href="http://maps.google.com/maps?q={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&ll={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&z=12" target="_blank"><i class="material-icons">map</i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Bounds</td>
+                                                    <td>{{data.get('bounds')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Postal code</td>
+                                                    <td>{{data.get('postal_code')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="place_tab">
+                                    <img src="https://maps.googleapis.com/maps/api/staticmap?center={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&size=640x640&key={{api_key}}&markers=size:mid%7Ccolor:red%7C{{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}%7C{{data.get('bounds', {}).get('left', {}).get('lat')}},{{data.get('bounds', {}).get('left', {}).get('lng')}}%7C{{data.get('bounds', {}).get('right', {}).get('lat')}},{{data.get('bounds', {}).get('right', {}).get('lng')}}"/>
+                                </div>
+                                <div role="tabpanel" class="tab-pane fade" id="info_tab">
+                                    <b>Additional info</b>
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>ID</td>
+                                                    <td>{{data.get('_id')}}</td>
+                                                    <td>_id by MongoDB</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Code</td>
+                                                    <td>{{data.get('code')}}</td>
+                                                    <td>Code for store in mongodb by url</td>
+                                                </tr>
+                                                {% for request in data.get('requests', {}) %}
+                                                <tr>
+                                                    <td>request</td>
+                                                    <td>{{request}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Tabs With Icon Title -->
     </div>
 </section>
 

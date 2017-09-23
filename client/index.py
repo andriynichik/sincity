@@ -69,7 +69,12 @@ def gmaps_list(country=None):
 
 @app.route('/gmaps/unit/<string:id>')
 def gmaps_unit(id):
-    return render_template('admin/gmap/unit.html')
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.gmaps_collection()
+    obj = collection.find_one({'_id': ObjectId(id)})
+    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
 
 
 @app.route('/wiki/')
