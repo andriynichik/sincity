@@ -51,7 +51,7 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return '<a href="#'+ data +'">#</a>';
+                    return '<a href="{{ url_for('wiki_unit', id=data) }} '+ data +'">#</a>';
                 },
                 targets: i++
             },

@@ -16,7 +16,6 @@ class StorageLocation:
         code = self._hash_lib.make(url)
         return Wiki(code=code, storage=self._db)
 
-
     def gmaps(self, code):
         return GMap(code=code, storage=self._db)
 

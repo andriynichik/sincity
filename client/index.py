@@ -66,9 +66,9 @@ def gmaps_list(country=None):
     return render_template('admin/gmap/list.html', country=country)
 
 
-@app.route('/gmaps/test')
-def gmaps_test():
-    return render_template('admin/gmap/test.html')
+@app.route('/gmaps/unit/<string:id>')
+def gmaps_unit(id):
+    return render_template('admin/gmap/unit.html')
 
 
 @app.route('/wiki/')
@@ -77,9 +77,14 @@ def wiki_list(country=None):
     return render_template('admin/wiki/list.html', country=country)
 
 
-@app.route('/wiki/test')
-def wiki_test():
-    return render_template('admin/wiki/test.html')
+@app.route('/wiki/unit/<string:id>')
+def wiki_unit(id):
+    config = Config('./config/config.yml')
+
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.wiki_collection()
+    obj = collection.find_one({'_id': ObjectId(id)})
+    return render_template('admin/wiki/unit.html', data=data)
 
 
 @app.route('/tasks/<string:journal_id>')
