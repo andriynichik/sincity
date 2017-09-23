@@ -9,6 +9,7 @@ from lib.location.Wiki import Wiki
 from lib.location.GMap import GMap
 from lib.logger.MongoDB import MongoDB as MongoDBLog
 import hashlib
+from bson.objectid import ObjectId
 
 
 app = Flask(__name__)
@@ -80,11 +81,11 @@ def wiki_list(country=None):
 @app.route('/wiki/unit/<string:id>')
 def wiki_unit(id):
     config = Config('./config/config.yml')
-
+    api_key = config.get('googlemaps').get('geocoding')
     factory = DocFactory(config.get('mongodb'))
     collection = factory.wiki_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
-    return render_template('admin/wiki/unit.html', data=data)
+    return render_template('admin/wiki/unit.html', data=obj, api_key=api_key)
 
 
 @app.route('/tasks/<string:journal_id>')

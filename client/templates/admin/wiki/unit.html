@@ -19,64 +19,155 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">
-                                    <a href="#home_with_icon_title" data-toggle="tab">
-                                        <i class="material-icons">home</i> HOME
+                                    <a href="#main_tab" data-toggle="tab">
+                                        <i class="material-icons">home</i>
                                     </a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#profile_with_icon_title" data-toggle="tab">
-                                        <i class="material-icons">face</i> PROFILE
+                                    <a href="#place_tab" data-toggle="tab">
+                                        <i class="material-icons">place</i>
                                     </a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#messages_with_icon_title" data-toggle="tab">
-                                        <i class="material-icons">email</i> MESSAGES
+                                    <a href="#translate_tab" data-toggle="tab">
+                                        <i class="material-icons">translate</i>
                                     </a>
                                 </li>
                                 <li role="presentation">
-                                    <a href="#settings_with_icon_title" data-toggle="tab">
-                                        <i class="material-icons">settings</i> SETTINGS
+                                    <a href="#info_tab" data-toggle="tab">
+                                        <i class="material-icons">info</i>
                                     </a>
                                 </li>
                             </ul>
 
                             <!-- Tab panes -->
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane fade in active" id="home_with_icon_title">
-                                    <b>Home Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
+                                <div role="tabpanel" class="tab-pane fade in active" id="main_tab">
+
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Name</td>
+                                                    <td>{{data.get('name')}}</td>
+                                                    <td><a href="{{data.get('url')}}" target="_blank"><i class="material-icons">link</i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Type</td>
+                                                    <td>{{data.get('type')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Capital</td>
+                                                    <td>{{data.get('capital', {}).get('name')}}</td>
+                                                    <td><a href="{{data.get('capital', {}).get('url', '#')}}" target="_blank"><i class="material-icons">link</i></a></td>
+                                                </tr>
+                                                {% for admin in data.get('admin_hierarchy') %}
+                                                <tr>
+                                                    <td>{{admin.get('type')}}</td>
+                                                    <td>{{admin.get('name')}}</td>
+                                                    <td><a href="{{admin.get('url')}}" target="_blank"><i class="material-icons">link</i></a></td>
+                                                </tr>
+                                                {% endfor %}
+                                               <tr>
+                                                    <td>Center</td>
+                                                    <td>{{data.get('center')}}</td>
+                                                    <td><a href="http://maps.google.com/maps?q={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&ll={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&z=12" target="_blank"><i class="material-icons">map</i></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Altitude</td>
+                                                    <td>{{data.get('altitude')}}</td>
+                                                    <td>meter</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Population</td>
+                                                    <td>{{data.get('population')}}</td>
+                                                    <td>mans</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Area</td>
+                                                    <td>{{data.get('area')}}</td>
+                                                    <td>km<sup>2</sup></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Postal codes</td>
+                                                    <td>{{data.get('postal_codes')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Time</td>
+                                                    <td>{{data.get('time')}}</td>
+                                                    <td></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div role="tabpanel" class="tab-pane fade" id="profile_with_icon_title">
-                                    <b>Profile Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
+                                <div role="tabpanel" class="tab-pane fade" id="place_tab">
+                                    <img src="https://maps.googleapis.com/maps/api/staticmap?center={{data.get('center', {}).get('lat')}},{{data.get('center', {}).get('lng')}}&zoom=9&size=640x450&key={{api_key}}"/>
+                                    </div>
+                                <div role="tabpanel" class="tab-pane fade" id="translate_tab">
+                                    <b>Translations</b>
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Lang</th>
+                                                    <th>Name</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for lang, value in data.get('i18n', {}).items() %}
+                                                <tr>
+                                                    <td>{{lang}}</td>
+                                                    <td>{{value.get('name')}}</td>
+                                                    <td><a href="{{value.get('url')}}" target="_blank"><i class="material-icons">link</i></a></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
-                                <div role="tabpanel" class="tab-pane fade" id="messages_with_icon_title">
-                                    <b>Message Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
-                                </div>
-                                <div role="tabpanel" class="tab-pane fade" id="settings_with_icon_title">
-                                    <b>Settings Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
+                                <div role="tabpanel" class="tab-pane fade" id="info_tab">
+                                    <b>Additional info</b>
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>ID</td>
+                                                    <td>{{data.get('_id')}}</td>
+                                                    <td>_id by MongoDB</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Code</td>
+                                                    <td>{{data.get('code')}}</td>
+                                                    <td>Code for store in mongodb by url</td>
+                                                </tr>
+                                                {% for request in data.get('requests', {}) %}
+                                                <tr>
+                                                    <td>request</td>
+                                                    <td>{{request}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
                                 </div>
                             </div>
                         </div>
