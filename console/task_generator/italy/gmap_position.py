@@ -22,8 +22,7 @@ objects = wiki.find(filter)
 for obj in objects:
     try:
         position = obj['center']
-        position_list = ([pos for pos in position.values() if isinstance(pos, float)])
-        if len(position_list) == 2:
+        if len(position) == 2:
             job_list.add(position)
     except KeyError:
         continue

@@ -11,16 +11,16 @@ class PositionTask(MapTask):
 
     def execute(self):
 
-        latitude = self._options.request.get('lat')
-        longitude = self._options.request.get('lng')
-        loader = self._options.loader
-        doc_factory = self._options.doc_factory
-        force_update = self._options.force_update
-        parser = self._options.parser
+        latitude = self._options.get('request').get('lat')
+        longitude = self._options.get('request').get('lng')
+        loader = self._options.get('loader')
+        doc_factory = self._options.get('doc_factory')
+        force_update = self._options.get('force_update')
+        parser = self._options.get('parser')
 
         position_content = loader.by_position(lat=latitude, lng=longitude)
-        objects = parser(position_content)
-        for obj in objects:
+        for obj in position_content:
+            obj = parser(obj)
             code = obj.get_place_id()
             if obj.get_place_id():
                 doc = doc_factory.gmaps(code)

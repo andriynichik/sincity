@@ -149,6 +149,14 @@ def clear_wiki_country(name):
     result = collection.delete_many({'admin_hierarchy': {'$elemMatch': {'name': name}}})
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
 
+@app.route('/clear/gmaps/<string:name>')
+def clear_gmaps_country(name):
+    config = Config('./config/config.yml').get('mongodb')
+    factory = DocFactory(config)
+    collection = factory.gmaps_collection()
+    result = collection.delete_many({'admin_hierarchy': {'$elemMatch': {'name': name}}})
+    return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
+
 
 @app.route('/recursive/parsed_page/<string:name>')
 def recursive_parsed_page_cache(name):

@@ -1,12 +1,15 @@
 from lib.job.TaskListMongoDB import TaskListMongoDB
 from lib.job.map.google.PositionTask import PositionTask
-from lib.job.Executor import Executor
+from lib.job.ExecutorWithLimit import ExecutorWithLimit
 from lib.job.storage.MongoDB import MongoDB as Storage
 from lib.config.Yaml import Yaml as Config
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.parser.map.google.Italy import Italy
 from lib.logger.MongoDB import MongoDB as Log
+from lib.Counter.CounterMongoDB import CounterMongoDB
+from pymongo import MongoClient
+
 
 force = False
 
@@ -25,6 +28,12 @@ options.update(loader=loader)
 doc_factory = DocFactory(config.get('mongodb'))
 options.update(doc_factory=doc_factory)
 
+mongo_config = config.get('mongodb')
+
+connection = MongoClient(mongo_config['host'], mongo_config['port'])
+
+counter = CounterMongoDB(counter_name='test', start=1, end=10, step=1, ttl=86400, connection=connection)
+
 options.update(force_update=force)
 
 options.update(parser=Italy)
@@ -35,6 +44,6 @@ log = Log(log_name=PositionTask.get_name(country), config=config.get('mongodb'))
 
 task_list = TaskListMongoDB(task_type=PositionTask.get_name(country), options=options, storage=storage, log=log)
 
-executor = Executor(task_list)
+executor = ExecutorWithLimit(task_list, counter)
 
 executor.run()
