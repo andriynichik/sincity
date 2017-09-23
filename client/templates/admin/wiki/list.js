@@ -23,14 +23,15 @@ $(function () {
     var i = 0;
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
-        dom: 'Bfrtip',
+        dom: 'Bflrtip',
+        lengthMenu: [ [10, 100, 1000, -1], [10, 100, 1000, "All"] ],
         buttons: [
             'csv', 'excel'
         ],
         data: [
         {% for item in items %}
 [
-'{{e(item.get('_id'))}}',
+'{{url_for('wiki_unit', id=e(item.get('_id')))}}',
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
 '{{e(item.get('type'))}}',
 [{% for admin in item.get('admin_hierarchy', {}) %}
@@ -51,7 +52,7 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return '<a href="{{ url_for('wiki_unit', id=data) }} '+ data +'">#</a>';
+                    return '<a href="'+ data +'" target="_blank">#</a>';
                 },
                 targets: i++
             },

@@ -3,7 +3,8 @@ $(function () {
     var i = 0;
     table = $('.js-exportable').DataTable({
         "bSortClasses": false,
-        dom: 'Bfrtip',
+        dom: 'Bflrtip',
+        lengthMenu: [ [10, 100, 1000, -1], [10, 100, 1000, "All"] ],
         buttons: [
             'csv', 'excel'
         ],
