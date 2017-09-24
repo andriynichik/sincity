@@ -10,7 +10,7 @@ class Comparison:
 
     @staticmethod
     def by_distance(original, candidate):
-        return vincenty((original.lat, original.lng), (candidate.lat, candidate.lng)).meters
+        return vincenty((original.get('lat'), original.get('lng')), (candidate.get('lat'), candidate.get('lng'))).meters
 
     @staticmethod
     def by_admin_hierarchy(original, candidate):
@@ -24,4 +24,4 @@ class Comparison:
         :return:
         """
         path = MplPath.Path(polygon)
-        return path.contains_point((candidate.lat, candidate.lng))
+        return path.contains_point((candidate.get('lat'), candidate.get('lng')))

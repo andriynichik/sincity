@@ -4,36 +4,28 @@ class Wiki(Converter):
 
     def __init__(self, obj):
         super(Wiki, self).__init__(obj)
-        self._admin_levels = {
-            self.obj.ADMIN_LEVEL_1:1,
-            self.obj.ADMIN_LEVEL_2:2,
-            self.obj.ADMIN_LEVEL_3:3,
-            self.obj.ADMIN_LEVEL_4:4,
-            self.obj.ADMIN_LEVEL_5:5,
-            self.obj.ADMIN_LEVEL_6:6
-        }
+        self._admin_levels= {}
+        for i in range(1, 14):
+            attr_name = 'ADMIN_LEVEL_{}'.format(i)
+            if hasattr(obj, attr_name):
+                self._admin_levels.set[getattr(obj, attr_name)] = i
 
     def by_name(self):
-        dic = {'origin': self.obj.name}
-        for key, value in self.obj.i18n.items():
-            dic[key] = value.name
+        dic = {'origin': self.obj.get('name')}
+        for key, value in self.obj.get('i18n', {}).items():
+            dic[key] = value.get('name')
         return dic
 
     def by_distance(self):
-        return {'lat': self.obj.center.latitude, 'lng': self.obj.center.longitude}
+        return {'lat': self.obj.get('center', {}).get('lat'), 'lng': self.obj.get('center', {}).get('lng')}
 
     def _admin_value(self, value):
-        dic = {'origin': value.name}
-        for key, val in value.i18n.items():
-            dic[key] = val.name
+        dic = {'origin': value.get('name')}
         return dic
 
-    def _admin_index(self, value):
-        return self._admin_levels[value.type]
-
     def by_admin_hierarchy(self):
-        admins = []
-        for key, value in self.obj.admin_hierarchy:
+        admins = {}
+        for key, value in self.obj.get('admin_hierarchy'):
             admins[self._admin_index(value)] = self._admin_value(value)
 
         return admins
