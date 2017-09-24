@@ -70,7 +70,7 @@ def gmaps_list(country=None):
 @app.route('/gmaps/unit/<string:id>')
 def gmaps_unit(id):
     config = Config('./config/config.yml')
-    api_key = config.get('googlemaps').get('geocoding')
+    api_key = config.get('googlemaps').get('geocoding').get('key')
     factory = DocFactory(config.get('mongodb'))
     collection = factory.gmaps_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
@@ -86,7 +86,7 @@ def wiki_list(country=None):
 @app.route('/wiki/unit/<string:id>')
 def wiki_unit(id):
     config = Config('./config/config.yml')
-    api_key = config.get('googlemaps').get('geocoding')
+    api_key = config.get('googlemaps').get('geocoding').get('key')
     factory = DocFactory(config.get('mongodb'))
     collection = factory.wiki_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
