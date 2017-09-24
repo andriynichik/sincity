@@ -19,15 +19,15 @@ class TaskList:
         pass
 
     def get_task_class(self, task_type):
-        if task_type == AddressTask.TYPE:
+        if AddressTask.TYPE in task_type:
             obj = AddressTask(options=self._options, storage=self._storage, log=self._log)
-        elif task_type == PositionTask.TYPE:
+        elif PositionTask.TYPE in task_type:
             obj = PositionTask(options=self._options, storage=self._storage, log=self._log)
-        elif task_type == PageRecursiveTask.TYPE:
+        elif PageRecursiveTask.TYPE in task_type:
             obj = PageRecursiveTask(options=self._options, storage=self._storage, log=self._log)
-        elif task_type == PageTask.TYPE:
+        elif PageTask.TYPE in task_type:
             obj = PageTask(options=self._options, storage=self._storage, log=self._log)
-        elif task_type == RequestTask.TYPE:
+        elif RequestTask.TYPE in task_type:
             obj = RequestTask(options=self._options, storage=self._storage, log=self._log)
         else:
             raise Exception('[{}] task do not exists'.format(task_type))

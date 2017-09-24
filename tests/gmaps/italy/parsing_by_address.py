@@ -7,10 +7,14 @@ config = Config('./config/config.yml')
 
 loader = LoaderFactory.loader_gmaps_with_cache(config.get('googlemaps'), config.get('mongodb'))
 
-position_content = loader.by_position(lat=48.83333, lng=2.33333)
+address = 'Italia, Roma'
 
-print('.' if len(position_content) else 'E', end='')
+address_content = loader.by_address(address=address)
 
-objects = MapFactory.france(position_content)
+print(address_content)
+
+print('.' if len(address_content) else 'E', end='')
+
+objects = MapFactory.italy(address_content)
 
 print('.' if len(objects) else 'E', end='')

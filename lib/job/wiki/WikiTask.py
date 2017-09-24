@@ -3,12 +3,18 @@ from lib.job.Task import Task
 
 class WikiTask(Task):
 
+    TYPE = 'wiki_task'
+
     def __init__(self, options, storage, log):
         super(WikiTask, self).__init__(options=options, storage=storage, log=log)
         self.loader = self._options.get('loader')
         self.parser = self._options.get('parser')
         self.headers = self._options.get('headers')
         self.document_factory = self._options.get('doc_factory')
+
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(WikiTask.TYPE, name)
 
     @staticmethod
     def update_meta(url, request, document):

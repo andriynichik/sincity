@@ -11,3 +11,6 @@ class Converter:
 
     def by_distance(self):
         pass
+
+    def _admin_index(self, value):
+        return self._admin_levels[value.get('type')]

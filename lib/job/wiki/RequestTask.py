@@ -6,6 +6,10 @@ class RequestTask(WikiTask):
 
     TYPE = 'wiki_request'
 
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(RequestTask.TYPE, name)
+
     def execute(self):
         try:
             url = self._options.get('url_format').format(self._options.get('request'))

@@ -4,9 +4,9 @@
     <div>
     Parsed pages
         <ul>
-            {% for url in parsed_page %}
+            {% for url in parsed_page_names %}
             <li>
-                <a href="{{ url_for('recursive_parsed_page_cache', name=url) }}" target="_blank">{{ url }}</a>
+                <a href="{{ url_for('recursive_parsed_page_cache', name=url) }}" target="_blank">{{ url }}({{ parsed_page[url].count() }})</a>
                 <a href="{{ url_for('recursive_parsed_page_drop', name=url) }}">X</a>
             </li>
             {% endfor %}
@@ -16,9 +16,9 @@
     <div>
     Url pool
         <ul>
-            {% for url in url_pool %}
+            {% for url in url_pool_names %}
             <li>
-                <a href="{{ url_for('recursive_url_pool_cache', name=url) }}" target="_blank">{{ url }}</a>
+                <a href="{{ url_for('recursive_url_pool_cache', name=url) }}" target="_blank">{{ url }}({{ url_pool[url].count() }})</a>
                 <a href="{{ url_for('recursive_url_pool_drop', name=url) }}">X</a>
 
             </li>

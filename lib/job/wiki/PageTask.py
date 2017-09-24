@@ -5,6 +5,10 @@ class PageTask(WikiTask):
 
     TYPE = 'wiki_page'
 
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(PageTask.TYPE, name)
+
     def execute(self):
         force_update = self._options.force_update
         link = self._options.request

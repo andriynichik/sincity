@@ -7,6 +7,10 @@ class PageRecursiveTask(WikiTask):
 
     TYPE = 'wiki_page_recursive'
 
+    @staticmethod
+    def get_name(name):
+        return '{}_{}'.format(PageRecursiveTask.TYPE, name)
+
     def __init__(self, options, storage, log):
         super(PageRecursiveTask, self).__init__(options=options, storage=storage, log=log)
         self.recursive_storage = self._options.get('recursive_storage')

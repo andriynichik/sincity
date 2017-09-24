@@ -3,7 +3,7 @@ from lib.job.map.google.PositionTask import PositionTask
 from lib.config.Yaml import Yaml as Config
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 
-country = 'France'
+country = 'Italia'
 
 config = Config('./config/config.yml').get('mongodb')
 
@@ -22,8 +22,7 @@ objects = wiki.find(filter)
 for obj in objects:
     try:
         position = obj['center']
-        position_list = ([pos for pos in position.values() if isinstance(pos, float)])
-        if len(position_list) == 2:
+        if len(position) == 2:
             job_list.add(position)
     except KeyError:
         continue
