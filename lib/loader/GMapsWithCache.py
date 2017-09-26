@@ -3,8 +3,8 @@ import json
 
 
 class LoaderGMapsWithCache(GMaps):
-    def __init__(self, googlemaps, storage):
-        super(LoaderGMapsWithCache, self).__init__(googlemaps=googlemaps)
+    def __init__(self, googlemaps, storage, language=None):
+        super(LoaderGMapsWithCache, self).__init__(googlemaps=googlemaps, language=language)
         self._storage = storage
 
     def address_key(self, address):

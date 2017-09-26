@@ -6,7 +6,10 @@ config = Config('./config/config.yml')
 
 print(config.get('googlemaps').get('geocoding').get('key'))
 
-loader = Factory.loader_gmaps(config.get('googlemaps'))
+gmaps_config = config.get('googlemaps')
+gmaps_config.update(language=None)
+
+loader = Factory.loader_gmaps(gmaps_config)
 
 lat, lng = 48.861077, 2.344552
 

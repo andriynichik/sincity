@@ -6,7 +6,7 @@ from lib.job.wiki.PageRecursiveTask import PageRecursiveTask
 
 config = Config('./config/config.yml')
 
-country = 'Italia'
+country = 'Italy'
 
 max_dig_level = 4
 
