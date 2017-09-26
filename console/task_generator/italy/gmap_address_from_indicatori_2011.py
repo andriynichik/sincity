@@ -16,11 +16,11 @@ config = Config('./config/config.yml').get('mongodb')
 
 job_list = Storage(AddressTask.get_name(country), config)
 
-df = pd.read_csv('./data/italy/indicatori_2011_localita.csv', delimiter=";", skiprows=[1])
+df = pd.read_csv('./data/italy/indicatori_2011_localita.csv', delimiter=";", skiprows=[1], encoding='ISO-8859-1')
 
 for index, row in df.iterrows():
     try:
-        new_address = ''
+        new_address = 'Italia, '
         if row[1]:
             new_address += row[region_index]
             if new_address not in lst_address:
