@@ -28,7 +28,7 @@ options.update(force_update=force)
 
 options.update(parser=Italy)
 options.update(headers={'User-Agent': 'Mozilla/5.0'})
-options.update(url_format="https://it.wikipedia.org/w/index.php?search={0}&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=ac9zaxa1lggzxpdhc5ukg06t6")
+options.update(url_format="https://it.wikipedia.org/w/index.php?search={0}&title=Sp%C3%A9cial:Recherche&limit=500&offset=0&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=ac9zaxa1lggzxpdhc5ukg06t6")
 
 storage = Storage(job_name=RequestTask.get_name(country), storage_config=config.get('mongodb'))
 

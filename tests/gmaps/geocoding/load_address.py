@@ -9,7 +9,7 @@ gmaps_config.update(language='it')
 
 loader = Factory.loader_gmaps(gmaps_config)
 
-address = 'Italie, Roma'
+address = 'Italia, Piemonte, Torino, Agliè, Madonna delle Grazie'
 
 address_content = loader.by_address(address=address)
 
