@@ -19,6 +19,7 @@ job_list = Storage(AddressTask.get_name(country), config)
 df = pd.read_csv('./data/italy/indicatori_2011_localita.csv', delimiter=";", skiprows=[1], encoding='ISO-8859-1')
 
 for index, row in df.iterrows():
+    print(index)
     try:
         new_address = 'Italia, '
         if row[1]:
