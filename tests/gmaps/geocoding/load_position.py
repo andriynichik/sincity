@@ -7,7 +7,7 @@ config = Config('./config/config.yml')
 print(config.get('googlemaps').get('geocoding').get('key'))
 
 gmaps_config = config.get('googlemaps')
-gmaps_config.update(language=None)
+gmaps_config.update(language='fr')
 
 loader = Factory.loader_gmaps(gmaps_config)
 
