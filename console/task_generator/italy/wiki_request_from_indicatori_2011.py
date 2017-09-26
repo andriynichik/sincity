@@ -20,25 +20,25 @@ df = pd.read_csv('./data/italy/indicatori_2011_localita.csv', delimiter=";", ski
 
 for index, row in df.iterrows():
     try:
-        new_address = 'Italia, '
+        new_address = 'Italia,+'
         if row[1]:
             new_address += row[region_index]
             if new_address not in lst_address:
                 lst_address.append(new_address)
                 job_list.add(new_address)
-            new_address += ', '
+            new_address += ',+'
             if row[provincia_index]:
                 new_address += row[provincia_index]
                 if new_address not in lst_address:
                     lst_address.append(new_address)
                     job_list.add(new_address)
-                new_address += ', '
+                new_address += ',+'
                 if row[comune_index]:
                     new_address += row[comune_index]
                     if new_address not in lst_address:
                         lst_address.append(new_address)
                         job_list.add(new_address)
-                    new_address += ', '
+                    new_address += ',+'
                     if row[localita_index]:
                         new_address += row[localita_index]
                         if new_address not in lst_address:
