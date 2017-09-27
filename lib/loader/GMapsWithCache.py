@@ -8,7 +8,7 @@ class LoaderGMapsWithCache(GMaps):
         self._storage = storage
 
     def address_key(self, address):
-        return ['address', address]
+        return ['address', address, self._language]
 
     def by_address(self, address, use_cache=True):
         result = {}
@@ -23,7 +23,7 @@ class LoaderGMapsWithCache(GMaps):
         return result
 
     def position_key(self, lat, lng):
-        return ['position', lat, lng]
+        return ['position', lat, lng, self._language]
 
     def by_position(self, lat, lng, use_cache=True):
         result = {}
