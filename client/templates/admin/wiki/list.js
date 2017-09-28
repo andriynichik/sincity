@@ -10,13 +10,17 @@ $(function () {
 {% for admin in items[0].get('admin_hierarchy', {}) %}
 ['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %},
+'{{e(items[0].get('frazioni'))}}',
+'{{e(items[0].get('istat'))}}',
+'{{e(items[0].get('catastale'))}}',
 ['{{e(items[0].get('capital', {}).get('url') if items[0].get('capital') else 'javascript:void(0);')}}', '{{e(items[0].get('capital', {}).get('name'))}}'],
 ['http://maps.google.com/maps?q={{e(items[0].get('center', {}).get('lat'))}},{{e(items[0].get('center', {}).get('lng'))}}&ll={{e(items[0].get('center', {}).get('lat'))}},{{e(items[0].get('center', {}).get('lng'))}}&z=12', '{{items[0].get('center', {}).get('lat')}}, {{items[0].get('center', {}).get('lng')}}'],
 '{{e(items[0].get('altitude'))}}',
 '{{e(items[0].get('population'))}}',
 '{{e(items[0].get('density'))}}',
 '{{e(items[0].get('area'))}}',
-'{{e(items[0].get('postal_codes'))}}'
+'{{e(items[0].get('postal_codes'))}}',
+'{{e(items[0].get('requests'))}}'
 ]);*/
     {% endif %}
     var table;
@@ -37,14 +41,16 @@ $(function () {
 [{% for admin in item.get('admin_hierarchy', {}) %}
 ['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %}],
+'{{e(item.get('frazioni'))}}',
+'{{e(item.get('istat'))}}',
+'{{e(item.get('catastale'))}}',
 ['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
 '{{e(item.get('altitude'))}}',
 '{{e(item.get('population'))}}',
 '{{e(item.get('density'))}}',
 '{{e(item.get('area'))}}',
-'{{e(item.get('postal_codes'))}}',
-'{{e(item.get('requests'))}}'
+'{{e(item.get('postal_codes'))}}'
 ],
         {% endfor %}
 
@@ -81,6 +87,24 @@ $(function () {
                     return data.reduce(function(previousValue, data, index) {
                         return previousValue + '[<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>]';
                     }, '')
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
                 },
                 targets: i++
             },
