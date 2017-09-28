@@ -22,6 +22,21 @@ class LoaderGMapsWithCache(GMaps):
 
         return result
 
+    def component_key(self, components):
+        return ['component', components, self._language]
+
+    def by_component(self, components, use_cache=True):
+        result = {}
+        key = self.component_key(components)
+        if use_cache:
+            result = self.from_cache(key)
+
+        if not result:
+            result = super(LoaderGMapsWithCache, self).by_component(components=components)
+            self.to_cache(content=result, params=key)
+
+        return result
+
     def position_key(self, lat, lng):
         return ['position', lat, lng, self._language]
 
