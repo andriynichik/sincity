@@ -13,6 +13,7 @@ def parser_wiki(line):
     wiki_res.update(get_density(line))
     wiki_res.update(get_area(line))
     wiki_res.update(get_coordinates(line))
+    wiki_res.update(hierarchy(line))
     return wiki_res
 
 
@@ -98,3 +99,25 @@ def get_coordinates(row):
                       }
         return coordinates
     return {}
+
+def hierarchy(row):
+    hierarchy_list = [
+        'W_Pays',
+        'W_Region',
+        'W_Departement',
+        'W_Arrondissement',
+        'W_Canton',
+        'W_Intercommunalite',
+        'W_Commune',
+    ]
+    level = 1
+    res_hierarchy = []
+    for admin_div in hierarchy_list:
+        try:
+           admin_unit = row[admin_div]
+        except KeyError:
+            return dict(admin_hierarchy=res_hierarchy)
+        if admin_unit != 'None':
+            res_hierarchy.append({'name': admin_unit, 'type': 'ADMIN_LEVEL_{}'.format(level)})
+            level += 1
+    return dict(admin_hierarchy=res_hierarchy)
