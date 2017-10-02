@@ -30,7 +30,7 @@ def internal(country=None):
 
 
 @app.route('/internal/unit/<string:id>')
-def gmaps_unit(id):
+def internal_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding')
     factory = DocFactory(config.get('mongodb'))
