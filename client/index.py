@@ -25,8 +25,18 @@ def index():
 
 
 @app.route('/internal/<string:country>')
-def internal(country):
-    return country
+def internal(country=None):
+    return render_template('admin/internal/list.html', country=country)
+
+
+@app.route('/internal/unit/<string:id>')
+def gmaps_unit(id):
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.gmaps_collection()
+    obj = collection.find_one({'_id': ObjectId(id)})
+    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
 
 
 @app.route('/data/<string:provider_type>.js')
