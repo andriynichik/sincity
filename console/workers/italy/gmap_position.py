@@ -11,16 +11,19 @@ from lib.Counter.CounterMongoDB import CounterMongoDB
 from pymongo import MongoClient
 
 
-force = False
+force = True
 
 config = Config('./config/config.yml')
 
-country = 'Italia'
+country = 'Italy'
 
 options = {}
 
+gmaps_config = config.get('googlemaps')
+gmaps_config.update(language='it')
+
 loader = LoaderFactory.loader_gmaps_with_cache(
-    gmaps_config=config.get('googlemaps'),
+    gmaps_config=gmaps_config,
     storage_config=config.get('mongodb')
 )
 options.update(loader=loader)
@@ -32,7 +35,7 @@ mongo_config = config.get('mongodb')
 
 connection = MongoClient(mongo_config['host'], mongo_config['port'])
 
-counter = CounterMongoDB(counter_name='gmap', start=1, end=2500, step=1, ttl=86400, connection=connection)
+counter = CounterMongoDB(counter_name='gmap', start=1, end=gmaps_config.get('geocoding').get('limit'), step=1, ttl=86400, connection=connection)
 
 options.update(force_update=force)
 

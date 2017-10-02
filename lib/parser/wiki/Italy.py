@@ -22,6 +22,19 @@ class Italy(Wiki):
 
     def as_dictionary(self):
         dic = super(Italy, self).as_dictionary()
+
+        frazioni = self.get_frazioni()
+        if frazioni:
+            dic.update(frazioni=frazioni)
+
+        istat = self.get_istat()
+        if istat:
+            dic.update(istat=istat)
+
+        catastale = self.get_catastale()
+        if catastale:
+            dic.update(catastale=catastale)
+
         return dic
 
     def get_name(self):
@@ -204,3 +217,15 @@ class Italy(Wiki):
         match = re.search(r"href=[\"']/wiki/Template:Divisione_amministrativa/man[\"']",
             self._main_block, re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
         return bool(match)
+
+    def get_frazioni(self):
+        return self._get_value('Frazioni', self._main_block)
+
+    def get_istat(self):
+        return self._get_value('ISTAT', self._main_block)
+
+    def get_catastale(self):
+        return self._get_value('Cod. catastale', self._main_block)
+
+    def get_prefisso(self):
+        return self._get_value('Prefisso', self._main_block)

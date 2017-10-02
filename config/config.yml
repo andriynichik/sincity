@@ -3,4 +3,6 @@ mongodb:
     port: 27017
 
 googlemaps:
-    geocoding: AIzaSyApLhGCGAAgMXncb0KR6CtLA33gU9yOpZY
+    geocoding:
+        key: AIzaSyApLhGCGAAgMXncb0KR6CtLA33gU9yOpZY
+        limit: 50000

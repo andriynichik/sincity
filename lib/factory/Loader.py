@@ -26,11 +26,18 @@ class Loader:
 
     @staticmethod
     def loader_gmaps(gmaps_config):
-        return LoaderGMapsWOCache(googlemaps=googlemaps.Client(key=gmaps_config['geocoding']))
+        return LoaderGMapsWOCache(
+            googlemaps=googlemaps.Client(key=gmaps_config.get('geocoding').get('key')),
+            language=gmaps_config.get('language', None)
+        )
 
     @staticmethod
     def loader_gmaps_with_cache(gmaps_config, storage_config):
         connection = MongoClient(storage_config['host'], storage_config['port'])
         db = connection.loader_gmaps_cache
         storage = ComplexData(db=gridfs.GridFS(db), hash_lib=sha512())
-        return LoaderGMapsWithCache(googlemaps=googlemaps.Client(key=gmaps_config['geocoding']), storage=storage)
+        return LoaderGMapsWithCache(
+            googlemaps=googlemaps.Client(key=gmaps_config.get('geocoding').get('key')),
+            storage=storage,
+            language=gmaps_config.get('language', None)
+        )
