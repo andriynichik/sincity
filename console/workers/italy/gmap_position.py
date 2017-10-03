@@ -11,15 +11,16 @@ from lib.Counter.CounterMongoDB import CounterMongoDB
 from pymongo import MongoClient
 
 
-force = False
+force = True
 
 config = Config('./config/config.yml')
 
-country = 'Italia'
+country = 'Italy'
 
 options = {}
 
 gmaps_config = config.get('googlemaps')
+gmaps_config.update(language='it')
 
 loader = LoaderFactory.loader_gmaps_with_cache(
     gmaps_config=gmaps_config,

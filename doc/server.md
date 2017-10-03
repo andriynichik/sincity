@@ -6,6 +6,11 @@ PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYT
 Worker run
 python3.6 console/workers/italy/wiki_task_recursive.py -t italy_recursive_2017-09-19-01-42-11 >& /dev/null &
 
+python3.6 console/workers/italy/gmap_address.py >& /dev/null &
+
+python3.6 console/workers/italy/wiki_task_request.py >& /dev/null &
+
+
 digitalocean.com
 
 Войти в учетную запись

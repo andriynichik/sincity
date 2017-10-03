@@ -4,10 +4,15 @@ from lib.config.Yaml import Yaml as Config
 
 config = Config('./config/config.yml')
 
-loader = Factory.loader_gmaps(config.get('googlemaps'))
+gmaps_config = config.get('googlemaps')
+gmaps_config.update(language='it')
 
-address = 'France, Paris'
+loader = Factory.loader_gmaps(gmaps_config)
+
+address = 'Italia, Piemonte, Torino, Agliè, Madonna delle Grazie'
 
 address_content = loader.by_address(address=address)
+
+print(address_content)
 
 print('.' if len(address_content) else 'E', end='')

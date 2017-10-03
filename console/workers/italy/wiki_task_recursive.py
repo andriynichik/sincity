@@ -18,7 +18,7 @@ arg_parser = ArgumentParser(description='Worker with recursive parse in wiki')
 arg_parser.add_argument('-t', help='title of history')
 opts = arg_parser.parse_args()
 
-country = 'Italia'
+country = 'Italy'
 
 title = opts.t if opts.t else 'italy_recursive_{}'.format(datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S'))
 

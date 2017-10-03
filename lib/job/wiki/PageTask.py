@@ -10,8 +10,8 @@ class PageTask(WikiTask):
         return '{}_{}'.format(PageTask.TYPE, name)
 
     def execute(self):
-        force_update = self._options.force_update
-        link = self._options.request
+        force_update = self._options.get('force_update')
+        link = self._options.get('request')
 
         content, code = self.loader.load(link, headers=self.headers)
         parsed_page = self.parser(content)
