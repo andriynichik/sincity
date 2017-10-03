@@ -62,7 +62,7 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data +'" target="_blank">#</a>';
+                    return '<a href="'+ data +'" target="_blank"><i class="material-icons">room</i></a>';
                 },
                 targets: i++
             },

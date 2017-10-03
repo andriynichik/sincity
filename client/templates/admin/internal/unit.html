@@ -169,10 +169,10 @@
                                                     <td>{{data.get('code')}}</td>
                                                     <td>Code for store in mongodb by url</td>
                                                 </tr>
-                                                {% for request in data.get('sources', {}) %}
+                                                {% for source in data.get('sources', {}) %}
                                                 <tr>
-                                                    <td>request</td>
-                                                    <td>{{request}}</td>
+                                                    <td>Source</td>
+                                                    <td>{{source}}</td>
                                                     <td></td>
                                                 </tr>
                                                 {% endfor %}

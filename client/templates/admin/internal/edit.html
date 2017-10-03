@@ -1,10 +1,188 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>FORM EXAMPLES</h2>
+            </div>
+<!-- Vertical Layout | With Floating Label -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                {% if data.get('name') %}
+                                    Edit {{ data.get('_id') }}
+                                {% else %}
+                                    Create new
+                                {% endif %}
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form method="post" action="{url_for('internal_save')}">
+                            <input type="hidden" value="{{data.get('_id', '')}}">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#main_tab" data-toggle="tab">
+                                        <i class="material-icons">home</i>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#place_tab" data-toggle="tab">
+                                        <i class="material-icons">place</i>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#translate_tab" data-toggle="tab">
+                                        <i class="material-icons">translate</i>
+                                    </a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#info_tab" data-toggle="tab">
+                                        <i class="material-icons">info</i>
+                                    </a>
+                                </li>
+                            </ul>
 
-</body>
-</html>
+                                      <!-- Tab panes -->
+                            <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane fade in active" id="main_tab">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('name', '')}}" name="name" class="form-control">
+                                        <label class="form-label">Name</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <div class="col-md-3">
+                                            <p>
+                                            <b>Type</b>
+                                            </p>
+                                            <select name="type" class="form-control show-tick">
+                                                {% for type_name in admin_levels %}
+                                                    <option value="{{type_name}}" {% if data.get('type') == type_name %} checked {% endif %}>{{type_name}}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('capital', '')}}" name="capital" class="form-control">
+                                        <label class="form-label">Capital</label>
+                                    </div>
+                                </div>
+                                {% for level in levels %}
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get(level)}}" name="{{level}}" class="form-control">
+                                        <label class="form-label">{{level}}</label>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('altitude', '')}}" name="altitude" class="form-control">
+                                        <label class="form-label">Altitude</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('population', '')}}" name="population" class="form-control">
+                                        <label class="form-label">Population</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('area', '')}}" name="area" class="form-control">
+                                        <label class="form-label">Area</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('density', '')}}" name="density" class="form-control">
+                                        <label class="form-label">Density</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{','.join(data.get('postal_codes', []))}}" name="postal_codes" class="form-control">
+                                        <label class="form-label">Postal codes</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('time', '')}}" name="time" class="form-control">
+                                        <label class="form-label">Time</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="place_tab">
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('center', {}).get('lat', '')}}" name="latitude" class="form-control">
+                                        <label class="form-label">Latitide</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('center', {}).get('lat', '')}}" name="longitude" class="form-control">
+                                        <label class="form-label">Longitude</label>
+                                    </div>
+                                </div>
+                                {% if data.get('center', {}).get('lat', '') and data.get('center', {}).get('lng', '') and data.get('bounds') %}
+                                    Map with bounds: {{data.get('bounds')}}
+                                {% endif %}
+                                Borders: {{data.get('borders')}}
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="translate_tab">
+                                {% for lang in languages %}
+                                    <div class="form-group form-float">
+                                        <div class="form-line">
+                                            <input type="text" value="{{data.get('i18n', {}).get(lang, '')}}" name="{{lang}}" class="form-control">
+                                            <label class="form-label">{{lang}}</label>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <div role="tabpanel" class="tab-pane fade" id="info_tab">
+                                <div class="body table-responsive">
+                                    <table class="table table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Value</th>
+                                                <th>Helper</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>ID</td>
+                                                <td>{{data.get('_id')}}</td>
+                                                <td>_id by MongoDB</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Code</td>
+                                                <td>{{data.get('code')}}</td>
+                                                <td>Code for store in mongodb by composite key</td>
+                                            </tr>
+                                            {% for source in data.get('sources', {}) %}
+                                            <tr>
+                                                <td>Source</td>
+                                                <td>{{source}}</td>
+                                                <td></td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <br>
+                            <button type="button" class="btn btn-primary m-t-15 waves-effect">LOGIN</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
