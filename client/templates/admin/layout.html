@@ -116,8 +116,15 @@
             <div class="navbar-header">
                 <a href="javascript:void(0);" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse" aria-expanded="false"></a>
                 <a href="javascript:void(0);" class="bars"></a>
-                <a class="navbar-brand" href="/">Sinoptik Wiki Gmaps Parser</a>
+                <a class="navbar-brand" href="/" target="_blank">Sinoptik Wiki Gmaps Parser</a>
                 {{debug}}
+                <div class="collapse navbar-collapse" id="navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="mailto:bpteam22@gmail.com" target="_blank"><i class="material-icons">bug_report</i></a>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>
@@ -130,7 +137,7 @@
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
                     <li class="active">
-                        <a href="/">
+                        <a href="/" target="_blank">
                             <i class="material-icons">home</i>
                             <span>Home</span>
                         </a>
@@ -142,22 +149,22 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="/internal/France">
+                                <a href="{{url_for('internal_list', country='France')}}" target="_blank">
                                     <span>Internal</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/matcher/France">
+                                <a href="/matcher/France" target="_blank">
                                     <span>Matching</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url_for('wiki_list', country='France')}}">
+                                <a href="{{url_for('wiki_list', country='France')}}" target="_blank">
                                     <span>Wikipedia</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url_for('gmaps_list', country='France')}}">
+                                <a href="{{url_for('gmaps_list', country='France')}}" target="_blank">
                                     <span>Google Maps</span>
                                 </a>
                             </li>
@@ -171,22 +178,22 @@
                         </a>
                         <ul class="ml-menu">
                             <li>
-                                <a href="/internal/France">
+                                <a href="{{url_for('internal_list', country='Italia')}}" target="_blank">
                                     <span>Internal</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="/matcher/France">
+                                <a href="/matcher/Italia" target="_blank">
                                     <span>Matching</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url_for('wiki_list', country='Italia')}}">
+                                <a href="{{url_for('wiki_list', country='Italia')}}" target="_blank">
                                     <span>Wikipedia</span>
                                 </a>
                             </li>
                             <li>
-                                <a href="{{url_for('gmaps_list', country='Italy')}}">
+                                <a href="{{url_for('gmaps_list', country='Italy')}}" target="_blank">
                                     <span>Google Maps</span>
                                 </a>
                             </li>
@@ -194,12 +201,12 @@
                     </li>
 
                     <li>
-                        <a href="{{url_for('wiki_list')}}">
+                        <a href="{{url_for('wiki_list')}}" target="_blank">
                             <span>Wikipedia</span>
                         </a>
                     </li>
                     <li>
-                        <a href="{{url_for('gmaps_list')}}">
+                        <a href="{{url_for('gmaps_list')}}" target="_blank">
                             <span>Google Maps</span>
                         </a>
                     </li>
@@ -221,17 +228,17 @@
                                         </a>
                                         <ul class="ml-menu">
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='active')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='active')}}" target="_blank">
                                                     <span>Active</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='done')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='done')}}" target="_blank">
                                                     <span>Done</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='in_progress')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_request', status='in_progress')}}" target="_blank">
                                                     <span>In progress</span>
                                                 </a>
                                             </li>
@@ -244,17 +251,17 @@
                                         </a>
                                         <ul class="ml-menu">
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='active')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='active')}}" target="_blank">
                                                     <span>Active</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='done')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='done')}}" target="_blank">
                                                     <span>Done</span>
                                                 </a>
                                             </li>
                                             <li>
-                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='in_progress')}}">
+                                                <a href="{{url_for('tasks_list', journal_id='wiki_page_recursive', status='in_progress')}}" target="_blank">
                                                     <span>In progress</span>
                                                 </a>
                                             </li>
@@ -269,12 +276,12 @@
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
-                                        <a href="/tasks/gmap_position">
+                                        <a href="/tasks/gmap_position" target="_blank">
                                             <span>Position</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="/tasks/gmap_address">
+                                        <a href="/tasks/gmap_address" target="_blank">
                                             <span>Address</span>
                                         </a>
                                     </li>
@@ -294,12 +301,12 @@
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
-                                        <a href="{{url_for('logs', name='wiki_request', status=1)}}">
+                                        <a href="{{url_for('logs', name='wiki_request', status=1)}}" target="_blank">
                                             <span>Wiki request</span>
                                         </a>
                                     </li>
                                     <li>
-                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=1)}}">
+                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=1)}}" target="_blank">
                                             <span>Wiki page recursive</span>
                                         </a>
                                     </li>
@@ -311,13 +318,13 @@
                                 </a>
                                 <ul class="ml-menu">
                                     <li>
-                                        <a href="{{url_for('logs', name='wiki_request', status=2)}}">
+                                        <a href="{{url_for('logs', name='wiki_request', status=2)}}" target="_blank">
                                             <span>Wiki request</span>
                                         </a>
                                     </li>
 
                                     <li>
-                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=2)}}">
+                                        <a href="{{url_for('logs', name='wiki_page_recursive', status=2)}}" target="_blank">
                                             <span>Wiki page recursive</span>
                                         </a>
                                     </li>

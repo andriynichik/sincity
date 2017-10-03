@@ -25,7 +25,7 @@ def index():
 
 
 @app.route('/internal/<string:country>')
-def internal(country=None):
+def internal_list(country=None):
     return render_template('admin/internal/list.html', country=country)
 
 
@@ -34,7 +34,50 @@ def internal_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding')
     factory = DocFactory(config.get('mongodb'))
-    collection = factory.gmaps_collection()
+    collection = factory.internal_collection()
+    obj = collection.find_one({'_id': ObjectId(id)})
+    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
+
+@app.route('/internal/edit/<string:id>')
+def internal_edit(id=None):
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding')
+    obj = {}
+    main_lang = ''
+    if id:
+        factory = DocFactory(config.get('mongodb'))
+        collection = factory.internal_collection()
+        obj = collection.find_one({'_id': ObjectId(id)})
+
+    admin_levels = ['ADMIN_LEVEL_1', 'ADMIN_LEVEL_2', 'ADMIN_LEVEL_3', 'ADMIN_LEVEL_4', 'ADMIN_LEVEL_5', 'ADMIN_LEVEL_6', 'ADMIN_LEVEL_7', 'ADMIN_LEVEL_8']
+
+    languages = ['en', 'it', 'fr']
+
+    if obj:
+        main_lang = obj.get('main_lang', '')
+        levels = []
+        for level in admin_levels:
+            if obj.get('type') == level:
+                break
+            levels.append(level)
+    else:
+        levels = admin_levels
+
+    return render_template('admin/gmap/unit.html',
+                           admin_levels=admin_levels,
+                           levels=levels,
+                           data=obj,
+                           api_key=api_key,
+                           main_lang=main_lang,
+                           languages=languages
+                           )
+
+@app.route('/internal/save')
+def internal_save():
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.internal_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
     return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
 
