@@ -85,14 +85,57 @@ def internal_save():
     factory = DocFactory(config.get('mongodb'))
     collection = factory.internal_collection()
     obj = {}
+    data = internal_form_mapping(post)
     if post.get('id'):
         obj = collection.find_one({'_id': ObjectId(post.get('id'))})
         if obj:
-            collection.update_one({'_id': ObjectId(post.get('id'))}, {'$set': post})
+            collection.update_one({'_id': ObjectId(post.get('id'))}, {'$set': data})
     else:
-        result = collection.insert_one(post)
+        result = collection.insert_one(data)
         obj.update(_id=result.inserted_id)
     return redirect(url_for('internal_edit', id=obj.get('_id'), saved=1))
+
+
+def internal_form_mapping(data):
+    obj = {
+        'name': data.get('name', ''),
+        'capital': data.get('capital', ''),
+        'type': data.get('type', ''),
+        'ADMIN_LEVEL_1': data.get('ADMIN_LEVEL_1', ''),
+        'ADMIN_LEVEL_2': data.get('ADMIN_LEVEL_2', ''),
+        'ADMIN_LEVEL_3': data.get('ADMIN_LEVEL_3', ''),
+        'ADMIN_LEVEL_4': data.get('ADMIN_LEVEL_4', ''),
+        'ADMIN_LEVEL_5': data.get('ADMIN_LEVEL_5', ''),
+        'ADMIN_LEVEL_6': data.get('ADMIN_LEVEL_6', ''),
+        'ADMIN_LEVEL_7': data.get('ADMIN_LEVEL_7', ''),
+        'ADMIN_LEVEL_8': data.get('ADMIN_LEVEL_8', ''),
+        'altitude': data.get('altitude', ''),
+        'population': data.get('population', ''),
+        'area': data.get('area', ''),
+        'density': data.get('density', ''),
+        'postal_codes': data.get('postal_codes', '').split(','),
+        'time': data.get('time', ''),
+        'center': {
+            'lat': data.get('latitude', ''),
+            'lng': data.get('longitude', ''),
+        },
+        'bounds': {
+            'left': {
+                'lat': data.get('left_latitude', ''),
+                'lng': data.get('left_longitude', '')
+            },
+            'right': {
+                'lat': data.get('right_latitude', ''),
+                'lng': data.get('right_longitude', '')
+            }
+        },
+        'i18n': {
+            'en': data.get('en', ''),
+            'fr': data.get('fr', ''),
+            'it': data.get('it', '')
+        }
+    }
+    return obj
 
 
 @app.route('/internal/delete/<string:id>')
