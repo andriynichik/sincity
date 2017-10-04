@@ -68,9 +68,9 @@ $(function () {
         columnDefs: [
             {
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data[0] +'" target="_blank"><i class="material-icons">remove_red_eye</i></a>' +
-                        '<a href="'+ data[1] +'" target="_blank"><i class="material-icons">mode_edit</i></a>' +
-                        '<a href="'+ data[2] +'" id="icon-delete" onclick="if(!confirm(\'Are you sure about that need to delete?\'))return false;" target="_blank"><i class="material-icons">delete_forever</i></a>';
+                    //'<a href="'+ data[0] +'" target="_blank"><i class="material-icons">remove_red_eye</i></a>' +
+                    return '<a href="'+ data[1] +'" target="_blank"><i class="material-icons">mode_edit</i></a>' +
+                        '<a href="'+ data[2] +'" id="icon-delete" onclick="if(!confirm(\'Are you sure about that need to delete?\')){return false;}else{window.table.row($(this).parents(\'tr\')).remove().draw();}" target="_blank"><i class="material-icons">delete_forever</i></a>';
                 },
                 targets: i++
             },
@@ -161,16 +161,15 @@ $(function () {
         ]
     });
 
+    window.table = table;
+
     $.each($('[data-hide]'), function (e) {
         var column = table.column($(this).attr('data-column') );
         column.visible(false);
     } );
 
     $('.js-exportable').on( 'click', '#icon-delete', function () {
-    table
-        .row( $(this).parents('tr') )
-        .remove()
-        .draw();
+
     } );
 
     $('a.toggle-link-vis').on( 'click', function (e) {
