@@ -10,6 +10,9 @@ from lib.location.GMap import GMap
 from lib.logger.MongoDB import MongoDB as MongoDBLog
 import hashlib
 from bson.objectid import ObjectId
+from flask import request
+from flask import redirect
+from flask import url_for
 
 
 app = Flask(__name__)
@@ -24,6 +27,7 @@ def index():
     return render_template('admin/index.html')
 
 
+@app.route('/internal')
 @app.route('/internal/<string:country>')
 def internal_list(country=None):
     return render_template('admin/internal/list.html', country=country)
@@ -36,14 +40,15 @@ def internal_unit(id):
     factory = DocFactory(config.get('mongodb'))
     collection = factory.internal_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
-    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
+    return render_template('admin/internal/unit.html', data=obj, api_key=api_key)
 
+@app.route('/internal/edit')
 @app.route('/internal/edit/<string:id>')
-def internal_edit(id=None):
+@app.route('/internal/edit/<string:id>/<string:saved>')
+def internal_edit(id=None, saved=0):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding')
     obj = {}
-    main_lang = ''
     if id:
         factory = DocFactory(config.get('mongodb'))
         collection = factory.internal_collection()
@@ -54,32 +59,49 @@ def internal_edit(id=None):
     languages = ['en', 'it', 'fr']
 
     if obj:
-        main_lang = obj.get('main_lang', '')
         levels = []
         for level in admin_levels:
             if obj.get('type') == level:
                 break
             levels.append(level)
     else:
+        obj = {}
         levels = admin_levels
 
-    return render_template('admin/gmap/unit.html',
+    return render_template('admin/internal/edit.html',
                            admin_levels=admin_levels,
                            levels=levels,
                            data=obj,
                            api_key=api_key,
-                           main_lang=main_lang,
-                           languages=languages
+                           languages=languages,
+                           saved=saved
                            )
 
-@app.route('/internal/save')
+
+@app.route('/internal/save', methods=['POST'])
 def internal_save():
+    post = request.form.copy()
     config = Config('./config/config.yml')
-    api_key = config.get('googlemaps').get('geocoding')
     factory = DocFactory(config.get('mongodb'))
     collection = factory.internal_collection()
-    obj = collection.find_one({'_id': ObjectId(id)})
-    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
+    obj = {}
+    if post.get('id'):
+        obj = collection.find_one({'_id': ObjectId(post.get('id'))})
+        if obj:
+            collection.update_one({'_id': ObjectId(post.get('id'))}, {'$set': post})
+    else:
+        result = collection.insert_one(post)
+        obj.update(_id=result.inserted_id)
+    return redirect(url_for('internal_edit', id=obj.get('_id'), saved=1))
+
+
+@app.route('/internal/delete/<string:id>')
+def internal_delete(id):
+    config = Config('./config/config.yml')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.internal_collection()
+    result = collection.delete_many({'_id': ObjectId(id)})
+    return render_template('admin/empty.html', data='ok', auto_close=True)
 
 
 @app.route('/data/<string:provider_type>.js')
@@ -106,6 +128,10 @@ def data_provider(provider_type, country=None):
             }
     else:
         data = factory.internal_collection()
+        if country:
+            document_filter = {
+                'admin_hierarchy': {'$elemMatch': {'name': country}}
+            }
 
     if not document_filter:
         document_filter = {'name': {'$exists': True, '$not': {'$size': 0}}}

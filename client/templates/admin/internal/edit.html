@@ -1,3 +1,10 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+{% if saved %}
+<script type="text/javascript">
+    showNotification('alert-success', 'Saved', 'top', 'center', '', '');
+</script>
+{% endif %}
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
@@ -17,8 +24,8 @@
                             </h2>
                         </div>
                         <div class="body">
-                            <form method="post" action="{url_for('internal_save')}">
-                            <input type="hidden" value="{{data.get('_id', '')}}">
+                            <form method="post" action="{{url_for('internal_save')}}">
+                            <input type="hidden" name="id" value="{{data.get('_id', '')}}">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs" role="tablist">
                                 <li role="presentation" class="active">
@@ -54,32 +61,30 @@
                                 </div>
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <div class="col-md-3">
-                                            <p>
-                                            <b>Type</b>
-                                            </p>
-                                            <select name="type" class="form-control show-tick">
-                                                {% for type_name in admin_levels %}
-                                                    <option value="{{type_name}}" {% if data.get('type') == type_name %} checked {% endif %}>{{type_name}}</option>
-                                                {% endfor %}
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group form-float">
-                                    <div class="form-line">
                                         <input type="text" value="{{data.get('capital', '')}}" name="capital" class="form-control">
                                         <label class="form-label">Capital</label>
                                     </div>
                                 </div>
+                                <h2 class="card-inside-title">Type</h2>
+                                <div class="row clearfix">
+                                <div class="col-md-12">
+                                <select name="type" class="form-control show-tick">
+                                    {% for type_name in admin_levels %}
+                                        <option value="{{type_name}}" {% if data.get('type') == type_name %} checked {% endif %}>{{type_name}}</option>
+                                    {% endfor %}
+                                </select>
+                                </div>
+                                </div>
+                                <h2 class="card-inside-title">Admin hierarchy</h2>
                                 {% for level in levels %}
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" value="{{data.get(level)}}" name="{{level}}" class="form-control">
+                                        <input type="text" value="{{data.get(level, '')}}" name="{{level}}" class="form-control">
                                         <label class="form-label">{{level}}</label>
                                     </div>
                                 </div>
                                 {% endfor %}
+                                <h2 class="card-inside-title">Other</h2>
                                 <div class="form-group form-float">
                                     <div class="form-line">
                                         <input type="text" value="{{data.get('altitude', '')}}" name="altitude" class="form-control">
@@ -130,8 +135,35 @@
                                         <label class="form-label">Longitude</label>
                                     </div>
                                 </div>
+                                <div>
+                                    <h4>Bounds</h4>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('bounds', {}).get('left', {}).get('lat', '')}}" name="left_latitude" class="form-control">
+                                        <label class="form-label">Left latitude</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('bounds', {}).get('left', {}).get('lng', '')}}" name="left_longitude" class="form-control">
+                                        <label class="form-label">Left longitude</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('bounds', {}).get('right', {}).get('lat', '')}}" name="right_latitude" class="form-control">
+                                        <label class="form-label">Right latitude</label>
+                                    </div>
+                                </div>
+                                <div class="form-group form-float">
+                                    <div class="form-line">
+                                        <input type="text" value="{{data.get('bounds', {}).get('right', {}).get('lng', '')}}" name="right_longitude" class="form-control">
+                                        <label class="form-label">Right longitude</label>
+                                    </div>
+                                </div>
                                 {% if data.get('center', {}).get('lat', '') and data.get('center', {}).get('lng', '') and data.get('bounds') %}
-                                    Map with bounds: {{data.get('bounds')}}
+                                    Map with bounds {{data.get('bounds')}} and center {{data.get('center')}}
                                 {% endif %}
                                 Borders: {{data.get('borders')}}
                             </div>
@@ -178,7 +210,7 @@
                                 </div>
                             </div>
                             <br>
-                            <button type="button" class="btn btn-primary m-t-15 waves-effect">LOGIN</button>
+                            <input type="submit" value="SAVE" class="btn btn-primary m-t-15 waves-effect">
                             </form>
                         </div>
                     </div>
@@ -186,3 +218,5 @@
             </div>
         </div>
     </section>
+
+{% endblock %}
