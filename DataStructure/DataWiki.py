@@ -7,21 +7,25 @@ wiki_france = 'https://fr.wikipedia.org'
 
 def parser_wiki(line):
     wiki_res = {}
-    # wiki_res.update(get_name(line))
-    # wiki_res.update(different_languages(line))
-    # wiki_res.update(get_url(line))
+    wiki_res.update(get_name(line))
+    wiki_res.update(different_languages(line))
+    wiki_res.update(get_url(line))
     wiki_res.update(get_population(line))
-    # wiki_res.update(get_density(line))
-    # wiki_res.update(get_area(line))
-    # wiki_res.update(get_coordinates(line))
-    # wiki_res.update(hierarchy(line))
-    # wiki_res.update(get_capital(line))
+    wiki_res.update(get_density(line))
+    wiki_res.update(get_area(line))
+    wiki_res.update(get_coordinates(line))
+    wiki_res.update(hierarchy(line))
+    wiki_res.update(get_capital(line))
+    wiki_res.update(get_postal_code(line))
     # wiki_res.update({'other': line})
     return wiki_res
 
 def get_name(row):
     try:
-        name_admin = {'name': row['Wiki_Name_Snipet']}
+        try:
+            name_admin = {'name': row['Wiki_Name_Snipet']}
+        except KeyError:
+            name_admin = {'name': row['Wiki_NameSnipet']}
     except KeyError:
         return {}
     return name_admin
@@ -59,9 +63,10 @@ def get_population(row):
         population_string = row['W_Population']
     except KeyError:
         return {}
-    if population_string != 'None':
+    if population_string not in ['None', '']:
         population = get_number(' hab.', population_string)
-        return {'population': int(population)} # TODO в департаментах одно поле не читается нужно разобраться
+        if isinstance(population, float):
+            return {'population': int(population)}
     return {}
 
 
@@ -89,9 +94,9 @@ def get_area(row):
 
 def get_number(identificator, number):
     pat = r'([\d\s,]*)(?={})'.format(identificator)
-    result = re.match(pat, number)
+    result = re.search(pat, number)
     if result == None:
-        return 0
+        return {}
     result = re.sub('\s', '', result.group())
     if ',' in result:
         result = result.replace(',', '.')
@@ -130,7 +135,11 @@ def hierarchy(row):
            admin_unit = row[admin_div]
         except KeyError:
             level += 1
-            res_hierarchy.append({'name': row['Wiki_Name_Snipet'], 'type': 'ADMIN_LEVEL_{}'.format(level)})
+            try:
+                name = row['Wiki_Name_Snipet']
+            except KeyError:
+                name = row['Wiki_NameSnipet']
+            res_hierarchy.append({'name': name, 'type': 'ADMIN_LEVEL_{}'.format(level)})
             return dict(admin_hierarchy=res_hierarchy)
         if admin_unit != 'None':
             level += 1
@@ -149,4 +158,14 @@ def get_capital(row):
         return {}
     if capital != 'None':
         return {'capital': capital}
+    return {}
+
+
+def get_postal_code(row):
+    try:
+        postal_code = row['W_CodePostal']
+    except KeyError:
+        return {}
+    if postal_code != 'None':
+        return {'postal_code': (postal_code,)}
     return {}
