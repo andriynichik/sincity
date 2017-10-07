@@ -1,23 +1,31 @@
 from lib.hashlib.sha512 import sha512 as hash
 import re
 
-wiki_res = {}
+
 wiki_france = 'https://fr.wikipedia.org'
 
 
 def parser_wiki(line):
     wiki_res = {}
-    wiki_res.update(get_name(line))
-    wiki_res.update(different_languages(line))
-    wiki_res.update(get_url(line))
-    wiki_res.update(get_population(line))
-    wiki_res.update(get_density(line))
-    wiki_res.update(get_area(line))
-    wiki_res.update(get_coordinates(line))
-    wiki_res.update(hierarchy(line))
-    wiki_res.update(get_capital(line))
-    wiki_res.update(get_postal_code(line))
-    wiki_res.update({'other': line})
+
+    functions_parser = (
+        get_name,
+        different_languages,
+        get_url,
+        get_population,
+        get_density,
+        get_area,
+        get_coordinates,
+        hierarchy,
+        get_capital,
+        get_postal_code,
+        get_altitude,
+        get_other,
+    )
+
+    for func in functions_parser:
+        wiki_res.update(func(line))
+
     return wiki_res
 
 
@@ -134,7 +142,7 @@ def hierarchy(row):
     res_hierarchy = []
     for admin_div in hierarchy_list:
         try:
-           admin_unit = row[admin_div]
+            admin_unit = row[admin_div]
         except KeyError:
             level += 1
             try:
