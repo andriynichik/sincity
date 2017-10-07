@@ -17,8 +17,9 @@ def parser_wiki(line):
     wiki_res.update(hierarchy(line))
     wiki_res.update(get_capital(line))
     wiki_res.update(get_postal_code(line))
-    # wiki_res.update({'other': line})
+    wiki_res.update({'other': line})
     return wiki_res
+
 
 def get_name(row):
     try:
@@ -34,12 +35,12 @@ def get_name(row):
 def different_languages(row):
     i18n = {}
     for key, val in row.items():
-        if re.match(r'^(W_Name_){1}[a-z]{2}', key):
+        if re.match(r'^(W_Name_)[a-z]{2}', key):
             if row.get(key):
                 country = key[-2:]
                 url_lang = row.get('W_Url_{}'.format(country))
                 i18n[country] = {'name': val}
-                if url_lang != None:
+                if url_lang is not None:
                     i18n.update({country: {'url': url_lang}})
     if i18n:
         return {'i18n': i18n}
@@ -95,7 +96,7 @@ def get_area(row):
 def get_number(identificator, number):
     pat = r'([\d\s,]*)(?={})'.format(identificator)
     result = re.search(pat, number)
-    if result == None:
+    if result is None:
         return {}
     result = re.sub('\s', '', result.group())
     if ',' in result:
@@ -117,6 +118,7 @@ def get_coordinates(row):
                       }
         return coordinates
     return {}
+
 
 def hierarchy(row):
     hierarchy_list = [
@@ -169,3 +171,31 @@ def get_postal_code(row):
     if postal_code != 'None':
         return {'postal_code': (postal_code,)}
     return {}
+
+
+def get_altitude(row):
+    try:
+        altitude = row['W_Altitude']
+    except KeyError:
+        return {}
+    if altitude != 'None':
+        return {'altitude': altitude}
+    return {}
+
+
+def get_other(row):
+    other = {'other': {}}
+    other_wiki = [
+        'W_Bureau',
+        'W_Cordommees',
+        'W_Creation',
+    ]
+    for name_column in other_wiki:
+        try:
+            value = row[name_column]
+        except KeyError:
+            continue
+        if value not in ['', 'None']:
+            var = name_column[2:].lower()
+            other['other'].update({var: value})
+    return other
