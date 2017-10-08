@@ -8,21 +8,17 @@ import csv
 # csv_file = 'Departements_28_08_17_cards.csv'
 csv_file = 'communes_17_09_17.csv'
 
-n=0
-with open(csv_file, encoding='utf-8') as cantonCSV:
-    for line in csv.DictReader(cantonCSV, delimiter='\t'):
+name_file_txt = csv_file.replace('.csv', '.txt')
+with open(name_file_txt, 'w') as dt_file:
+    with open(csv_file, encoding='utf-8') as admin_div_CSV:
+        for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
 
-        n += 1
+            dct = {}
 
-        dct = {}
+            wiki = parser_wiki(line)
+            gmap = parser_gmap(line)
 
-        wiki = parser_wiki(line)
-        gmap = parser_gmap(line)
+            dct.update({'wiki': wiki})
+            dct.update({'gmap': gmap})
 
-        dct.update({'wiki': wiki})
-        dct.update({'gmap': gmap})
-
-        print(dct)
-
-        # if n>= 2:
-        #     break
+            dt_file.writelines(str(dct) + '\n')
