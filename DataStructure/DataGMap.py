@@ -5,8 +5,8 @@ def parser_gmap(line):
         ('G_Locality_long_name', 'long_name'),
         ('G_Locality_short_name', 'short_name'),
         ('G_PlaceId', 'code'),
-        ('G_Types', 'type')
-        ('G_FormatAddress', 'address'),
+        ('G_Types', 'type'),
+        ('G_FormatAddress', 'full_address'),
         ('G_postal_code_long_name', 'postal_code'),
     )
 
@@ -16,6 +16,8 @@ def parser_gmap(line):
     functions_parser = (
         get_center,
         get_bounds,
+        hierarchy,
+        get_other,
     )
 
     for func in functions_parser:
@@ -32,45 +34,6 @@ def pars(row, column_name, res_name):
     if name not in ['None', '']:
         return {res_name: name}
     return {}
-#
-# def long_name(row):
-#     try:
-#         name = row['G_Country_long_name']
-#     except KeyError:
-#         return {}
-#     if name not in ['None', '']:
-#         return {'long_name': name}
-#     return {}
-#
-#
-# def short_name(row):
-#     try:
-#         name = row['G_Country_short_name']
-#     except KeyError:
-#         return {}
-#     if name not in ['None', '']:
-#         return {'short_name': name}
-#     return {}
-#
-#
-# def get_code(row):
-#     try:
-#         gpi = row['G_PlaceId']
-#     except KeyError:
-#         return {}
-#     if gpi not in ['None', '']:
-#         return {'code': gpi}
-#     return {}
-#
-#
-# def get_type(row):
-#     try:
-#         types = row['G_Types']
-#     except KeyError:
-#         return {}
-#     if types not in ['None', '']:
-#         return {'type': types}
-#     return {}
 
 
 def get_center(row):
@@ -79,7 +42,7 @@ def get_center(row):
         lon = row['G_Coordinates_location_Lng_3']
     except KeyError:
         return {}
-    if lat != 'None' and lon != 'None':
+    if 'None' not in [lat, lon]:
         coordinates = {'center': {
                                   'lat': float(lat),
                                   'lon': float(lon),
@@ -98,9 +61,58 @@ def get_bounds(row):
     except KeyError:
         return {}
     if 'None' not in [ne_lat, sw_lat, ne_lng, sw_lng]:
-        bounds = {'bounds':
-                      {'left': {'lat':float(ne_lat), 'lng': float(ne_lng)},
-                       'right': {'lat':float(sw_lat), 'lng': float(sw_lng)}}
+        bounds = {'bounds': {
+                            'left': {'lat': float(ne_lat), 'lng': float(ne_lng)},
+                            'right': {'lat': float(sw_lat), 'lng': float(sw_lng)},
+                            }
                   }
         return bounds
+    return {}
+
+
+def admin_level(row, identificator):
+    dct_country = {}
+    try:
+        long_name = row['G_{}_long_name'.format(identificator)]
+        short_name = row['G_{}_short_name'.format(identificator)]
+        types = row['G_{}_types'.format(identificator)]
+    except KeyError:
+        return dct_country
+    if 'None' not in [long_name, short_name, types]:
+        dct_country.update({
+            'name': long_name,
+            'short_name': short_name,
+            'type': types,
+        })
+    return dct_country
+
+
+def hierarchy(row):
+    admin_hierarchy = []
+    for idn in ['Country', 'AdminLevel_1', 'AdminLevel_2']:
+        val_level = admin_level(row, idn)
+        if val_level:
+            admin_hierarchy.append(val_level)
+        else:
+            return {}
+    return {'admin_hierarchy': admin_hierarchy}
+
+
+def get_other(row):
+    other = {'other': {}}
+    other_gmap = [
+        'G_Name_en',
+        'G_Name_ru',
+        'G_Name_uk',
+    ]
+    for name_column in other_gmap:
+        try:
+            value = row[name_column]
+        except KeyError:
+            continue
+        if value not in ['', 'None']:
+            var = name_column[2:].lower()
+            other['other'].update({var: value})
+    if other['other']:
+        return other
     return {}
