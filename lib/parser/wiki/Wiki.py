@@ -170,7 +170,7 @@ class Wiki(Parser):
 
         tags = self._content_soap.find_all('li', {"class": "interlanguage-link"})
         for tag in tags:
-            match = re.search(r"(?P<name>.*?)\s*[-—]", tag.a['title'])
+            match = re.search(r"(?P<name>.*?) [-—] ", tag.a['title'])
             if match:
                 name = match.group('name')
                 result[tag.a["lang"]] = {"name": name, "url": tag.a["href"]}
