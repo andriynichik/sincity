@@ -22,7 +22,7 @@ for index, row in df.iterrows():
     print(index)
     try:
         new_address = 'Italia, '
-        if row[1]:
+        if row[region_index]:
             new_address += row[region_index]
             if new_address not in lst_address:
                 lst_address.append(new_address)
