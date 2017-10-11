@@ -2,7 +2,7 @@ def parser_gmap(line):
     gmap_res = {}
 
     data_parser = (
-        ('G_Locality_long_name', 'long_name'),
+        ('G_Locality_long_name', 'name'),
         ('G_Locality_short_name', 'short_name'),
         ('G_PlaceId', 'code'),
         ('G_Types', 'type'),
@@ -39,13 +39,13 @@ def pars(row, column_name, res_name):
 def get_center(row):
     try:
         lat = row['G_Coordinates_location_Lat_3']
-        lon = row['G_Coordinates_location_Lng_3']
+        lng = row['G_Coordinates_location_Lng_3']
     except KeyError:
         return {}
-    if 'None' not in [lat, lon]:
+    if 'None' not in [lat, lng]:
         coordinates = {'center': {
                                   'lat': float(lat),
-                                  'lon': float(lon),
+                                  'lng': float(lng),
                                  }
                       }
         return coordinates
@@ -99,7 +99,7 @@ def hierarchy(row):
 
 
 def get_other(row):
-    other = {'other': {}}
+    other = {}
     other_gmap = [
         'G_Name_en',
         'G_Name_ru',
@@ -111,8 +111,7 @@ def get_other(row):
         except KeyError:
             continue
         if value not in ['', 'None']:
-            var = name_column[2:].lower()
-            other['other'].update({var: value})
-    if other['other']:
+            other.update({name_column: value})
+    if other:
         return other
     return {}

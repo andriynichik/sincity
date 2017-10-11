@@ -47,9 +47,9 @@ def different_languages(row):
             if row.get(key):
                 country = key[-2:]
                 url_lang = row.get('W_Url_{}'.format(country))
-                i18n[country] = {'name': val}
+                i18n.update({country:{'name': val}})
                 if url_lang is not None:
-                    i18n.update({country: {'url': url_lang}})
+                    i18n.update({country: {'url': url_lang, 'name': val}})
     if i18n:
         return {'i18n': i18n}
     return {}
@@ -57,7 +57,10 @@ def different_languages(row):
 
 def get_url(row):
     try:
-        url = row['Wiki_Url']
+        if 'Wiki_UrlInCommune' in row:
+            url = row['Wiki_UrlInCommune']
+        else:
+            url = row['Wiki_Url']
     except KeyError:
         return {}
     if url != 'None':
@@ -115,13 +118,13 @@ def get_number(identificator, number):
 def get_coordinates(row):
     try:
         lat = row['Wiki_Coordinates_lat']
-        lon = row['Wiki_Coordinates_lon']
+        lng = row['Wiki_Coordinates_lon']
     except KeyError:
         return {}
-    if lat != 'None' and lon != 'None':
+    if lat != 'None' and lng != 'None':
         coordinates = {'center': {
                                   'lat': float(lat),
-                                  'lon': float(lon),
+                                  'lng': float(lng),
                                  }
                       }
         return coordinates
@@ -142,7 +145,10 @@ def hierarchy(row):
     res_hierarchy = []
     for admin_div in hierarchy_list:
         try:
-            admin_unit = row[admin_div]
+            if admin_div == 'W_Pays':
+                admin_unit = 'France'
+            else:
+                admin_unit = row[admin_div]
         except KeyError:
             level += 1
             try:
@@ -192,11 +198,12 @@ def get_altitude(row):
 
 
 def get_other(row):
-    other = {'other': {}}
+    other = {}
     other_wiki = [
         'W_Bureau',
         'W_Cordommees',
         'W_Creation',
+        'ColResultInSnipet'
     ]
     for name_column in other_wiki:
         try:
@@ -204,6 +211,5 @@ def get_other(row):
         except KeyError:
             continue
         if value not in ['', 'None']:
-            var = name_column[2:].lower()
-            other['other'].update({var: value})
+            other.update({name_column: value})
     return other
