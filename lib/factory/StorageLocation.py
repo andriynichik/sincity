@@ -20,6 +20,12 @@ class StorageLocation:
     def gmaps(self, code):
         return GMap(code=code, storage=self._db)
 
+    def insee(self, code):
+        return Insee(code=code, storage=self._db)
+
+    def internal(self, code):
+        return Internal(code, storage=self._db)
+
     def gmaps_collection(self):
         return self._db[GMap.TYPE]
 

@@ -128,20 +128,10 @@ other - dict данные которые отличаются в зависим�
 sources - dict - список ключей на связаные данные из других источников (wiki, gmaps, osm, ...) позволит понимать откуда такие данные
 ```text
   {
-    wiki:[
-      	gdfkslgjreirehgdsjfk,
-      	fwqeoigthyqweruighvs,
-      	fwqoietuqjgsadfvasdf
-      ],
-    gmaps:[
-        asdfasdfewpfgdsg,
-        fadsklgehwotetvs,
-        fasdgewetqgfasdv
-      ],
-    osm: [
-        safdfgsdfgasg,
-        gasdhgdshasdg
-      ]
+    wiki: gdfkslgjreirehgdsjfk,
+    gmap: asdfasdfewpfgdsg,
+    osm: safdfgsdfgasg,
+    insee: asdgasha
   }
 ```
 

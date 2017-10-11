@@ -1,3 +1,6 @@
+from lib.hashlib.sha512 import sha512 as hash
+
+
 def parser_insee(row):
     other = {}
     other_data = [
@@ -27,4 +30,6 @@ def parser_insee(row):
             continue
         if value not in ['', 'None']:
             other.update({name_column: value})
+    code = hash().make(hash().make(row))
+    other.update(code=code)
     return other

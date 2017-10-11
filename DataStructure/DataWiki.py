@@ -183,7 +183,7 @@ def get_postal_code(row):
     except KeyError:
         return {}
     if postal_code != 'None':
-        return {'postal_code': (postal_code,)}
+        return {'postal_codes': (postal_code,)}
     return {}
 
 
