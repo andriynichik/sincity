@@ -35,8 +35,52 @@ $(function () {
 '{{item.get('population')|e}}',
 '{{item.get('postal_codes')|e}}',
         {% set item = itemsDic.get('wiki', {}) %}
+'{{url_for('wiki_unit', id=e(item.get('_id')))}}',
+['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
+'{{e(item.get('type'))}}',
+[{% for admin in item.get('admin_hierarchy', {}) %}
+['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
+{% endfor %}],
+['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
+['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
+'{{e(item.get('altitude'))}}',
+'{{e(item.get('population'))}}',
+'{{e(item.get('density'))}}',
+'{{e(item.get('area'))}}',
+'{{e(item.get('postal_codes'))}}',
+
         {% set item = itemsDic.get('gmap', {}) %}
+'{{url_for('gmaps_unit', id=e(item.get('_id')))}}',
+'{{e(item.get('name'))}}',
+'{{e(item.get('short_name'))}}',
+'{{e(item.get('type'))}}',
+[{% for admin in item.get('admin_hierarchy', {}) %}
+['{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
+{% endfor %}],
+['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],
+['{{e(item.get('bounds', {}).get('left',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('left',{}).get('lng'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lng'))}}'],
+'{{e(item.get('postal_code'))}}',
+'{{e(item.get('requests'))}}'
         {% set item = itemsDic.get('insee', {}) %}
+'{{url_for('insee_code_unit', id=e(item.get('code')))}}',
+'{{e(item.get('I_Code_Arrondissements'))}}',
+'{{e(item.get('I_Ar'))}}',
+'{{e(item.get('I_Cheflieu'))}}',
+'{{e(item.get('I_Code_canton'))}}',
+'{{e(item.get('I_Region'))}}',
+'{{e(item.get('I_Dep'))}}',
+'{{e(item.get('I_Canton'))}}',
+'{{e(item.get('I_Typct'))}}',
+'{{e(item.get('I_Burcentral'))}}',
+'{{e(item.get('I_Tncc'))}}',
+'{{e(item.get('I_Artmaj'))}}',
+'{{e(item.get('I_Ncc'))}}',
+'{{e(item.get('I_Armin'))}}',
+'{{e(item.get('I_Nccent'))}}',
+'{{e(item.get('InseeXls_CodeCommune'))}}',
+'{{e(item.get('InseeXls_NameCommune'))}}',
+'{{e(item.get('InseeXls_Population'))}}',
+'{{e(item.get('I_Code_departament'))}}',
 ],
         {% endfor %}
 
@@ -133,7 +177,249 @@ $(function () {
                     return data;
                 },
                 targets: i++
-            }
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data +'" target="_blank">#</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[1] +'" target="_blank">'+ data[0] +'</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            //{
+            //    render: function ( data, type, row ) {
+            //        return data.reduce(function(previousValue, data, index) {
+            //            return previousValue + '<a href="'+ data[0] +'" target="_blank">'+ data[1] +': '+ data[2] +'</a>';
+            //        }, '')
+            //    },
+            //    targets: i++
+            //},
+            {
+                render: function ( data, type, row ) {
+                    return data.reduce(function(previousValue, data, index) {
+                        return previousValue + '[<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>]';
+                    }, '')
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data +'" target="_blank">#</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data.reduce(function(previousValue, data, index) {
+                        return previousValue + ' '+ data[0] +'('+ data[1] +') > ';
+                    }, '')
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    var lat = data[0];
+                    var lng = data[1];
+                    return '<a href="http://maps.google.com/maps?q='+lat+','+lng+'&ll='+lat+','+lng+'&z=12" target="_blank">'+lat+', '+lng+'</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '('+data[0]+','+data[1]+'),('+data[2]+','+data[3]+')';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data +'" target="_blank">#</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
         ]
     });
 
