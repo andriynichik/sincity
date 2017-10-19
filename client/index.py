@@ -188,8 +188,27 @@ def matching_france():
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
-    document_filter = {}
-    data = factory.internal_collection()
+    internal = factory.internal_collection()
+    wiki = factory.wiki_collection()
+    gmap = factory.gmaps_collection()
+    insee = factory.insee_collection()
+    objects = internal.find({'name': {'$exists': True, '$not': {'$size': 0}}})
+    result = []
+    for item in objects:
+        dic = {
+            'internal': item
+        }
+
+        if item.get('source', {}).get('wiki'):
+            dic.update(wiki=wiki.find_one({'code': item.get('source', {}).get('wiki')}))
+        if item.get('source', {}).get('gmap'):
+            dic.update(gmap=gmap.find_one({'code': item.get('source', {}).get('gmap')}))
+        if item.get('source', {}).get('insee'):
+            dic.update(insee=gmap.find_one({'code': item.get('source', {}).get('insee')}))
+        result.append(dic)
+
+    return render_template('admin/matching-france/list.js', e=escape, items=result)
+
 
 
 @app.route('/gmaps/')
@@ -206,6 +225,7 @@ def gmaps_unit(id):
     collection = factory.gmaps_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
     return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
+
 
 @app.route('/gmaps/unit/code/<string:id>')
 def gmap_code_unit(id):
