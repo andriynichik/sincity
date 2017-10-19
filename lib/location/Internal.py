@@ -5,20 +5,24 @@ class Internal(Location):
 
     TYPE = 'internal'
 
-    def _add_source(self, name, value):
-        data = self._get_obj()
-        if not data[name]:
-            data[name] = []
-        if value not in data[name]:
-            data[name].append(value)
+    def __init__(self, code, storage):
+        collection = storage[self.TYPE]
+        super(Internal, self).__init__(code=code, storage=collection)
 
-        self._storage.save({'code': self.code}, data)
+    def _add_source(self, name, value):
+        data = self.get_document()
+        if not data.get(name):
+            data.update({name: ''})
+        else:
+            data.update({name: value})
+
+        self.update(data)
 
     def _remove_source(self, name, value):
-        data = self._get_obj()
-        if data[name]:
-            data[name] = [x for x in data[name] if x != value]
-
+        data = self.get_document()
+        if data.get(name):
+            data.update({name: ''})
+            self.update(data)
 
     def add_wiki_source(self, code):
         self._add_source('wiki', code)
@@ -27,9 +31,9 @@ class Internal(Location):
         self._add_source('gmaps', code)
 
     def get_wiki_sources(self):
-        data = self._get_obj()
-        return data.wiki if data.wiki else []
+        data = self.get_document()
+        return data.get('source',{}).get('wiki')
 
     def get_google_map_sources(self):
-        data = self._get_obj()
-        return data.gmaps if data.gmaps else []
+        data = self.get_document()
+        return data.get('source',{}).get('gmap')

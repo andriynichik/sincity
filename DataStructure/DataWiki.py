@@ -173,7 +173,7 @@ def get_capital(row):
     except KeyError:
         return {}
     if capital != 'None':
-        return {'capital': capital}
+        return {'capital': {'name': capital}}
     return {}
 
 

@@ -20,7 +20,7 @@ i = 0
 for csv_file in files:
     with open(csv_file, encoding='utf-8') as admin_div_CSV:
         for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
-            #try:
+            try:
                 i = i + 1
                 print(i)
                 dct = {}
@@ -31,14 +31,17 @@ for csv_file in files:
 
                 insee = parser_insee(line)
 
-                wiki_obj = doc_factory.wiki(wiki.get('code'))
-                wiki_obj.update(wiki)
+                if wiki.get('url'):
+                    wiki_obj = doc_factory.wiki(wiki.get('url'))
+                    wiki_obj.update(wiki)
 
-                gmap_obj = doc_factory.gmaps(gmap.get('code'))
-                gmap_obj.update(gmap)
+                if gmap.get('code'):
+                    gmap_obj = doc_factory.gmaps(gmap.get('code'))
+                    gmap_obj.update(gmap)
 
-                insee_obj = doc_factory.insee(insee.get('code'))
-                insee_obj.update(insee)
+                if insee.get('code'):
+                    insee_obj = doc_factory.insee(insee.get('code'))
+                    insee_obj.update(insee)
 
                 internal = {}
 
@@ -49,10 +52,10 @@ for csv_file in files:
 
                 if wiki.get('type'):
                     internal.update(type=wiki.get('type'))
+                elif len(wiki.get('admin_hierarchy', [])):
+                    internal.update(type='ADMIN_LEVEL_{}'.format(len(wiki.get('admin_hierarchy', [])) + 1))
                 elif gmap.get('type'):
                     internal.update(type=gmap.get('type'))
-                elif wiki.get('admin_hierarchy', []).len():
-                    internal.update(type='ADMIN_LEVEL_{}'.format(wiki.get('admin_hierarchy', []).len() + 1))
 
                 internal.update(i18n=wiki.get('i18n', {}))
 
@@ -98,13 +101,16 @@ for csv_file in files:
                 internal_code = hash().make(hash().make([internal.get('name'), internal.get('type'), wiki.get('admin_hierarchy')]))
                 internal.update(code=internal_code)
 
-                internal.update(source={
-                    'wiki': wiki.get('code'),
-                    'gmap': gmap.get('code'),
-                    'insee': insee.get('code')
-                })
+                source = {}
+                if wiki.get('code'):
+                    source.update(wiki=wiki.get('code'))
+                if gmap.get('code'):
+                    source.update(gmap=wiki.get('code'))
+                if insee.get('code'):
+                    source.update(insee=insee.get('code'))
+
+                internal.update(source=source)
                 internal_obj = doc_factory.internal(internal.get('code'))
-                insee_obj.update(internal)
-            #except:
-            #    print(line)
-                break
+                internal_obj.update(internal)
+            except:
+                print(line)
