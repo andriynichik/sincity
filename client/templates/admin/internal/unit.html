@@ -169,11 +169,11 @@
                                                     <td>{{data.get('code')}}</td>
                                                     <td>Code for store in mongodb by url</td>
                                                 </tr>
-                                                {% for source in data.get('sources', {}) %}
+                                                {% for source in data.get('source', {}) %}
                                                 <tr>
-                                                    <td>Source</td>
-                                                    <td>{{source}}</td>
-                                                    <td></td>
+                                                    <td>{{source}} source</td>
+                                                    <td>{{data.get('source', {}).get(source)}}</td>
+                                                    <td><a href="{{url_for('{}_code_unit'.format(source), id=data.get('source', {}).get(source))}}"><i class="material-icons">link</i></a></td>
                                                 </tr>
                                                 {% endfor %}
                                             </tbody>

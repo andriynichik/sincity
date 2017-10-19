@@ -1,0 +1,61 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>OTHER</h2>
+        </div>
+        <!-- Tabs With Icon Title -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation">
+                                    <a href="#info_tab" data-toggle="tab">
+                                        <i class="material-icons">info</i>
+                                    </a>
+                                </li>
+                            </ul>
+
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane fade in active" id="info_tab">
+                                    <b>Additional info</b>
+                                    <div class="body table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>Name</th>
+                                                    <th>Value</th>
+                                                    <th>Helper</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for name in data %}
+                                                <tr>
+                                                    <td>{{name}}</td>
+                                                    <td>{{data.get(name)}}</td>
+                                                    <td></td>
+                                                </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Tabs With Icon Title -->
+    </div>
+</section>
+
+{% endblock %}

@@ -38,6 +38,9 @@ for csv_file in files:
                 if gmap.get('code'):
                     gmap_obj = doc_factory.gmaps(gmap.get('code'))
                     gmap_obj.update(gmap)
+                elif gmap.get('center'):
+                    gmap_obj = doc_factory.gmaps(hash().make(str(gmap.get('center'))))
+                    gmap_obj.update(gmap)
 
                 if insee.get('code'):
                     insee_obj = doc_factory.insee(insee.get('code'))
@@ -102,12 +105,12 @@ for csv_file in files:
                 internal.update(code=internal_code)
 
                 source = {}
-                if wiki.get('code'):
-                    source.update(wiki=wiki.get('code'))
-                if gmap.get('code'):
-                    source.update(gmap=wiki.get('code'))
-                if insee.get('code'):
-                    source.update(insee=insee.get('code'))
+                if wiki_obj.get_document().get('code'):
+                    source.update(wiki=wiki_obj.get_document().get('code'))
+                if gmap_obj.get_document().get('code'):
+                    source.update(gmap=gmap_obj.get_document().get('code'))
+                if insee_obj.get_document().get('code'):
+                    source.update(insee=insee_obj.get_document().get('code'))
 
                 internal.update(source=source)
                 internal_obj = doc_factory.internal(internal.get('code'))

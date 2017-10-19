@@ -183,6 +183,15 @@ def data_provider(provider_type, country=None):
     return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
 
+@app.route('/data/matching-france.js')
+def matching_france():
+    config = Config('./config/config.yml')
+
+    factory = DocFactory(config.get('mongodb'))
+    document_filter = {}
+    data = factory.internal_collection()
+
+
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
 def gmaps_list(country=None):
@@ -196,6 +205,15 @@ def gmaps_unit(id):
     factory = DocFactory(config.get('mongodb'))
     collection = factory.gmaps_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
+    return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
+
+@app.route('/gmaps/unit/code/<string:id>')
+def gmap_code_unit(id):
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding').get('key')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.gmaps_collection()
+    obj = collection.find_one({'code': id})
     return render_template('admin/gmap/unit.html', data=obj, api_key=api_key)
 
 
@@ -213,6 +231,25 @@ def wiki_unit(id):
     collection = factory.wiki_collection()
     obj = collection.find_one({'_id': ObjectId(id)})
     return render_template('admin/wiki/unit.html', data=obj, api_key=api_key)
+
+
+@app.route('/wiki/unit/code/<string:id>')
+def wiki_code_unit(id):
+    config = Config('./config/config.yml')
+    api_key = config.get('googlemaps').get('geocoding').get('key')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.wiki_collection()
+    obj = collection.find_one({'code': id})
+    return render_template('admin/wiki/unit.html', data=obj, api_key=api_key)
+
+
+@app.route('/insee/unit/code/<string:id>')
+def insee_code_unit(id):
+    config = Config('./config/config.yml')
+    factory = DocFactory(config.get('mongodb'))
+    collection = factory.insee_collection()
+    obj = collection.find_one({'code': id})
+    return render_template('admin/other/unit.html', data=obj)
 
 
 @app.route('/tasks/<string:journal_id>')

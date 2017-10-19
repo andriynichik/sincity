@@ -1,0 +1,144 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<script type="text/javascript" src="/data/matching-france.js"></script>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>Internal</h2>
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Matching France
+                        </h2>
+                    </div>
+                    <div class="text">
+                        Toggle column (Internal):
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="1">Name</a>
+                        - <a class="toggle-link-vis" data-column="2">Type</a>
+                        - <a class="toggle-link-vis" data-column="3">AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="4">AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="5">AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="6" data-hide>AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="7" data-hide>AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="8" data-hide>AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="9" data-hide>AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="10" data-hide>AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="11" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="12">Center</a>
+                        - <a class="toggle-link-vis" data-column="13">Population</a>
+                        - <a class="toggle-link-vis" data-column="14" data-hide>Postal codes</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Wiki):
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="1" data-hide>Name</a>
+                        - <a class="toggle-link-vis" data-column="2" data-hide>Type</a>
+                        - <a class="toggle-link-vis" data-column="3" data-hide>AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="4" data-hide>AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="5" data-hide>AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="6" data-hide>AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="7" data-hide>AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="8" data-hide>AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="9" data-hide>AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="10" data-hide>AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="11" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="12" data-hide>Center</a>
+                        - <a class="toggle-link-vis" data-column="13" data-hide>Population</a>
+                        - <a class="toggle-link-vis" data-column="14" data-hide>Postal codes</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Gmap):
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="1" data-hide>Name</a>
+                        - <a class="toggle-link-vis" data-column="2" data-hide>Type</a>
+                        - <a class="toggle-link-vis" data-column="3" data-hide>AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="4" data-hide>AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="5" data-hide>AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="6" data-hide>AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="7" data-hide>AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="8" data-hide>AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="9" data-hide>AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="10" data-hide>AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="11" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="12" data-hide>Center</a>
+                        - <a class="toggle-link-vis" data-column="13" data-hide>Population</a>
+                        - <a class="toggle-link-vis" data-column="14" data-hide>Postal codes</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Additional):
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="1" data-hide>Name</a>
+                        - <a class="toggle-link-vis" data-column="2" data-hide>Type</a>
+                        - <a class="toggle-link-vis" data-column="3" data-hide>AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="4" data-hide>AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="5" data-hide>AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="6" data-hide>AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="7" data-hide>AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="8" data-hide>AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="9" data-hide>AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="10" data-hide>AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="11" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="12" data-hide>Center</a>
+                        - <a class="toggle-link-vis" data-column="13" data-hide>Population</a>
+                        - <a class="toggle-link-vis" data-column="14" data-hide>Postal codes</a>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>AdmL1</th>
+                                    <th>AdmL2</th>
+                                    <th>AdmL3</th>
+                                    <th>AdmL4</th>
+                                    <th>AdmL5</th>
+                                    <th>AdmL6</th>
+                                    <th>AdmL7</th>
+                                    <th>AdmL8</th>
+                                    <th>Capital</th>
+                                    <th>Center</th>
+                                    <th>Population</th>
+                                    <th>Postal codes</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>AdmL1</th>
+                                    <th>AdmL2</th>
+                                    <th>AdmL3</th>
+                                    <th>AdmL4</th>
+                                    <th>AdmL5</th>
+                                    <th>AdmL6</th>
+                                    <th>AdmL7</th>
+                                    <th>AdmL8</th>
+                                    <th>Capital</th>
+                                    <th>Center</th>
+                                    <th>Population</th>
+                                    <th>Postal codes</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+</section>
+{% endblock %}
