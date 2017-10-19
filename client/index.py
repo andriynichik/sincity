@@ -184,7 +184,7 @@ def data_provider(provider_type, country=None):
 
 
 @app.route('/data/matching-france.js')
-def matching_france():
+def matching_france_js():
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
@@ -199,16 +199,32 @@ def matching_france():
             'internal': item
         }
 
+        wiki_res = {}
         if item.get('source', {}).get('wiki'):
-            dic.update(wiki=wiki.find_one({'code': item.get('source', {}).get('wiki')}))
+            wiki_res = wiki.find_one({'code': item.get('source', {}).get('wiki')})
+
+        dic.update(wiki=wiki_res)
+
+        gmap_res = {}
         if item.get('source', {}).get('gmap'):
-            dic.update(gmap=gmap.find_one({'code': item.get('source', {}).get('gmap')}))
+            gmap_res = gmap.find_one({'code': item.get('source', {}).get('gmap')})
+
+        dic.update(gmap=gmap_res)
+
+        insee_res = {}
         if item.get('source', {}).get('insee'):
-            dic.update(insee=gmap.find_one({'code': item.get('source', {}).get('insee')}))
+            insee_res = insee.find_one({'code': item.get('source', {}).get('insee')})
+
+        dic.update(insee=insee_res)
+
         result.append(dic)
 
     return render_template('admin/matching-france/list.js', e=escape, items=result)
 
+
+@app.route('/matching/france')
+def matching_france():
+    return render_template('admin/matching-france/list.html')
 
 
 @app.route('/gmaps/')

@@ -38,8 +38,8 @@ for csv_file in files:
                 if gmap.get('code'):
                     gmap_obj = doc_factory.gmaps(gmap.get('code'))
                     gmap_obj.update(gmap)
-                elif gmap.get('center'):
-                    gmap_obj = doc_factory.gmaps(hash().make(str(gmap.get('center'))))
+                elif gmap:
+                    gmap_obj = doc_factory.gmaps(hash().make(gmap))
                     gmap_obj.update(gmap)
 
                 if insee.get('code'):

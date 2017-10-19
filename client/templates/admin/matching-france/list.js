@@ -60,7 +60,7 @@ $(function () {
 ['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],
 ['{{e(item.get('bounds', {}).get('left',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('left',{}).get('lng'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lng'))}}'],
 '{{e(item.get('postal_code'))}}',
-'{{e(item.get('requests'))}}'
+'{{e(item.get('requests'))}}',
         {% set item = itemsDic.get('insee', {}) %}
 '{{url_for('insee_code_unit', id=e(item.get('code')))}}',
 '{{e(item.get('I_Code_Arrondissements'))}}',
@@ -251,6 +251,12 @@ $(function () {
             {
                 render: function ( data, type, row ) {
                     return '<a href="'+ data +'" target="_blank">#</a>';
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
                 },
                 targets: i++
             },
