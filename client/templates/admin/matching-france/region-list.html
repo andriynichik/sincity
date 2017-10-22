@@ -1,0 +1,56 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>Region list</h2>
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            France region list
+                        </h2>
+                    </div>
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>List</th>
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>Name</th>
+                                    <th>List</th>
+                                </tr>
+                                </tfoot>
+                                <tbody>
+                                    {% for item in data %}
+                                        <tr>
+                                            <td>{{ item.get('count') }}</td>
+                                            <td>{{ item.get('_id') }}</td>
+                                            <td><a href="{{ url_for('matching_france', region=item.get('_id')) }}"> <i class="material-icons">link</i> </a></td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+</section>
+
+<script src="/js/pages/tables/jquery-datatable.js"></script>
+{% endblock %}

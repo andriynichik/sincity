@@ -4,6 +4,8 @@ from DataStructure.DataInsee import parser_insee
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
 from lib.hashlib.sha512 import sha512 as hash
+from lib.parser.wiki.France import France as ParserFranceWiki
+from lib.factory.Loader import Loader as LoaderFactory
 import csv
 
 files = [
@@ -16,11 +18,15 @@ files = [
 config = Config('./config/config.yml')
 
 doc_factory = DocFactory(config.get('mongodb'))
+
+loader = LoaderFactory.loader_with_mongodb(storage_config=config.get('mongodb'))
+headers = {'User-Agent': 'Mozilla/5.0'}
+
 i = 0
 for csv_file in files:
     with open(csv_file, encoding='utf-8') as admin_div_CSV:
         for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
-            try:
+            #try:
                 i = i + 1
                 print(i)
                 dct = {}
@@ -34,6 +40,10 @@ for csv_file in files:
                 if wiki.get('url'):
                     wiki_obj = doc_factory.wiki(wiki.get('url'))
                     wiki_obj.update(wiki)
+                    #wiki_content, code = loader.load( wiki.get('url'), headers=headers)
+                    #wiki_parser = ParserFranceWiki(wiki_content)
+                    #wiki_obj.update(wiki_parser.as_dictionary())
+                    #wiki = wiki_obj.get_document()
 
                 if gmap.get('code'):
                     gmap_obj = doc_factory.gmaps(gmap.get('code'))
@@ -41,6 +51,8 @@ for csv_file in files:
                 elif gmap:
                     gmap_obj = doc_factory.gmaps(hash().make(gmap))
                     gmap_obj.update(gmap)
+
+                #if gmap_obj.get_document().get('type') == ''
 
                 if insee.get('code'):
                     insee_obj = doc_factory.insee(insee.get('code'))
@@ -60,7 +72,10 @@ for csv_file in files:
                 elif gmap.get('type'):
                     internal.update(type=gmap.get('type'))
 
-                internal.update(i18n=wiki.get('i18n', {}))
+                languages = {}
+                for lang, i18n in wiki.get('i18n', {}).items():
+                    languages.update({lang: i18n.get('name')})
+                internal.update(i18n=languages)
 
                 if gmap.get('G_Name_en'):
                     internal.get('i18n', {}).update(en=gmap.get('G_Name_en'))
@@ -70,7 +85,7 @@ for csv_file in files:
                     internal.get('i18n', {}).update(uk=gmap.get('G_Name_uk'))
 
                 if wiki.get('admin_hierarchy'):
-                    for obj in wiki.get('admin_hierarchy'):
+                    for key, obj in wiki.get('admin_hierarchy', {}).items():
                         internal.update({obj.get('type'): obj.get('name')})
 
                 if wiki.get('capital'):
@@ -115,5 +130,5 @@ for csv_file in files:
                 internal.update(source=source)
                 internal_obj = doc_factory.internal(internal.get('code'))
                 internal_obj.update(internal)
-            except:
-                print(line)
+            #except:
+            #    print(line)

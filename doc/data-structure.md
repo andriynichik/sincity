@@ -30,17 +30,16 @@ i18n - dict названия на разных языках
   }
 ```
 
-admin_hierarchy - list список в порядке убывания  всех уровней админ делений до этого пункта, названия на родном языке (позволит миксовать запросы к тому-же гуглу)
+admin_hierarchy - dict список в порядке убывания  всех уровней админ делений до этого пункта, названия на родном языке (позволит миксовать запросы к тому-же гуглу)
 ```text
-  [
-    {name:France, type:ADMIN_LEVEL_1},
-    {...},
-    {name:Île-de-France, type:ADMIN_LEVEL_2},
-    {name:Paris, type:ADMIN_LEVEL_3},
-    {...},
-    {name:Paris, type:ADMIN_LEVEL_5}
-    {...}
-  ]
+  {
+    ADMIN_LEVEL_1: {name:France},
+    ADMIN_LEVEL_2: {name:Île-de-France},
+    ADMIN_LEVEL_3: {name:Paris},
+    ADMIN_LEVEL_5: {...},
+    ADMIN_LEVEL_5: {name:Paris}
+    ADMIN_LEVEL_N: {...},
+  }
 ```
 
 capital - string имя центра админ деления
@@ -251,16 +250,16 @@ i18n - dict названия на разных языках
   }
 ```
 
-admin_hierarchy - list список в порядке убывания  всех уровней админ делений до этого пункта (позволит миксовать запросы к тому-же гуглу)
+admin_hierarchy - dict список в порядке убывания  всех уровней админ делений до этого пункта (позволит миксовать запросы к тому-же гуглу)
 ```text
   [
-    {name:France, type:country, url:'http://fr.wiki....'},
-    {...},
-    {name:Île-de-France, type:region, url:'http://fr.wiki....'},
-    {name:Paris, type:department, url:'http://fr.wiki....'},
-    {...},
-    {name:Paris, type:district, url:'http://fr.wiki....'}
-    {...}
+    ADMIN_LEVEL_1: {name:France, type:country, url:'http://fr.wiki....'},
+    ADMIN_LEVEL_2: {...},
+    ADMIN_LEVEL_3: {name:Île-de-France, type:region, url:'http://fr.wiki....'},
+    ADMIN_LEVEL_4: {name:Paris, type:department, url:'http://fr.wiki....'},
+    ADMIN_LEVEL_5: {...},
+    ADMIN_LEVEL_6: {name:Paris, type:district, url:'http://fr.wiki....'}
+    ADMIN_LEVEL_N: {...}
   ]
 ```
 
@@ -364,13 +363,13 @@ lang - string язык названий
 en
 ```
 
-admin_hierarchy - list список в порядке убывания всех уровней админ до этого пункта
+admin_hierarchy - dict список в порядке убывания всех уровней админ до этого пункта
 ```text
 [
-    {name:France, short_name: FR, type:country},
-    {name:Île-de-France, short_name: Île-de-France, type:administrative_area_level_1},
-    {name:Paris, short_name: Paris, type:administrative_area_level_2},
-    {...}
+    ADMIN_LEVEL_1: {name:France, short_name: FR, type:country},
+    ADMIN_LEVEL_2: {name:Île-de-France, short_name: Île-de-France, type:administrative_area_level_1},
+    ADMIN_LEVEL_3: {name:Paris, short_name: Paris, type:administrative_area_level_2},
+    ADMIN_LEVEL_N: {...}
 ]
 ```
 

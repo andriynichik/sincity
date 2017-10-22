@@ -1,6 +1,6 @@
 from lib.hashlib.sha512 import sha512 as hash
 import re
-
+from urllib.parse import quote_plus
 
 wiki_france = 'https://fr.wikipedia.org'
 
@@ -64,7 +64,8 @@ def get_url(row):
     except KeyError:
         return {}
     if url != 'None':
-        url = wiki_france + url
+        url = wiki_france + '/wiki/' + quote_plus(url.replace('/wiki/', ''))
+        print(url)
         code = hash().make(url)
         return {'url': url, 'code': code}
     return {}
@@ -142,7 +143,7 @@ def hierarchy(row):
         'W_Commune',
     ]
     level = 0
-    res_hierarchy = []
+    res_hierarchy = {}
     for admin_div in hierarchy_list:
         try:
             if admin_div == 'W_Pays':
@@ -155,11 +156,11 @@ def hierarchy(row):
                 name = row['Wiki_Name_Snipet']
             except KeyError:
                 name = row['Wiki_NameSnipet']
-            res_hierarchy.append({'name': name, 'type': 'ADMIN_LEVEL_{}'.format(level)})
+            res_hierarchy.update({'ADMIN_LEVEL_{}'.format(level): {'name': name, 'type': 'ADMIN_LEVEL_{}'.format(level)}})
             return dict(admin_hierarchy=res_hierarchy)
         if admin_unit != 'None':
             level += 1
-            res_hierarchy.append({'name': admin_unit, 'type': 'ADMIN_LEVEL_{}'.format(level)})
+            res_hierarchy.update({'ADMIN_LEVEL_{}'.format(level): {'name': admin_unit, 'type': 'ADMIN_LEVEL_{}'.format(level)}})
 
     return dict(admin_hierarchy=res_hierarchy)
 

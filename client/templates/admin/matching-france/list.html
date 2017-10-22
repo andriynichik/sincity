@@ -1,6 +1,6 @@
 {% extends "admin/layout.html" %}
 {% block body %}
-<script type="text/javascript" src="/data/matching-france.js"></script>
+<script type="text/javascript" src="{{ url_for('matching_france_js', region=region) }}"></script>
 
 <section class="content">
     <div class="container-fluid">

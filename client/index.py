@@ -13,6 +13,7 @@ from bson.objectid import ObjectId
 from flask import request
 from flask import redirect
 from flask import url_for
+from urllib.parse import unquote_plus
 
 
 app = Flask(__name__)
@@ -160,20 +161,20 @@ def data_provider(provider_type, country=None):
         if country:
             document_filter = {
                 'name': {'$exists': True, '$not': {'$size': 0}},
-                'admin_hierarchy': {'$elemMatch': {'name': country}}
+                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
             }
     elif provider_type == GMap.TYPE:
         data = factory.gmaps_collection()
         if country:
             document_filter = {
                 'name': {'$exists': True, '$not': {'$size': 0}},
-                'admin_hierarchy': {'$elemMatch': {'name': country}}
+                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
             }
     else:
         data = factory.internal_collection()
         if country:
             document_filter = {
-                'admin_hierarchy': {'$elemMatch': {'name': country}}
+                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
             }
 
     if not document_filter:
@@ -183,8 +184,9 @@ def data_provider(provider_type, country=None):
     return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
 
-@app.route('/data/matching-france.js')
-def matching_france_js():
+@app.route('/data/matching-france-<string:region>.js')
+def matching_france_js(region):
+    region = unquote_plus(region)
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
@@ -192,7 +194,10 @@ def matching_france_js():
     wiki = factory.wiki_collection()
     gmap = factory.gmaps_collection()
     insee = factory.insee_collection()
-    objects = internal.find({'name': {'$exists': True, '$not': {'$size': 0}}})
+    objects = internal.find({
+        'name': {'$exists': True, '$not': {'$size': 0}},
+        '$and': [{'ADMIN_LEVEL_1': 'France'}, {'ADMIN_LEVEL_2': region}],
+    })
     result = []
     for item in objects:
         dic = {
@@ -222,9 +227,18 @@ def matching_france_js():
     return render_template('admin/matching-france/list.js', e=escape, items=result)
 
 
-@app.route('/matching/france')
-def matching_france():
-    return render_template('admin/matching-france/list.html')
+@app.route('/matching/france/')
+@app.route('/matching/france/<string:region>')
+def matching_france(region=None):
+    if region is None:
+        config = Config('./config/config.yml')
+
+        factory = DocFactory(config.get('mongodb'))
+        internal = factory.internal_collection()
+        objects = internal.aggregate([{'$group': {'_id': '$ADMIN_LEVEL_2', 'count': {'$sum': 1}}}])
+        return render_template('admin/matching-france/region-list.html', data=objects)
+    else:
+        return render_template('admin/matching-france/list.html', region=region)
 
 
 @app.route('/gmaps/')

@@ -69,7 +69,7 @@
                                                     <td>{{data.get('capital', {}).get('name')}}</td>
                                                     <td><a href="{{data.get('capital', {}).get('url', '#')}}" target="_blank"><i class="material-icons">link</i></a></td>
                                                 </tr>
-                                                {% for admin in data.get('admin_hierarchy', {}) %}
+                                                {% for admin_type, admin in data.get('admin_hierarchy', {}).items() %}
                                                 <tr>
                                                     <td>{{admin.get('type')}}</td>
                                                     <td>{{admin.get('name')}}</td>

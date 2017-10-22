@@ -50,27 +50,44 @@ class France(Wiki):
         return text
 
     def get_admin_hierarchy(self):
-        admin = []
+        admin = {}
+
+        min_level = self.get_type()
+
+        if min_level == self.ADMIN_LEVEL_1:
+            return admin
 
         country = self._get_country()
         if country:
-            admin.append(country)
+            admin.update(ADMIN_LEVEL_1=country)
+
+        if min_level == self.ADMIN_LEVEL_2:
+            return admin
 
         region = self._get_region()
         if region:
-            admin.append(region)
+            admin.update(ADMIN_LEVEL_2=region)
+
+        if min_level == self.ADMIN_LEVEL_3:
+            return admin
 
         department = self._get_department()
         if department:
-            admin.append(department)
+            admin.update(ADMIN_LEVEL_3=department)
+
+        if min_level == self.ADMIN_LEVEL_4:
+            return admin
 
         borough = self._get_borough()
         if borough:
-            admin.append(borough)
+            admin.update(ADMIN_LEVEL_4=borough)
+
+        if min_level == self.ADMIN_LEVEL_5:
+            return admin
 
         city = self._get_city()
         if city:
-            admin.append(city)
+            admin.update(ADMIN_LEVEL_5=city)
 
         return admin
 

@@ -2,6 +2,11 @@ $(function () {
     var table;
     var i = 0;
     table = $('.js-exportable').removeAttr('width').DataTable({
+        columnDefs: [
+            { width: 200, targets: 0 }
+        ],
+        fixedColumns: true,
+        "autoWidth": false,
         "bSortClasses": false,
         dom: 'Bflrtip',
         lengthMenu: [ [10, 100, 1000, -1], [10, 100, 1000, "All"] ],
@@ -38,7 +43,7 @@ $(function () {
 '{{url_for('wiki_unit', id=e(item.get('_id')))}}',
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
 '{{e(item.get('type'))}}',
-[{% for admin in item.get('admin_hierarchy', {}) %}
+[{% for admin_type, admin in item.get('admin_hierarchy', {}).items() %}
 ['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %}],
 ['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
