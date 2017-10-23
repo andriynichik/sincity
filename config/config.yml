@@ -5,4 +5,4 @@ mongodb:
 googlemaps:
     geocoding:
         key: AIzaSyApLhGCGAAgMXncb0KR6CtLA33gU9yOpZY
-        limit: 50000
+        limit: 2500

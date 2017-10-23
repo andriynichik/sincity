@@ -37,7 +37,7 @@
                                         <tr>
                                             <td>{{ item.get('count') }}</td>
                                             <td>{{ item.get('_id') }}</td>
-                                            <td><a href="{{ url_for('matching_france', region=item.get('_id')) }}"> <i class="material-icons">link</i> </a></td>
+                                            <td><a target="_blank" href="{{ url_for('matching_france', region=item.get('_id')) }}"> <i class="material-icons">link</i> </a></td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

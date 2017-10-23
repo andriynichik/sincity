@@ -5,9 +5,12 @@ from lib.config.Yaml import Yaml as Config
 
 config = Config('./config/config.yml')
 
-loader = LoaderFactory.loader_gmaps_with_cache(config.get('googlemaps'), config.get('mongodb'))
+gmap_config = config.get('googlemaps')
+gmap_config.update(language='fr')
 
-components = {'country': 'France', 'locality': u'Benoîtville'}
+loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config, storage_config=config.get('mongodb'))
+
+components = {'country': 'FR', 'postal_code': '25320'}
 
 components_content = loader.by_component(components=components)
 

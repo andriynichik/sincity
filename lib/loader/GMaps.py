@@ -3,6 +3,9 @@ class GMaps:
         self._googlemaps = googlemaps
         self._language = language
 
+    def by_address_and_components(self, address, components):
+        return self._googlemaps.geocode(address, components=components, language=self._language)
+
     def by_component(self, components):
         return self._googlemaps.geocode(components=components, language=self._language)
 
