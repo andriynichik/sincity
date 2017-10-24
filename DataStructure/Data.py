@@ -26,31 +26,34 @@ i = 0
 for csv_file in files:
     with open(csv_file, encoding='utf-8') as admin_div_CSV:
         for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
-            #try:
+            try:
                 i = i + 1
                 print(i)
                 dct = {}
 
                 wiki = parser_wiki(line)
 
-                gmap = parser_gmap(line)
+                #gmap = parser_gmap(line)
+                gmap = {}
 
                 insee = parser_insee(line)
 
                 if wiki.get('url'):
                     wiki_obj = doc_factory.wiki(wiki.get('url'))
-                    wiki_obj.update(wiki)
-                    #wiki_content, code = loader.load( wiki.get('url'), headers=headers)
-                    #wiki_parser = ParserFranceWiki(wiki_content)
-                    #wiki_obj.update(wiki_parser.as_dictionary())
-                    #wiki = wiki_obj.get_document()
+                    #wiki_obj.update(wiki)
+                    wiki_content, code = loader.load( wiki.get('url'), headers=headers)
+                    wiki_parser = ParserFranceWiki(wiki_content)
+                    wiki_parsed = wiki_parser.as_dictionary()
+                    wiki_parsed.update(url=wiki.get('url'))
+                    wiki_obj.update(wiki_parsed)
+                    wiki = wiki_obj.get_document()
 
-                if gmap.get('code'):
-                    gmap_obj = doc_factory.gmaps(gmap.get('code'))
-                    gmap_obj.update(gmap)
-                elif gmap:
-                    gmap_obj = doc_factory.gmaps(hash().make(gmap))
-                    gmap_obj.update(gmap)
+                #if gmap.get('code'):
+                #    gmap_obj = doc_factory.gmaps(gmap.get('code'))
+                #    gmap_obj.update(gmap)
+                #elif gmap:
+                #    gmap_obj = doc_factory.gmaps(hash().make(gmap))
+                #    gmap_obj.update(gmap)
 
                 #if gmap_obj.get_document().get('type') == ''
 
@@ -85,8 +88,7 @@ for csv_file in files:
                     internal.get('i18n', {}).update(uk=gmap.get('G_Name_uk'))
 
                 if wiki.get('admin_hierarchy'):
-                    for key, obj in wiki.get('admin_hierarchy', {}).items():
-                        internal.update({obj.get('type'): obj.get('name')})
+                    internal.update(admin_hierarchy=wiki.get('admin_hierarchy', {}))
 
                 if wiki.get('capital'):
                     internal.update(capital=wiki.get('capital'))
@@ -116,19 +118,19 @@ for csv_file in files:
                 if wiki.get('postal_codes'):
                     internal.update(postal_codes=wiki.get('postal_codes'))
 
-                internal_code = hash().make(hash().make([internal.get('name'), internal.get('type'), wiki.get('admin_hierarchy')]))
+                internal_code = hash().make(hash().make(str([internal.get('name'), internal.get('type'), wiki.get('admin_hierarchy')])))
                 internal.update(code=internal_code)
 
                 source = {}
                 if wiki_obj.get_document().get('code'):
                     source.update(wiki=wiki_obj.get_document().get('code'))
-                if gmap_obj.get_document().get('code'):
-                    source.update(gmap=gmap_obj.get_document().get('code'))
+                #if gmap_obj.get_document().get('code'):
+                #    source.update(gmap=gmap_obj.get_document().get('code'))
                 if insee_obj.get_document().get('code'):
                     source.update(insee=insee_obj.get_document().get('code'))
 
                 internal.update(source=source)
                 internal_obj = doc_factory.internal(internal.get('code'))
                 internal_obj.update(internal)
-            #except:
-            #    print(line)
+            except:
+                print(line)

@@ -27,18 +27,19 @@ $(function () {
 ['{{url_for('internal_unit', id=e(item.get('_id')))}}', '{{url_for('internal_edit', id=e(item.get('_id')))}}', '{{url_for('internal_delete', id=e(item.get('_id')))}}'],
 '{{item.get('name')|e}}',
 '{{item.get('type')|e}}',
-'{{ item.get('ADMIN_LEVEL_1')|e }}',
-'{{ item.get('ADMIN_LEVEL_2')|e }}',
-'{{ item.get('ADMIN_LEVEL_3')|e }}',
-'{{ item.get('ADMIN_LEVEL_4')|e }}',
-'{{ item.get('ADMIN_LEVEL_5')|e }}',
-'{{ item.get('ADMIN_LEVEL_6')|e }}',
-'{{ item.get('ADMIN_LEVEL_7')|e }}',
-'{{ item.get('ADMIN_LEVEL_8')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('name')|e }}',
+'{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}',
 '{{item.get('capital')|e}}',
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
 '{{item.get('population')|e}}',
 '{{item.get('postal_codes')|e}}',
+
         {% set item = itemsDic.get('wiki', {}) %}
 '{{url_for('wiki_unit', id=e(item.get('_id')))}}',
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
@@ -53,19 +54,23 @@ $(function () {
 '{{e(item.get('density'))}}',
 '{{e(item.get('area'))}}',
 '{{e(item.get('postal_codes'))}}',
+'{{e(item.get('communes'))}}',
+'{{e(item.get('canton_codes'))}}',
+'{{e(item.get('commune_codes'))}}',
 
         {% set item = itemsDic.get('gmap', {}) %}
 '{{url_for('gmaps_unit', id=e(item.get('_id')))}}',
 '{{e(item.get('name'))}}',
 '{{e(item.get('short_name'))}}',
 '{{e(item.get('type'))}}',
-[{% for admin in item.get('admin_hierarchy', {}) %}
+[{% for admin_type, admin in item.get('admin_hierarchy', {}).items() %}
 ['{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %}],
 ['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],
 ['{{e(item.get('bounds', {}).get('left',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('left',{}).get('lng'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lng'))}}'],
 '{{e(item.get('postal_code'))}}',
 '{{e(item.get('requests'))}}',
+
         {% set item = itemsDic.get('insee', {}) %}
 '{{url_for('insee_code_unit', id=e(item.get('code')))}}',
 '{{e(item.get('I_Code_Arrondissements'))}}',
@@ -91,6 +96,7 @@ $(function () {
 
         ],
         columnDefs: [
+            // INTERNAL
             {
                 render: function ( data, type, row ) {
                     //'<a href="'+ data[0] +'" target="_blank"><i class="material-icons">remove_red_eye</i></a>' +
@@ -183,6 +189,7 @@ $(function () {
                 },
                 targets: i++
             },
+            // WIKI
             {
                 render: function ( data, type, row ) {
                     return '<a href="'+ data +'" target="_blank">#</a>';
@@ -255,6 +262,25 @@ $(function () {
             },
             {
                 render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            {
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            //GMAP
+            {
+                render: function ( data, type, row ) {
                     return '<a href="'+ data +'" target="_blank">#</a>';
                 },
                 targets: i++
@@ -317,6 +343,7 @@ $(function () {
                 },
                 targets: i++
             },
+            //INSEE
             {
                 render: function ( data, type, row ) {
                     return '<a href="'+ data +'" target="_blank">#</a>';

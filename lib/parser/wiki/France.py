@@ -20,6 +20,18 @@ class France(Wiki):
     def as_dictionary(self):
         dic = super(France, self).as_dictionary()
 
+        communes = self.get_communes()
+        if communes:
+            dic.update(communes=communes)
+
+        canton_codes = self.get_canton_codes()
+        if canton_codes:
+            dic.update(canton_codes=canton_codes)
+
+        insee = self.get_code_insee()
+        if insee:
+            dic.update(insee=insee)
+
         commune_codes = self.get_commune_codes()
         if commune_codes:
             dic.update(commune_codes=commune_codes)
@@ -170,6 +182,15 @@ class France(Wiki):
             return capital
 
         return None
+
+    def get_communes(self):
+        return self._get_value(u'Communes', self._main_block)
+
+    def get_canton_codes(self):
+        return self._get_value(u'Code canton', self._main_block)
+
+    def get_code_insee(self):
+        return self._get_value(u'Code Insee', self._main_block)
 
     def get_postal_codes(self):
         data = self._get_value('Code postal', self._main_block)

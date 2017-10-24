@@ -7,7 +7,7 @@ $(function () {
 [{% for lang, i18n in items[0].get('i18n', {}).items(): %}
 ['{{e(i18n.get('url'))}}', '{{e(lang)}}', '{{e(i18n.get('name'))}}'],
 {% endfor %}],
-{% for admin in items[0].get('admin_hierarchy', {}) %}
+{% for admin_type, admin in items[0].get('admin_hierarchy', {}).items() %}
 ['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %},
 '{{e(items[0].get('frazioni'))}}',

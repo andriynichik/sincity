@@ -15,7 +15,7 @@ $(function () {
 '{{e(item.get('name'))}}',
 '{{e(item.get('short_name'))}}',
 '{{e(item.get('type'))}}',
-[{% for admin in item.get('admin_hierarchy', {}) %}
+[{% for admin_type, admin in item.get('admin_hierarchy', {}).items() %}
 ['{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
 {% endfor %}],
 ['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],

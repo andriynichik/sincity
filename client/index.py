@@ -102,14 +102,16 @@ def internal_form_mapping(data):
         'name': data.get('name', ''),
         'capital': data.get('capital', ''),
         'type': data.get('type', ''),
-        'ADMIN_LEVEL_1': data.get('ADMIN_LEVEL_1', ''),
-        'ADMIN_LEVEL_2': data.get('ADMIN_LEVEL_2', ''),
-        'ADMIN_LEVEL_3': data.get('ADMIN_LEVEL_3', ''),
-        'ADMIN_LEVEL_4': data.get('ADMIN_LEVEL_4', ''),
-        'ADMIN_LEVEL_5': data.get('ADMIN_LEVEL_5', ''),
-        'ADMIN_LEVEL_6': data.get('ADMIN_LEVEL_6', ''),
-        'ADMIN_LEVEL_7': data.get('ADMIN_LEVEL_7', ''),
-        'ADMIN_LEVEL_8': data.get('ADMIN_LEVEL_8', ''),
+        'admin_hierarchy': {
+            'ADMIN_LEVEL_1': data.get('ADMIN_LEVEL_1', ''),
+            'ADMIN_LEVEL_2': data.get('ADMIN_LEVEL_2', ''),
+            'ADMIN_LEVEL_3': data.get('ADMIN_LEVEL_3', ''),
+            'ADMIN_LEVEL_4': data.get('ADMIN_LEVEL_4', ''),
+            'ADMIN_LEVEL_5': data.get('ADMIN_LEVEL_5', ''),
+            'ADMIN_LEVEL_6': data.get('ADMIN_LEVEL_6', ''),
+            'ADMIN_LEVEL_7': data.get('ADMIN_LEVEL_7', ''),
+            'ADMIN_LEVEL_8': data.get('ADMIN_LEVEL_8', ''),
+        },
         'altitude': data.get('altitude', ''),
         'population': data.get('population', ''),
         'area': data.get('area', ''),
@@ -161,20 +163,20 @@ def data_provider(provider_type, country=None):
         if country:
             document_filter = {
                 'name': {'$exists': True, '$not': {'$size': 0}},
-                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
+                'admin_hierarchy.ADMIN_LEVEL_1.name': country
             }
     elif provider_type == GMap.TYPE:
         data = factory.gmaps_collection()
         if country:
             document_filter = {
                 'name': {'$exists': True, '$not': {'$size': 0}},
-                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
+                'admin_hierarchy.ADMIN_LEVEL_1.name': country
             }
     else:
         data = factory.internal_collection()
         if country:
             document_filter = {
-                'admin_hierarchy': {'ADMIN_LEVEL_1': {'name' :country}}
+                'admin_hierarchy.ADMIN_LEVEL_1.name': country
             }
 
     if not document_filter:
@@ -196,7 +198,7 @@ def matching_france_js(region):
     insee = factory.insee_collection()
     objects = internal.find({
         'name': {'$exists': True, '$not': {'$size': 0}},
-        '$and': [{'ADMIN_LEVEL_1': 'France'}, {'ADMIN_LEVEL_2': region}],
+        '$and': [{'admin_hierarchy.ADMIN_LEVEL_1.name': 'France'}, {'admin_hierarchy.ADMIN_LEVEL_2.name': region}],
     })
     result = []
     for item in objects:
@@ -235,7 +237,7 @@ def matching_france(region=None):
 
         factory = DocFactory(config.get('mongodb'))
         internal = factory.internal_collection()
-        objects = internal.aggregate([{'$group': {'_id': '$ADMIN_LEVEL_2', 'count': {'$sum': 1}}}])
+        objects = internal.aggregate([{'$group': {'_id': '$admin_hierarchy.ADMIN_LEVEL_2.name', 'count': {'$sum': 1}}}])
         return render_template('admin/matching-france/region-list.html', data=objects)
     else:
         return render_template('admin/matching-france/list.html', region=region)
@@ -366,7 +368,7 @@ def clear_wiki_country(name):
     config = Config('./config/config.yml').get('mongodb')
     factory = DocFactory(config)
     collection = factory.wiki_collection()
-    result = collection.delete_many({'admin_hierarchy': {'$elemMatch': {'name': name}}})
+    result = collection.delete_many({'admin_hierarchy.ADMIN_LEVEL_1.name': name})
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
 
 @app.route('/clear/gmaps/<string:name>')
@@ -374,7 +376,7 @@ def clear_gmaps_country(name):
     config = Config('./config/config.yml').get('mongodb')
     factory = DocFactory(config)
     collection = factory.gmaps_collection()
-    result = collection.delete_many({'admin_hierarchy': {'$elemMatch': {'name': name}}})
+    result = collection.delete_many({'admin_hierarchy.ADMIN_LEVEL_1.name': name})
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
 
 

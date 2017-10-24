@@ -79,7 +79,7 @@
                                 {% for level in levels %}
                                 <div class="form-group form-float">
                                     <div class="form-line">
-                                        <input type="text" value="{{data.get(level, '')}}" name="{{level}}" class="form-control">
+                                        <input type="text" value="{{data.get('admin_hierarchy', {}).get(level, {}).get('name')}}" name="{{level}}" class="form-control">
                                         <label class="form-label">{{level}}</label>
                                     </div>
                                 </div>
