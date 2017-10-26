@@ -44,9 +44,15 @@ $(function () {
 '{{url_for('wiki_unit', id=e(item.get('_id')))}}',
 ['{{e(item.get('name'))}}', '{{e(item.get('url'))}}'],
 '{{e(item.get('type'))}}',
-[{% for admin_type, admin in item.get('admin_hierarchy', {}).items() %}
-['{{e(admin.get('url'))}}', '{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
-{% endfor %}],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('type')|e }}'],
+
 ['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
 '{{e(item.get('altitude'))}}',
@@ -63,9 +69,14 @@ $(function () {
 '{{e(item.get('name'))}}',
 '{{e(item.get('short_name'))}}',
 '{{e(item.get('type'))}}',
-[{% for admin_type, admin in item.get('admin_hierarchy', {}).items() %}
-['{{e(admin.get('name'))}}', '{{e(admin.get('type'))}}'],
-{% endfor %}],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_3', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_4', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_5', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('type')|e }}'],
+['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('type')|e }}'],
 ['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],
 ['{{e(item.get('bounds', {}).get('left',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('left',{}).get('lng'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lng'))}}'],
 '{{e(item.get('postal_code'))}}',
@@ -207,11 +218,51 @@ $(function () {
                 },
                 targets: i++
             },
-            { // WIKI admin hierarchy
+            { // WIKI ADMIN_1
                 render: function ( data, type, row ) {
-                    return data.reduce(function(previousValue, data, index) {
-                        return previousValue + '[<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>]';
-                    }, '')
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_2
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_3
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_4
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_5
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_6
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_7
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
+                },
+                targets: i++
+            },
+            { // WIKI ADMIN_8
+                render: function ( data, type, row ) {
+                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'('+ data[2] +')</a>';
                 },
                 targets: i++
             },
@@ -300,11 +351,51 @@ $(function () {
                 },
                 targets: i++
             },
-            { // GMAP admin hierarchy
+            { // GMAP ADMIN_1
                 render: function ( data, type, row ) {
-                    return data.reduce(function(previousValue, data, index) {
-                        return previousValue + ' '+ data[0] +'('+ data[1] +') > ';
-                    }, '')
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_2
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_3
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_4
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_5
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_6
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_7
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
+                },
+                targets: i++
+            },
+            { // GMAP ADMIN_8
+                render: function ( data, type, row ) {
+                    return data[0] +'('+ data[1] +')';
                 },
                 targets: i++
             },
