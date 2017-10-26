@@ -68,10 +68,18 @@ for csv_file in files:
                 elif wiki.get('name'):
                     internal.update(name=wiki.get('name'))
 
-                if wiki.get('type'):
+                if wiki.get('admin_hierarchy', {}):
+                    for level in range(1, 12):
+                        if not wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_{}'.format(level)):
+                            internal.update(type='ADMIN_LEVEL_{}'.format(level))
+                            break
+                elif gmap.get('admin_hierarchy', {}):
+                    for level in range(1, 12):
+                        if not gmap.get('admin_hierarchy', {}).get('ADMIN_LEVEL_{}'.format(level)):
+                            internal.update(type='ADMIN_LEVEL_{}'.format(level))
+                            break
+                elif wiki.get('type'):
                     internal.update(type=wiki.get('type'))
-                elif len(wiki.get('admin_hierarchy', [])):
-                    internal.update(type='ADMIN_LEVEL_{}'.format(len(wiki.get('admin_hierarchy', [])) + 1))
                 elif gmap.get('type'):
                     internal.update(type=gmap.get('type'))
 
