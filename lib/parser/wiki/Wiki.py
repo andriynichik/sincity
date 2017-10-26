@@ -237,7 +237,7 @@ class Wiki(Parser):
 
     def _get_value(self, column_name, content):
         match = re.search(
-            r"<th[^>]*>.*?" + re.escape(column_name) + r".*?<[^>]*th>\s*<td[^>]*>(?P<name>.*?)<[^>]*td>",
+            r"<th[^>]*>(.(?!<th))*" + re.escape(column_name) + r"(.(?!<th))*<[^>]*th>\s*<td[^>]*>(?P<name>.*?)<[^>]*td>",
             content,
             re.MULTILINE | re.UNICODE | re.IGNORECASE | re.DOTALL)
 
