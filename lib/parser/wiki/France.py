@@ -8,9 +8,10 @@ class France(Wiki):
     ADMIN_LEVEL_1 = u'pays'
     ADMIN_LEVEL_2 = u'région'
     ADMIN_LEVEL_3 = u'département'
-    ADMIN_LEVEL_4 = u'ville'
-    ADMIN_LEVEL_5 = u'arrondissement'
-    ADMIN_LEVEL_6 = u'commune'
+    ADMIN_LEVEL_4 = u'arrondissement'
+    ADMIN_LEVEL_5 = u'canton'
+    ADMIN_LEVEL_6 = u'intercommunalité'
+    ADMIN_LEVEL_7 = u'commune'
 
     def __init__(self, content):
         super(France, self).__init__(content)
@@ -69,66 +70,80 @@ class France(Wiki):
         if min_level == self.ADMIN_LEVEL_1:
             return admin
 
-        country = self._get_country()
+        country = self._get_level_1()
         if country:
             admin.update(ADMIN_LEVEL_1=country)
 
         if min_level == self.ADMIN_LEVEL_2:
             return admin
 
-        region = self._get_region()
+        region = self._get_level_2()
         if region:
             admin.update(ADMIN_LEVEL_2=region)
 
         if min_level == self.ADMIN_LEVEL_3:
             return admin
 
-        department = self._get_department()
+        department = self._get_level_3()
         if department:
             admin.update(ADMIN_LEVEL_3=department)
 
         if min_level == self.ADMIN_LEVEL_4:
             return admin
 
-        borough = self._get_borough()
+        borough = self._get_level_4()
         if borough:
             admin.update(ADMIN_LEVEL_4=borough)
 
         if min_level == self.ADMIN_LEVEL_5:
             return admin
 
-        city = self._get_city()
-        if city:
-            admin.update(ADMIN_LEVEL_5=city)
+        canton = self._get_level_5()
+        if canton:
+            admin.update(ADMIN_LEVEL_5=canton)
+
+        if min_level == self.ADMIN_LEVEL_6:
+            return admin
+
+
+        metropole = self._get_level_6()
+        if metropole:
+            admin.update(ADMIN_LEVEL_6=metropole)
 
         return admin
 
-    def _get_country(self):
+    def _get_level_1(self):
         result = self._get_value_with_link(u"Pays", self._main_block)
         result.update(type=self.ADMIN_LEVEL_1)
         return result
 
-    def _get_region(self):
+    def _get_level_2(self):
         result = self._get_value_with_link(u"Région", self._main_block)
         result.update(type=self.ADMIN_LEVEL_2)
         return result
 
-    def _get_department(self):
+    def _get_level_3(self):
         result = self._get_value_with_link(u"Département", self._main_block)
         if result:
             result.update(type=self.ADMIN_LEVEL_3)
         return result
 
-    def _get_borough(self):
+    def _get_level_4(self):
         result = self._get_value_with_link(u"Arrondissement", self._main_block)
         if result:
             result.update(type=self.ADMIN_LEVEL_4)
         return result
 
-    def _get_city(self):
-        result = self._get_value_with_link(u"Ville", self._main_block)
+    def _get_level_5(self):
+        result = self._get_value_with_link(u"Canton", self._main_block)
         if result:
             result.update(type=self.ADMIN_LEVEL_5)
+        return result
+
+    def _get_level_6(self):
+        result = self._get_value_with_link(u"Intercommunalité", self._main_block)
+        if result:
+            result.update(type=self.ADMIN_LEVEL_6)
         return result
 
     def get_altitude(self):

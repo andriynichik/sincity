@@ -36,7 +36,11 @@ $(function () {
 '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('name')|e }}',
 '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}',
 '{{item.get('capital')|e}}',
+        {% if item.get('center') %}
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
+    {% else %}
+[],
+    {% endif %}
 '{{item.get('population')|e}}',
 '{{item.get('postal_codes')|e}}',
 
@@ -54,7 +58,11 @@ $(function () {
 ['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('url')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('type')|e }}'],
 
 ['{{e(item.get('capital', {}).get('url') if item.get('capital') else 'javascript:void(0);')}}', '{{e(item.get('capital', {}).get('name'))}}'],
+        {% if item.get('center') %}
 ['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
+    {% else %}
+[],
+    {% endif %}
 '{{e(item.get('altitude'))}}',
 '{{e(item.get('population'))}}',
 '{{e(item.get('density'))}}',
@@ -77,7 +85,11 @@ $(function () {
 ['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_6', {}).get('type')|e }}'],
 ['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_7', {}).get('type')|e }}'],
 ['{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('name')|e }}', '{{ item.get('admin_hierarchy', {}).get('ADMIN_LEVEL_8', {}).get('type')|e }}'],
-['{{e(item.get('center', {}).get('lat'))}}','{{e(item.get('center', {}).get('lng'))}}'],
+        {% if item.get('center') %}
+['http://maps.google.com/maps?q={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&ll={{e(item.get('center', {}).get('lat'))}},{{e(item.get('center', {}).get('lng'))}}&z=12', '{{item.get('center', {}).get('lat')}}, {{item.get('center', {}).get('lng')}}'],
+    {% else %}
+[],
+    {% endif %}
 ['{{e(item.get('bounds', {}).get('left',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('left',{}).get('lng'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lat'))}}', '{{e(item.get('bounds', {}).get('right',{}).get('lng'))}}'],
 '{{e(item.get('postal_code'))}}',
 
@@ -183,7 +195,11 @@ $(function () {
             },
             { // INTERNAL gmap link
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    if (data) {
+                        return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    } else {
+                        return 'None'
+                    }
                 },
                 targets: i++
             },
@@ -274,7 +290,11 @@ $(function () {
             },
             { // WIKI gmap link
                 render: function ( data, type, row ) {
-                    return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    if (data) {
+                        return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    } else {
+                        return 'None'
+                    }
                 },
                 targets: i++
             },
@@ -401,9 +421,11 @@ $(function () {
             },
             { // GMAP center
                 render: function ( data, type, row ) {
-                    var lat = data[0];
-                    var lng = data[1];
-                    return '<a href="http://maps.google.com/maps?q='+lat+','+lng+'&ll='+lat+','+lng+'&z=12" target="_blank">'+lat+', '+lng+'</a>';
+                    if (data) {
+                        return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
+                    } else {
+                        return 'None'
+                    }
                 },
                 targets: i++
             },
