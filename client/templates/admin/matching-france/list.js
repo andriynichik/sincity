@@ -195,7 +195,7 @@ $(function () {
             },
             { // INTERNAL gmap link
                 render: function ( data, type, row ) {
-                    if (data) {
+                    if (data.length) {
                         return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                     } else {
                         return 'None'
@@ -290,7 +290,7 @@ $(function () {
             },
             { // WIKI gmap link
                 render: function ( data, type, row ) {
-                    if (data) {
+                    if (data.length) {
                         return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                     } else {
                         return 'None'
@@ -421,7 +421,7 @@ $(function () {
             },
             { // GMAP center
                 render: function ( data, type, row ) {
-                    if (data) {
+                    if (data.length) {
                         return '<a href="'+ data[0] +'" target="_blank">'+ data[1] +'</a>';
                     } else {
                         return 'None'
