@@ -38,20 +38,17 @@ def gmap_by_address(wiki, gmap_loader):
         address.append(value.get('name'))
     address.append(wiki.get('name'))
 
-    print(','.join(address))
-
     gmap_content = gmap_loader.by_address(','.join(address))
 
-    print(gmap_content)
 
     objects = MapFactory.france(gmap_content)
 
-    print(objects)
+    gmap = {}
+    if objects:
+        gmap = objects[0].as_dictionary()
+        gmap.update(language=gmap_loader._language)
 
-    #gmap = objects[0].as_document()
-    #gmap.update(language=gmap_loader._language)
-    #return gmap
-    return {}
+    return gmap
 
 def make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj):
     internal = {}
@@ -91,7 +88,7 @@ def make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj):
         internal.update(admin_hierarchy=wiki.get('admin_hierarchy', {}))
 
     if wiki.get('capital'):
-        internal.update(capital=wiki.get('capital'))
+        internal.update(capital=wiki.get('capital', {}).get('name'))
 
     if wiki.get('center'):
         internal.update(center=wiki.get('center'))
@@ -135,11 +132,11 @@ def make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj):
     internal_obj.update(internal)
 
 i = 0
-url_pull = []
+url_pull = ['https://fr.wikipedia.org/wiki/France']
 for csv_file in files:
     with open(csv_file, encoding='utf-8') as admin_div_CSV:
         for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
- #           try:
+            try:
                 i = i + 1
                 print(i)
                 dct = {}
@@ -161,34 +158,35 @@ for csv_file in files:
                     wiki_obj.update(wiki_parsed)
                     wiki = wiki_obj.get_document()
 
-                   # try:
-                    for name, value in wiki_parsed.get('admin_hierarchy', {}).items():
-                        if value.get('url') in url_pull:
-                            continue
-                        else:
-                            url_pull.append(value.get('url'))
-                        wiki_admin = doc_factory.wiki(value.get('url'))
-                        wiki_content, code = loader.load(value.get('url'), headers=headers)
-                        wiki_admin_parser = ParserFranceWiki(wiki_content)
-                        wiki_admin_parsed = wiki_admin_parser.as_dictionary()
-                        wiki_admin_parsed.update(url=value.get('url'))
-                        wiki_admin.update(wiki_admin_parsed)
+                    try:
+                        for name, value in wiki_parsed.get('admin_hierarchy', {}).items():
+                            if value.get('url') in url_pull:
+                                continue
+                            else:
+                                url_pull.append(value.get('url'))
+                            print(value.get('url'))
+                            wiki_admin = doc_factory.wiki(value.get('url'))
+                            wiki_content, code = loader.load(value.get('url'), headers=headers)
+                            wiki_admin_parser = ParserFranceWiki(wiki_content)
+                            wiki_admin_parsed = wiki_admin_parser.as_dictionary()
+                            wiki_admin_parsed.update(url=value.get('url'))
+                            wiki_admin.update(wiki_admin_parsed)
 
-                        if wiki_admin_parsed.get('admin_hierarchy'):
-                            gmap = gmap_by_address(wiki=wiki_admin_parsed, gmap_loader=gmap_loader)
-                        else:
-                            gmap = {}
+                            if wiki_admin_parsed.get('admin_hierarchy'):
+                                gmap = gmap_by_address(wiki=wiki_admin_parsed, gmap_loader=gmap_loader)
+                            else:
+                                gmap = {}
 
-                        if gmap.get('code'):
-                            gmap_obj = doc_factory.gmaps(gmap.get('code'))
-                            gmap_obj.update(gmap)
-                        else:
-                            gmap_obj = doc_factory.gmaps('dummy')
-                        # make_internal({}, {}, wiki_admin_parsed, wiki_admin, gmap, gmap_obj)
+                            if gmap.get('code'):
+                                gmap_obj = doc_factory.gmaps(gmap.get('code'))
+                                gmap_obj.update(gmap)
+                            else:
+                                gmap_obj = doc_factory.gmaps('dummy')
+                            make_internal({}, {}, wiki_admin_parsed, wiki_admin, gmap, gmap_obj)
 
-                   # except:
-                   #     print('Error')
-                   #     print(value)
+                    except:
+                        print('Error')
+                        print(value)
                 else:
                     wiki_obj = doc_factory.wiki('dummy')
 
@@ -209,7 +207,8 @@ for csv_file in files:
                     gmap_obj.update(gmap)
                 else:
                     gmap_obj = doc_factory.gmaps('dummy')
-                #make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj)
-#            except:
-#                print('Error')
-#                print(line)
+
+                make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj)
+            except:
+                print('Error')
+                print(line)

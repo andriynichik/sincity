@@ -189,6 +189,7 @@ def data_provider(provider_type, country=None):
 @app.route('/data/matching-france-<string:region>.js')
 def matching_france_js(region):
     region = unquote_plus(region)
+    mode = request.args.get('mode', 'none')
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
@@ -224,23 +225,31 @@ def matching_france_js(region):
 
         dic.update(insee=insee_res)
 
-        result.append(dic)
+        if mode != 'none':
+            if mode == 'wiki_adapte':
+                if dic.get('wiki', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
+                    result.append(dic)
+            elif mode == 'gmap_adapte':
+                if dic.get('gmap', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
+                    result.append(dic)
+        else:
+            result.append(dic)
 
     return render_template('admin/matching-france/list.js', e=escape, items=result)
-
 
 @app.route('/matching/france/')
 @app.route('/matching/france/<string:region>')
 def matching_france(region=None):
+    mode = request.args.get('mode', 'none')
     if region is None:
         config = Config('./config/config.yml')
 
         factory = DocFactory(config.get('mongodb'))
         internal = factory.internal_collection()
         objects = internal.aggregate([{'$group': {'_id': '$admin_hierarchy.ADMIN_LEVEL_2.name', 'count': {'$sum': 1}}}])
-        return render_template('admin/matching-france/region-list.html', data=objects)
+        return render_template('admin/matching-france/region-list.html', data=objects, mode=mode)
     else:
-        return render_template('admin/matching-france/list.html', region=region)
+        return render_template('admin/matching-france/list.html', region=region, mode=mode)
 
 
 @app.route('/gmaps/')

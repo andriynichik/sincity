@@ -17,11 +17,13 @@ def parser_insee(row):
         'I_Artmaj',
         'I_Ncc',
         'I_Armin',
+        'I_Nccenr',
         'I_Nccent',
         'InseeXls_CodeCommune',
         'InseeXls_NameCommune',
         'InseeXls_Population',
         'I_Code_departament'
+        'ColResultInSnipet'
     ]
     for name_column in other_data:
         try:
@@ -32,4 +34,12 @@ def parser_insee(row):
             other.update({name_column: value})
     code = hash().make(hash().make(row))
     other.update(code=code)
+
+    if row.get('I_Nccenr'):
+        other.update(name=row.get('I_Nccenr'))
+    if row.get('I_Nccent'):
+        other.update(name=row.get('I_Nccent'))
+    elif row.get('InseeXls_NameCommune'):
+        other.update(name=row.get('InseeXls_NameCommune'))
+
     return other

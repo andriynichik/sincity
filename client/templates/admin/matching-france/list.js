@@ -109,10 +109,12 @@ $(function () {
 '{{e(item.get('I_Ncc'))}}',
 '{{e(item.get('I_Armin'))}}',
 '{{e(item.get('I_Nccent'))}}',
+'{{e(item.get('I_Nccenr'))}}',
 '{{e(item.get('InseeXls_CodeCommune'))}}',
 '{{e(item.get('InseeXls_NameCommune'))}}',
 '{{e(item.get('InseeXls_Population'))}}',
 '{{e(item.get('I_Code_departament'))}}',
+'{{e(item.get('ColResultInSnipet'))}}',
 ],
         {% endfor %}
 
@@ -532,6 +534,12 @@ $(function () {
                 },
                 targets: i++
             },
+            { // INSEE I_Nccenr
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
             { // INSEE InseeXls_CodeCommune
                 render: function ( data, type, row ) {
                     return data;
@@ -551,6 +559,12 @@ $(function () {
                 targets: i++
             },
             { // INSEE I_Code_departament
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // INSEE ColResultInSnipet
                 render: function ( data, type, row ) {
                     return data;
                 },

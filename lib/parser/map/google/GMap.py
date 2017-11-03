@@ -142,13 +142,15 @@ class GMap(Parser):
         return result
 
     def get_admin_hierarchy(self):
-        result = []
+        result = {}
         if 'address_components' in self._content:
             admin_elements = reversed(self._content.get('address_components')[1:])
+            i = 1
             for element in admin_elements:
                 parsed_element = self._parse_admin_element(element)
                 if parsed_element.get('type') and ('short_name' in parsed_element or 'name' in parsed_element):
-                    result.append(parsed_element)
+                    result.update({'ADMIN_LEVEL_{}'.format(i): parsed_element})
+                    i = i + 1
 
         return result
 

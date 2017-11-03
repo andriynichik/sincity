@@ -8,7 +8,7 @@ config = Config('./config/config.yml')
 
 loader = Factory.loader_with_mongodb(config.get('mongodb'))
 
-url = 'https://fr.wikipedia.org/wiki/Occitanie_(r%C3%A9gion_administrative)'
+url = 'https://fr.wikipedia.org/wiki/France'
 headers = {'User-Agent': 'Mozilla/5.0'}
 
 content, code = loader.load(url, headers=headers)

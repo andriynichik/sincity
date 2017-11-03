@@ -1,6 +1,6 @@
 {% extends "admin/layout.html" %}
 {% block body %}
-<script type="text/javascript" src="{{ url_for('matching_france_js', region=region) }}"></script>
+<script type="text/javascript" src="{{ url_for('matching_france_js', region=region, mode=mode) }}"></script>
 
 <section class="content">
     <div class="container-fluid">
@@ -93,10 +93,12 @@
                         - <a class="toggle-link-vis" data-column="63" data-hide>I_Ncc</a>
                         - <a class="toggle-link-vis" data-column="64" data-hide>I_Armin</a>
                         - <a class="toggle-link-vis" data-column="65" data-hide>I_Nccent</a>
-                        - <a class="toggle-link-vis" data-column="66" >InseeXls_CodeCommune</a>
-                        - <a class="toggle-link-vis" data-column="67" >InseeXls_NameCommune</a>
-                        - <a class="toggle-link-vis" data-column="68" data-hide>InseeXls_Population</a>
-                        - <a class="toggle-link-vis" data-column="69" data-hide>I_Code_departament</a>
+                        - <a class="toggle-link-vis" data-column="66" data-hide>I_Nccenr</a>
+                        - <a class="toggle-link-vis" data-column="67" >InseeXls_CodeCommune</a>
+                        - <a class="toggle-link-vis" data-column="68" >InseeXls_NameCommune</a>
+                        - <a class="toggle-link-vis" data-column="69" data-hide>InseeXls_Population</a>
+                        - <a class="toggle-link-vis" data-column="70" data-hide>I_Code_departament</a>
+                        - <a class="toggle-link-vis" data-column="71" data-hide>ColResultInSnipet</a>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
@@ -174,10 +176,12 @@
                                     <th>I_Ncc</th>
                                     <th>I_Armin</th>
                                     <th>I_Nccent</th>
+                                    <th>I_Nccenr</th>
                                     <th>InseeXls_CodeCommune</th>
                                     <th>InseeXls_NameCommune</th>
                                     <th>InseeXls_Population</th>
                                     <th>I_Code_departament</th>
+                                    <th>ColResultInSnipet</th>
 
                                 </tr>
                                 </thead>
@@ -254,10 +258,12 @@
                                     <th>I_Ncc</th>
                                     <th>I_Armin</th>
                                     <th>I_Nccent</th>
+                                    <th>I_Nccenr</th>
                                     <th>InseeXls_CodeCommune</th>
                                     <th>InseeXls_NameCommune</th>
                                     <th>InseeXls_Population</th>
                                     <th>I_Code_departament</th>
+                                    <th>ColResultInSnipet</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
