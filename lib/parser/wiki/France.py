@@ -180,6 +180,10 @@ class France(Wiki):
 
     def get_capital(self):
 
+        capital = self._get_value_with_link(u"Bureau centralisateur", self._main_block)
+        if capital:
+            return capital
+
         capital = self._get_value_with_link(u"Siège", self._main_block)
         if capital:
             return capital
