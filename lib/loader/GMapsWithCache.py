@@ -52,6 +52,37 @@ class LoaderGMapsWithCache(GMaps):
 
         return result
 
+    def address_and_components_key(self, address, components):
+        return ['address_components', address, components, self._language]
+
+    def by_address_and_components(self, address, components, use_cache=True):
+        result = {}
+        key = self.address_and_components_key(address, components)
+        if use_cache:
+            result = self.from_cache(key)
+
+        if not result:
+            result = super(LoaderGMapsWithCache, self).by_address_and_components(address=address, components=components)
+            self.to_cache(content=result, params=key)
+
+        return result
+
+    def place_id_key(self, place_id):
+        return ['place_id', place_id, self._language]
+
+    def by_place_id(self, place_id, use_cache=True):
+        result = {}
+        key = self.place_id_key(place_id=place_id)
+        if use_cache:
+            result = self.from_cache(key)
+
+        if not result:
+            result = super(LoaderGMapsWithCache, self).by_place_id(place_id=place_id)
+            self.to_cache(content=result, params=key)
+
+        return result
+
+
     def from_cache(self, params):
         result = None
         cache_data = self._storage.get(params)
