@@ -45,7 +45,7 @@ def gmap_by_address(wiki):
 
     gmap = {}
     if objects:
-        gmap = objects[0].as_dictionary()
+        gmap = objects[0].get_document()
         gmap.update(language=spider.gmap_loader._language)
 
     return gmap
@@ -154,7 +154,7 @@ for csv_file in files:
                     wiki = wiki_obj.get_document()
 
                     try:
-                        for name, value in wiki_parsed.get('admin_hierarchy', {}).items():
+                        for name, value in wiki.get('admin_hierarchy', {}).items():
                             if value.get('url') in url_pull:
                                 continue
                             else:
@@ -188,8 +188,8 @@ for csv_file in files:
                 else:
                     insee_obj = doc_factory.insee('dummy')
 
-                if wiki_parsed.get('admin_hierarchy'):
-                    gmap = gmap_by_address(wiki=wiki_parsed)
+                if wiki.get('admin_hierarchy'):
+                    gmap = gmap_by_address(wiki=wiki)
                 else:
                     gmap = {}
 
