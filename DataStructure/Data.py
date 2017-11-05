@@ -175,7 +175,8 @@ for csv_file in files:
                             else:
                                 gmap_obj = doc_factory.gmaps('dummy')
                             make_internal({}, {}, wiki_admin_parsed, wiki_admin, gmap, gmap_obj)
-
+                    except KeyboardInterrupt:
+                        raise KeyboardInterrupt
                     except:
                         print('Error')
                         print(value)
@@ -200,6 +201,8 @@ for csv_file in files:
                     gmap_obj = doc_factory.gmaps('dummy')
 
                 make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj)
+            except KeyboardInterrupt:
+                raise KeyboardInterrupt
             except:
                 print('Error')
                 print(line)
