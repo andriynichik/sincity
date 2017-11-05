@@ -1,0 +1,141 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                <h2>GMAP</h2>
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Gmap test form
+                                <small>put data hera and get result from raw response and parsed data</small>
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form method="get" action="{{ url_for('test_gmap') }}">
+
+                                <h2 class="card-inside-title">Gmap request data</h2>
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input value="{{ form_data.get('address', '') }}" type="text" name="address" class="form-control"/>
+                                                <label class="form-label">Address</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input value="{{ form_data.get('latitude', '') }}" type="text" name="latitude" class="form-control"/>
+                                                <label class="form-label">Latitude</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input value="{{ form_data.get('longitude', '') }}" type="text" name="longitude" class="form-control"/>
+                                                <label class="form-label">Longitude</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input value="{{ form_data.get('place_id', '') }}" type="text" name="place_id" class="form-control"/>
+                                                <label class="form-label">Place ID</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h2 class="card-inside-title">
+                                    Language:
+                                </h2>
+                                <div class="row clearfix">
+
+                                    <div class="demo-radio-button">
+                                        <input name="lang" type="radio" value="en" id="radio_en"
+                                               class="with-gap radio-col-red" checked/>
+                                        <label for="radio_en">English</label>
+                                        <input name="lang" type="radio" value="it" id="radio_it"
+                                               class="with-gap radio-col-green"/>
+                                        <label for="radio_it">Italiano</label>
+                                        <input name="lang" type="radio" value="fr" id="radio_fr"
+                                               class="with-gap radio-col-blue"/>
+                                        <label for="radio_fr">Française</label>
+                                    </div>
+                                </div>
+                                <h2 class="card-inside-title">
+                                    Select request type:
+                                </h2>
+                                <div class="row clearfix">
+
+                                    <div class="demo-radio-button">
+                                        <input name="method" type="radio" value="address" id="radio_address"
+                                               class="with-gap radio-col-red" checked/>
+                                        <label for="radio_address">Address</label>
+                                        <input name="method" type="radio" value="position" id="radio_position"
+                                               class="with-gap radio-col-yellow"/>
+                                        <label for="radio_position">Position</label>
+                                        <input name="method" type="radio" value="place_id" id="radio_place_id"
+                                               class="with-gap radio-col-green"/>
+                                        <label for="radio_place_id">Place ID</label>
+                                    </div>
+                                </div>
+                                <h2 class="card-inside-title">Use cache</h2>
+                                <div class="row clearfix">
+                                    <div class="demo-switch">
+                                        <div class="switch">
+                                            <label>OFF<input type="checkbox" name="use_cache" checked><span
+                                                    class="lever"></span>ON</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h2 class="card-inside-title">
+                                    Parsed result:
+                                </h2>
+                                <div class="row clearfix">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                    <textarea rows="1" class="form-control no-resize auto-growth"
+                                              placeholder="">{{ parsed }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <h2 class="card-inside-title">
+                                    Raw result:
+                                </h2>
+                                <div class="row clearfix">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                <textarea rows="1" class="form-control no-resize auto-growth"
+                                          placeholder="">{{ raw }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br>
+                                <input type="submit" value="Send" class="btn btn-primary m-t-15 waves-effect">
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+<!-- Autosize Plugin Js -->
+<script src="../plugins/autosize/autosize.js"></script>
+
+<script>
+    autosize($('textarea.auto-growth'));
+</script>
+{% endblock %}

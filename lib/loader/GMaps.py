@@ -7,7 +7,7 @@ class GMaps:
         return self._googlemaps.geocode(address, components=components, language=self._language)
 
     def by_place_id(self, place_id):
-        return self._googlemaps.geocode(place_id=place_id, language=self._language)
+        return self._googlemaps.reverse_geocode(place_id, language=self._language)
 
     def by_component(self, components):
         return self._googlemaps.geocode(components=components, language=self._language)

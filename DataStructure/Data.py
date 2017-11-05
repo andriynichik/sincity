@@ -8,6 +8,7 @@ from lib.parser.wiki.France import France as ParserFranceWiki
 from lib.factory.Loader import Loader as LoaderFactory
 import csv
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
+from lib.spider.Spider import Spider
 
 
 files = [
@@ -20,35 +21,35 @@ files = [
 config = Config('./config/config.yml')
 
 doc_factory = DocFactory(config.get('mongodb'))
+language='fr'
 
-loader = LoaderFactory.loader_with_mongodb(storage_config=config.get('mongodb'))
-headers = {'User-Agent': 'Mozilla/5.0'}
+spider = Spider(
+    loader_factory=LoaderFactory,
+    gmap_parser=MapFactory.france,
+    wiki_parser=ParserFranceWiki,
+    doc_factory=doc_factory,
+    language=language,
+    config=config,
+    use_cache=True
+)
 
 
-gmap_config = config.get('googlemaps')
-gmap_config.update(language='fr')
-
-gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config, storage_config=config.get('mongodb'))
-
-
-def gmap_by_address(wiki, gmap_loader):
+def gmap_by_address(wiki):
 
     address = []
     for name, value in wiki.get('admin_hierarchy', {}).items():
         address.append(value.get('name'))
     address.append(wiki.get('name'))
 
-    gmap_content = gmap_loader.by_address(','.join(address))
-
-
-    objects = MapFactory.france(gmap_content)
+    objects = spider.get_gmap_address(','.join(address))
 
     gmap = {}
     if objects:
         gmap = objects[0].as_dictionary()
-        gmap.update(language=gmap_loader._language)
+        gmap.update(language=spider.gmap_loader._language)
 
     return gmap
+
 
 def make_internal(insee, insee_obj, wiki, wiki_obj, gmap, gmap_obj):
     internal = {}
@@ -148,14 +149,8 @@ for csv_file in files:
                 if wiki.get('url'):
                     if wiki.get('url') not in url_pull:
                         url_pull.append(wiki.get('url'))
-                    wiki_obj = doc_factory.wiki(wiki.get('url'))
-                    #wiki_obj.update(wiki)
-                    wiki_content, code = loader.load( wiki.get('url'), headers=headers)
-                    wiki_parser = ParserFranceWiki(wiki_content)
-                    wiki_parsed = wiki_parser.as_dictionary()
-
-                    wiki_parsed.update(url=wiki.get('url'))
-                    wiki_obj.update(wiki_parsed)
+                    print(wiki.get('url'))
+                    wiki_obj = spider.get_wiki_url(url=wiki.get('url'))
                     wiki = wiki_obj.get_document()
 
                     try:
@@ -165,15 +160,12 @@ for csv_file in files:
                             else:
                                 url_pull.append(value.get('url'))
                             print(value.get('url'))
-                            wiki_admin = doc_factory.wiki(value.get('url'))
-                            wiki_content, code = loader.load(value.get('url'), headers=headers)
-                            wiki_admin_parser = ParserFranceWiki(wiki_content)
-                            wiki_admin_parsed = wiki_admin_parser.as_dictionary()
-                            wiki_admin_parsed.update(url=value.get('url'))
-                            wiki_admin.update(wiki_admin_parsed)
+
+                            wiki_admin = spider.get_wiki_url(url=value.get('url'))
+                            wiki_admin_parsed= wiki_admin.get_document()
 
                             if wiki_admin_parsed.get('admin_hierarchy'):
-                                gmap = gmap_by_address(wiki=wiki_admin_parsed, gmap_loader=gmap_loader)
+                                gmap = gmap_by_address(wiki=wiki_admin_parsed)
                             else:
                                 gmap = {}
 
@@ -190,7 +182,6 @@ for csv_file in files:
                 else:
                     wiki_obj = doc_factory.wiki('dummy')
 
-
                 if insee.get('code'):
                     insee_obj = doc_factory.insee(insee.get('code'))
                     insee_obj.update(insee)
@@ -198,7 +189,7 @@ for csv_file in files:
                     insee_obj = doc_factory.insee('dummy')
 
                 if wiki_parsed.get('admin_hierarchy'):
-                    gmap = gmap_by_address(wiki=wiki_parsed, gmap_loader=gmap_loader)
+                    gmap = gmap_by_address(wiki=wiki_parsed)
                 else:
                     gmap = {}
 

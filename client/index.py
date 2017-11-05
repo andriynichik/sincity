@@ -14,6 +14,8 @@ from flask import request
 from flask import redirect
 from flask import url_for
 from urllib.parse import unquote_plus
+from lib.factory.Loader import Loader as LoaderFactory
+from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
 
 
 app = Flask(__name__)
@@ -380,6 +382,7 @@ def clear_wiki_country(name):
     result = collection.delete_many({'admin_hierarchy.ADMIN_LEVEL_1.name': name})
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
 
+
 @app.route('/clear/gmaps/<string:name>')
 def clear_gmaps_country(name):
     config = Config('./config/config.yml').get('mongodb')
@@ -387,6 +390,44 @@ def clear_gmaps_country(name):
     collection = factory.gmaps_collection()
     result = collection.delete_many({'admin_hierarchy.ADMIN_LEVEL_1.name': name})
     return render_template('admin/empty.html', data=['ok', result.deleted_count], auto_close=True)
+
+
+@app.route('/test/wiki')
+def test_wiki():
+    pass
+
+
+@app.route('/test/gmap')
+def test_gmap():
+    get = request.args.copy()
+    raw = {}
+    parsed = []
+    if get:
+        config = Config('./config/config.yml')
+        gmap_config = config.get('googlemaps')
+        gmap_config.update(language=get.get('lang', 'en'))
+
+        gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config,
+                                                            storage_config=config.get('mongodb'))
+        use_cache = bool(get.get('use_cache', True))
+        method = get.get('method', 'address')
+        if method == 'address':
+            address = get.get('address') if get.get('address') else 'Magadan'
+            raw = gmap_loader.by_address(address, use_cache=use_cache)
+        elif method == 'position':
+            lat = get.get('latitude') if get.get('latitude') else 59.558208
+            lng = get.get('longitude') if get.get('longitude') else 150.822794
+            raw = gmap_loader.by_position(lat=lat, lng=lng, use_cache=use_cache)
+        elif method == 'place_id':
+            place_id = get.get('place_id') if get.get('place_id') else 'ChIJ6UpSLYGEaVkROrwiAnFmzXw'
+            raw = gmap_loader.by_place_id(place_id=place_id, use_cache=use_cache)
+
+        objects = MapFactory.france(raw)
+
+        for element in objects:
+            parsed.append(element.as_dictionary())
+
+    return render_template('admin/gmap/test.html', form_data=get, raw=raw, parsed=parsed)
 
 
 @app.route('/recursive/parsed_page/<string:name>')
