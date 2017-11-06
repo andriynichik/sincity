@@ -12,10 +12,10 @@ from lib.spider.Spider import Spider
 
 
 files = [
-    'DataStructure/Departements_28_08_17_cards.csv',
-    'DataStructure/arrondissements_25_08_17_cards.csv',
-    'DataStructure/20_08_17_canton_google_3.csv',
-    'DataStructure/communes_17_09_17.csv'
+    'data/france/Departements_28_08_17_cards.csv',
+    'data/france/arrondissements_25_08_17_cards.csv',
+    'data/france/20_08_17_canton_google_3.csv',
+    'data/france/communes_17_09_17.csv'
 ]
 
 config = Config('./config/config.yml')
