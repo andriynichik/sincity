@@ -2,6 +2,7 @@ from lib.hashlib.sha512 import sha512
 from pymongo import MongoClient
 from lib.location.Wiki import Wiki
 from lib.location.Insee import Insee
+from lib.location.Istat import Istat
 from lib.location.GMap import GMap
 from lib.location.Internal import Internal
 
@@ -23,6 +24,9 @@ class StorageLocation:
     def insee(self, code):
         return Insee(code=code, storage=self._db)
 
+    def istat(self, code):
+        return Istat(code=code, storage=self._db)
+
     def internal(self, code):
         return Internal(code, storage=self._db)
 
@@ -34,6 +38,9 @@ class StorageLocation:
 
     def insee_collection(self):
         return self._db[Insee.TYPE]
+
+    def istat_collection(self):
+        return self._db[Istat.TYPE]
 
     def internal_collection(self):
         return self._db[Internal.TYPE]

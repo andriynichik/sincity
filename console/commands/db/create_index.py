@@ -37,6 +37,13 @@ insee.create_index([('_id', 1)])
 insee.create_index([('code', 1)])
 insee.create_index([('name', 1)])
 
+istat = factory.istat_collection()
+
+istat.drop_indexes()
+
+insee.create_index([('_id', 1)])
+insee.create_index([('code', 1)])
+insee.create_index([('name', 1)])
 
 internal = factory.internal_collection()
 
