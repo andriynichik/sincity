@@ -145,6 +145,45 @@ def map_istat(row):
         'codreg': row[codreg_index]
     }
 
+def get_wiki(gmap):
+    if gmap.get('postal_code') and gmap.get('name'):
+
+        wiki_obj = spider.get_wiki_url(url=wiki.get('url'))
+        wiki = wiki_obj.get_document()
+
+        try:
+            for name, value in wiki.get('admin_hierarchy', {}).items():
+                if value.get('url') in url_pull:
+                    continue
+                else:
+                    url_pull.append(value.get('url'))
+                print(value.get('url'))
+
+                wiki_admin = spider.get_wiki_url(url=value.get('url'))
+                wiki_admin_parsed = wiki_admin.get_document()
+
+                if wiki_admin_parsed.get('admin_hierarchy'):
+                    gmap = gmap_by_address(wiki=wiki_admin_parsed)
+                else:
+                    gmap = {}
+
+                if gmap.get('code'):
+                    gmap_obj = doc_factory.gmaps(gmap.get('code'))
+                    gmap_obj.update(gmap)
+                else:
+                    gmap_obj = doc_factory.gmaps('dummy')
+                make_internal({}, {}, wiki_admin_parsed, wiki_admin, gmap, gmap_obj)
+        except KeyboardInterrupt:
+            raise KeyboardInterrupt
+        except:
+            print('Error')
+            print(value)
+            wiki_obj = doc_factory.wiki('dummy')
+    else:
+        wiki_obj = doc_factory.wiki('dummy')
+
+    return wiki_obj
+
 for index, row in df.iterrows():
     print(index)
     try:
