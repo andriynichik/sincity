@@ -67,6 +67,9 @@ def internal_edit(id=None, saved=0):
             if obj.get('type') == level:
                 break
             levels.append(level)
+        old_postal = obj.get('postal_codes', [])
+        new_postal = (str(x) for x in old_postal)
+        obj.update(postal_codes=new_postal)
     else:
         obj = {}
         levels = admin_levels
@@ -248,7 +251,15 @@ def matching_france(region=None):
 
         factory = DocFactory(config.get('mongodb'))
         internal = factory.internal_collection()
-        objects = internal.aggregate([{'$group': {'_id': '$admin_hierarchy.ADMIN_LEVEL_2.name', 'count': {'$sum': 1}}}])
+        objects = internal.aggregate([
+        {'$match':
+            {
+                'name': {'$exists': True, '$not': {'$size': 0}},
+                '$and': [{'admin_hierarchy.ADMIN_LEVEL_1.name': 'France'}]
+            }
+        },
+        {'$group': {'_id': '$admin_hierarchy.ADMIN_LEVEL_2.name', 'count': {'$sum': 1}}}
+        ])
         return render_template('admin/matching-france/region-list.html', data=objects, mode=mode)
     else:
         return render_template('admin/matching-france/list.html', region=region, mode=mode)
