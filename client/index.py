@@ -194,7 +194,7 @@ def data_provider(provider_type, country=None):
 @app.route('/data/matching-france-<string:region>.js')
 def matching_france_js(region):
     region = unquote_plus(region)
-    mode = request.args.get('mode', 'none')
+    #mode = request.args.get('mode', 'none')
     config = Config('./config/config.yml')
 
     factory = DocFactory(config.get('mongodb'))
@@ -230,15 +230,17 @@ def matching_france_js(region):
 
         dic.update(insee=insee_res)
 
-        if mode != 'none':
-            if mode == 'wiki_adapte':
-                if dic.get('wiki', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
-                    result.append(dic)
-            elif mode == 'gmap_adapte':
-                if dic.get('gmap', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
-                    result.append(dic)
-        else:
-            result.append(dic)
+#        if mode != 'none':
+#            if mode == 'wiki_adapte':
+#                if dic.get('wiki', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
+#                    result.append(dic)
+#            elif mode == 'gmap_adapte':
+#                if dic.get('gmap', {}).get('name', '').lower() != dic.get('insee', {}).get('name', '').lower():
+#                    result.append(dic)
+#        else:
+#            result.append(dic)
+
+        result.append(dic)
 
     return render_template('admin/matching-france/list.js', e=escape, items=result)
 

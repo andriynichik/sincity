@@ -8,6 +8,7 @@ $(function () {
         fixedColumns: true,
         "autoWidth": false,
         "bSortClasses": false,
+        //"ordering": false,
         dom: 'Bflrtip',
         lengthMenu: [ [10, 100, 1000, -1], [10, 100, 1000, "All"] ],
         buttons: [
@@ -574,6 +575,30 @@ $(function () {
     });
 
     window.table = table;
+
+    // Setup - add a text input to each cell
+    $('.js-exportable thead th').each( function () {
+        var title = $(this).text();
+        $(this).html( '<div>'+title+'</div>' +
+            '<input type="text" placeholder="" />' );
+    } );
+
+    // Apply the search
+    table.columns().every( function () {
+        var that = this;
+
+        $( 'input', this.header() ).on( 'keyup change', function () {
+            if ( that.search() !== this.value ) {
+                that
+                    .search( this.value )
+                    .draw();
+            }
+        } );
+
+        $('input', this.header()).on('click', function(e) {
+            e.stopPropagation();
+        });
+    } );
 
     $.each($('[data-hide]'), function (e) {
         var column = table.column($(this).attr('data-column') );
