@@ -16,6 +16,7 @@ from flask import url_for
 from urllib.parse import unquote_plus
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
+from lib.compare.Comparison import Comparison
 
 
 app = Flask(__name__)
@@ -229,6 +230,19 @@ def matching_france_js(region):
             insee_res = insee.find_one({'code': item.get('source', {}).get('insee')})
 
         dic.update(insee=insee_res)
+
+        compare_res = {}
+        compare_res.update({'insee_code!=wiki_code': 1 if not (insee_res.get('InseeXls_CodeCommune') == wiki_res.get('commune_codes')) else 0})
+        compare_res.update({'insee_name!=wiki_name': 1 if not (insee_res.get('InseeXls_NameCommune') == wiki_res.get('name')) else 0})
+        compare_res.update({'wiki_name!=gmaps_name': 1 if not (wiki_res.get('name') == gmap_res.get('name')) else 0})
+        compare_res.update({'wiki_post!=gmaps_post': 1 if not (str(wiki_res.get('postal_codes')) == str(gmap_res.get('postal_code'))) else 0})
+        compare_res.update({'wiki_admin!=gmaps_admin': 1 if not (str(wiki_res.get('admin_hierarchy')) == str(gmap_res.get('admin_hierarchy'))) else 0})
+        try:
+            max_meters_in_distance = 5000
+            compare_res.update({'wiki_posinion>gmaps_position': 1 if Comparison.by_distance(wiki_res.get('center'), gmap_res.get('center')) > max_meters_in_distance else 0})
+        except:
+            compare_res.update({'wiki_posinion>gmaps_position': 1})
+        dic.update(compare=compare_res)
 
 #        if mode != 'none':
 #            if mode == 'wiki_adapte':

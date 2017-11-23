@@ -28,6 +28,7 @@ $(function () {
     {% set gmap = itemsDic.get('gmap', {}) %}
     {% set internal = itemsDic.get('internal', {}) %}
     {% set wiki = itemsDic.get('wiki', {}) %}
+    {% set compareRow = itemsDic.get('compare', {}) %}
 ['{{url_for('internal_unit', id=e(internal.get('_id')))}}', '{{url_for('internal_edit', id=e(internal.get('_id')))}}', '{{url_for('internal_delete', id=e(internal.get('_id')))}}'],
 '{{e(insee.get('InseeXls_CodeCommune'))}}',
 '{{e(insee.get('InseeXls_NameCommune'))}}',
@@ -117,6 +118,14 @@ $(function () {
 '{{e(insee.get('I_Nccenr'))}}',
 '{{e(insee.get('I_Code_departament'))}}',
 '{{e(insee.get('ColResultInSnipet'))}}',
+
+'{{compareRow.get('insee_code!=wiki_code')}}',
+'{{compareRow.get('insee_name!=wiki_name')}}',
+'{{compareRow.get('wiki_name!=gmaps_name')}}',
+'{{compareRow.get('wiki_post!=gmaps_post')}}',
+'{{compareRow.get('wiki_admin!=gmaps_admin')}}',
+'{{compareRow.get('wiki_posinion>gmaps_position')}}',
+
 ],
         {% endfor %}
 
@@ -571,6 +580,42 @@ $(function () {
                 },
                 targets: i++
             },
+            { // insee_code!=wiki_code
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // insee_name!=wiki_name
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // wiki_name!=gmaps_name
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // wiki_post!=gmaps_post
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // wiki_admin!=gmaps_admin
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // wiki_posinion>gmaps_position
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
         ]
     });
 
@@ -580,7 +625,7 @@ $(function () {
     $('.js-exportable thead th').each( function () {
         var title = $(this).text();
         $(this).html( '<div>'+title+'</div>' +
-            '<input type="text" placeholder="" />' );
+            '<input id="'+title+'" type="text" placeholder="" />' );
     } );
 
     // Apply the search
