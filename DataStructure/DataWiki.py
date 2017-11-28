@@ -65,7 +65,6 @@ def get_url(row):
         return {}
     if url != 'None':
         url = wiki_france + '/wiki/' + quote_plus(url.replace('/wiki/', ''))
-        print(url)
         code = hash().make(url)
         return {'url': url, 'code': code}
     return {}

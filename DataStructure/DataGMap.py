@@ -88,11 +88,20 @@ def admin_level(row, identificator):
 
 
 def hierarchy(row):
-    admin_hierarchy = []
+    admin_hierarchy = {}
     for idn in ['Country', 'AdminLevel_1', 'AdminLevel_2']:
+
+        level = ''
+        if idn == 'Country':
+            level = "ADMIN_LEVEL_1"
+        elif idn == 'AdminLevel_1':
+            level = "ADMIN_LEVEL_2"
+        elif idn == 'AdminLevel_2':
+            level = "ADMIN_LEVEL_3"
+
         val_level = admin_level(row, idn)
-        if val_level:
-            admin_hierarchy.append(val_level)
+        if val_level and level:
+            admin_hierarchy.update({level: val_level})
         else:
             return {}
     return {'admin_hierarchy': admin_hierarchy}
