@@ -54,6 +54,7 @@ $(function () {
 
 '{{url_for('wiki_unit', id=e(wiki.get('_id')))}}',
 ['{{e(wiki.get('name'))}}', '{{e(wiki.get('url'))}}'],
+'{{e(wiki.get('true_name'))}}',
 '{{e(wiki.get('type'))}}',
 ['{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('url')|e }}', '{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('name')|e }}', '{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('type')|e }}'],
 ['{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('url')|e }}', '{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('name')|e }}', '{{ wiki.get('admin_hierarchy', {}).get('ADMIN_LEVEL_2', {}).get('type')|e }}'],
@@ -81,6 +82,7 @@ $(function () {
 
 '{{url_for('gmaps_unit', id=e(gmap.get('_id')))}}',
 '{{e(gmap.get('name'))}}',
+'{{e(gmap.get('true_name'))}}',
 '{{e(gmap.get('short_name'))}}',
 '{{e(gmap.get('type'))}}',
 ['{{ gmap.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('name')|e }}', '{{ gmap.get('admin_hierarchy', {}).get('ADMIN_LEVEL_1', {}).get('type')|e }}'],
@@ -258,6 +260,12 @@ $(function () {
                 },
                 targets: i++
             },
+            { // WIKI true_name
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
             { // WIKI type
                 render: function ( data, type, row ) {
                     return data;
@@ -384,6 +392,12 @@ $(function () {
                 targets: i++
             },
             { // GMAP name
+                render: function ( data, type, row ) {
+                    return data;
+                },
+                targets: i++
+            },
+            { // GMAP true_name
                 render: function ( data, type, row ) {
                     return data;
                 },
@@ -625,7 +639,7 @@ $(function () {
     $('.js-exportable thead th').each( function () {
         var title = $(this).text();
         $(this).html( '<div>'+title+'</div>' +
-            '<input id="'+title+'" type="text" placeholder="" />' );
+            '<input data-id="'+title+'" type="text" placeholder="" />' );
     } );
 
     // Apply the search
@@ -653,6 +667,14 @@ $(function () {
     $('.js-exportable').on( 'click', '#icon-delete', function () {
 
     } );
+
+    $.each($('.switch-for-filter'), function (e, v) {
+        var input = $('[data-id="' + $(this).attr('data-input') + '"]');
+        console.log(v.checked);
+        input.value = '1';
+    } );
+
+    $('[data-id="Wiki position >(5km) GMaps position"]')
 
     $('a.toggle-link-vis').on( 'click', function (e) {
         e.preventDefault();
