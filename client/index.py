@@ -234,7 +234,7 @@ def matching_france_js(region):
         compare_res = {}
         compare_res.update({'insee_code!=wiki_code': 1 if not (insee_res.get('InseeXls_CodeCommune') == wiki_res.get('commune_codes')) else 0})
         compare_res.update({'insee_name!=wiki_name': 1 if not (insee_res.get('InseeXls_NameCommune') == wiki_res.get('name')) else 0})
-        compare_res.update({'wiki_name!=gmaps_name': 1 if not (wiki_res.get('name') == gmap_res.get('name')) else 0})
+        compare_res.update({'wiki_name!=gmaps_name': 1 if not (wiki_res.get('true_name', wiki_res.get('name')) == gmap_res.get('true_name', gmap_res.get('name'))) else 0})
         compare_res.update({'wiki_post!=gmaps_post': 1 if not (str(wiki_res.get('postal_codes')) == str(gmap_res.get('postal_code'))) else 0})
         compare_res.update({'wiki_admin!=gmaps_admin': 1 if not (str(wiki_res.get('admin_hierarchy')) == str(gmap_res.get('admin_hierarchy'))) else 0})
         try:
