@@ -17,10 +17,42 @@ gmap_loader = Loader.loader_gmaps_with_cache(gmaps_config=gmap_config, storage_c
 
 document_filter = {
     'name': {'$exists': True, '$not': {'$size': 0}},
-    '$and': [{'ADMIN_LEVEL_1': 'France'}]
+    '$and': [{'admin_hierarchy.ADMIN_LEVEL_1.name': 'France'}]
 }
 
 objects = internal_docs.find(document_filter)
 
+print(objects.count())
+
+#exlude_type = [
+#    'administrative_area_level_1',
+#    'administrative_area_level_2',
+#    'locality,political',
+#    'locality',
+
+#    'political,sublocality,sublocality_level_1' # не понятно оставлять его или нет
+#]
+
+#replace = [
+#    'establishment,point_of_interest,premise',
+#    'postal_code',
+#    'street_address',
+#    'route'
+#]
+
+count = 0
+
 for obj in objects:
-    pass
+    if obj.get('source', {}).get('gmap'):
+        gmap_code = obj.get('source', {}).get('gmap')
+        gmap_doc = gmap_docs.find_one({'code': gmap_code})
+        type_doc = gmap_doc.get('type')
+
+        if not gmap_doc.get('name'):
+            count = count + 1
+ #       if type_doc not in exlude_type and type_doc not in replace:
+ #           print(type_doc)
+ #           print(gmap_doc.get('name'))
+ #           print(obj.get('name'))
+
+print(count)
