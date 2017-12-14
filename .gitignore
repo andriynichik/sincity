@@ -2,3 +2,6 @@
 mongodb
 tmp
 log
+*.pyc
+__pycache__/
+*.py[cod]
