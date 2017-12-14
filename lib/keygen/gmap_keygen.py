@@ -63,7 +63,7 @@ class Keygen:
 
 	def changeLimites(self):
 
-		self.db.update({}, {'$set': {'geocode': 0, "place":0, "distance":0}}, False, True)
+		self.db.keygen.update({}, {'$set': {'geocode': 0, "place":0, "distance":0}}, False, True)
 
 
 if __name__ == '__main__':
