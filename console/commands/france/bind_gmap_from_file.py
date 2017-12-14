@@ -35,6 +35,7 @@ spider = Spider(
 
 internal_collection = doc_factory.internal_collection()
 i = 0
+hash_lib = hash()
 for csv_file in files:
     with open(csv_file, encoding='utf-8') as admin_div_CSV:
         for line in csv.DictReader(admin_div_CSV, delimiter='\t'):
@@ -46,7 +47,7 @@ for csv_file in files:
                 wiki = parser_wiki(line)
 
                 gmap = parser_gmap(line)
-                wiki_obj = doc_factory.wiki(wiki.get('url'))
+                wiki_obj = hash_lib.make(wiki.get('url'))
 
                 if gmap.get('code'):
                     code = gmap.get('code')
@@ -54,7 +55,7 @@ for csv_file in files:
                     code = hash().make(str(gmap))
                 else:
                     code = 'dummy'
-
+                print(code)
                 gmap_obj = doc_factory.gmaps(code)
                 gmap.update(code=code)
                 gmap_obj.update(gmap)
