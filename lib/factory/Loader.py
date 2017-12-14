@@ -9,7 +9,7 @@ import googlemaps
 
 from pymongo import MongoClient
 import gridfs
-
+from lib.keygen.gmap_keygen import Keygen
 
 class Loader:
 
@@ -26,18 +26,20 @@ class Loader:
 
     @staticmethod
     def loader_gmaps(gmaps_config):
+        Key = Keygen()
         return LoaderGMapsWOCache(
-            googlemaps=googlemaps.Client(key=gmaps_config.get('geocoding').get('key')),
+            googlemaps=googlemaps.Client(key=Key.get_key_geocode()),
             language=gmaps_config.get('language', None)
         )
 
     @staticmethod
     def loader_gmaps_with_cache(gmaps_config, storage_config):
+        Key = Keygen()
         connection = MongoClient(storage_config['host'], storage_config['port'])
         db = connection.loader_gmaps_cache
         storage = ComplexData(db=gridfs.GridFS(db), hash_lib=sha512())
         return LoaderGMapsWithCache(
-            googlemaps=googlemaps.Client(key=gmaps_config.get('geocoding').get('key')),
+            googlemaps=googlemaps.Client(key=Key.get_key_geocode()),
             storage=storage,
             language=gmaps_config.get('language', None)
         )

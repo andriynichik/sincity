@@ -23,10 +23,12 @@ from lib.keygen.gmap_keygen import Keygen
 
 # from lib.parser.wiki.Spain import Spain as ParserSpain
 country = 'Spain'
-conn = pymongo.MongoClient('wiki_parser_mongodb', 27017)
+config = Config('./config/config.yml')
+mongo_config = config.get('mongodb')
+conn = pymongo.MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
-config = Config('./config/config.yml')
+
 doc_factory = DocFactory(config.get('mongodb'))
 df = pd.read_csv('./data/spain/Spain_notDublicate.csv',  skiprows=0, low_memory=False)
 loader = Loader.loader_with_mongodb(config.get('mongodb'))
@@ -170,7 +172,8 @@ def make_internal(gmap, row, wiki, Name_w_Article, additional_INE, distance_url)
     return internal_obj
 
 def getByPlace(adress, mytype, Name_w_Article):
-	url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='+str(adress)+'&types=geocode&language=es&key='+str(Keygen.get_key_geocode())+''
+	Key = Keygen()
+	url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='+str(adress)+'&types=geocode&language=es&key='+str(Key.get_key_place())+''
 	types = {"Municipio": ["administrative_area_level_4"],
 			"Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
 			"Otras entidades": ["locality", "neighborhood"],
@@ -193,8 +196,8 @@ def getOSM(adress):
 	print(g.json)
 	
 def getDistance(lat1,lon1,lat2,lon2):
-
-	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='+str(lat1)+','+str(lon1)+'&destinations='+str(lat2)+','+str(lon2)+'&key='+str(Keygen.get_key_distance())+''
+	Key = Keygen()
+	url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='+str(lat1)+','+str(lon1)+'&destinations='+str(lat2)+','+str(lon2)+'&key='+str(Key.get_key_distance())+''
 	print(url)
 	response = requests.get(url)
 	data = response.json()

@@ -7,10 +7,13 @@ import sys
 
 class Keygen:
 
-	connection = MongoClient('wiki_parser_mongodb', 27017)
-	db = connection.local	
 	config = Config('./config/config.yml')
+	mongo_config = config.get('mongodb')
+	connection = MongoClient(mongo_config['host'], mongo_config['port'])
 
+	def __init__(self):
+		self.db = self.connection.local
+	
 	def get_key_geocode(self):
 
 		key =  self.db.keygen.find_one_and_update({'geocode': {'$lt': 2500}},
@@ -32,7 +35,6 @@ class Keygen:
 			return 'None place API KEY'
 
 
-	@staticmethod
 	def get_key_distance(self):
 
 		key =  self.db.keygen.find_one_and_update({'distance': {'$lt': 2500}},
@@ -43,37 +45,30 @@ class Keygen:
 		except Exception as e:
 			return 'None  distance API  KEY'
 
-	@staticmethod
+
 	def createGmapsKey(key):
-		connection = MongoClient('wiki_parser_mongodb', 27017)
-		db = connection.local
 		data = {
 			"key":key,
 			"geocode":0,
 			"place":0,
 			"distance":0
 		}
-		post = db.keygen.find_one({'key': key})
+		post = self.db.keygen.find_one({'key': key})
 		if post is None:
-			result = db.keygen.insert_one(data)
+			result = self.db.keygen.insert_one(data)
 			print("Created",key)
 		else:
 			print("KEY EXIST",key)
 			
-	@staticmethod
-	def changeLimites():
-		connection = MongoClient('wiki_parser_mongodb', 27017)
-		db = connection.local
-		db.test.update({}, {'$set': {'geocode': 0, "place":0, "distance":0}}, False, True)
+
+	def changeLimites(self):
+
+		self.db.update({}, {'$set': {'geocode': 0, "place":0, "distance":0}}, False, True)
 
 
-Keygen = Keygen()
-try:
-	if sys.argv[1] == 'create':
-		Keygen.createGmapsKey(str(sys.argv[2]))
-	elif sys.argv[1] == 'cleen':
-		Keygen.changeLimites()
-except Exception as e:
-	pass
-
-
+if __name__ == '__main__':
+    Keygen = Keygen()
+    if sys.argv[1] == 'create':
+    	Keygen.createGmapsKey(str(sys.argv[2]))
+    elif sys.argv[1] == 'cleen':
+    	Keygen.changeLimites()
