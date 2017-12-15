@@ -1,0 +1,327 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<script type="text/javascript" src="{{ url_for('matching_france_js', region=region, mode=mode) }}"></script>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Matching Spain
+                        </h2>
+                    </div>
+ <!--                    <div class="text">
+                        Toggle column (Internal):
+                        <a class="toggle-link-vis" data-column="0">#</a>
+                        - <a class="toggle-link-vis" data-column="4">Name</a>
+                        - <a class="toggle-link-vis" data-column="5">Type</a>
+                        - <a class="toggle-link-vis" data-column="6">AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="7">AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="8">AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="9" data-hide>AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="10" data-hide>AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="11" data-hide>AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="12" data-hide>AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="13" data-hide>AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="14" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="15">Center</a>
+                        - <a class="toggle-link-vis" data-column="16">Population</a>
+                        - <a class="toggle-link-vis" data-column="17" data-hide>Postal codes</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Wiki):
+                        <a class="toggle-link-vis" data-column="18" data-hide>#</a>
+                        - <a class="toggle-link-vis" data-column="19" >Name</a>
+                        - <a class="toggle-link-vis" data-column="20" >True Name</a>
+                        - <a class="toggle-link-vis" data-column="21" data-hide>Type</a>
+                        - <a class="toggle-link-vis" data-column="22">Wiki AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="23">Wiki AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="24">Wiki AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="25" data-hide>Wiki AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="26" data-hide>Wiki AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="27" data-hide>Wiki AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="28" data-hide>Wiki AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="29" data-hide>Wiki AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="30" data-hide>Capital</a>
+                        - <a class="toggle-link-vis" data-column="31" data-hide>Position</a>
+                        - <a class="toggle-link-vis" data-column="32" data-hide>Altitude</a>
+                        - <a class="toggle-link-vis" data-column="33" data-hide>Population</a>
+                        - <a class="toggle-link-vis" data-column="34" data-hide>Density</a>
+                        - <a class="toggle-link-vis" data-column="35" data-hide>Area</a>
+                        - <a class="toggle-link-vis" data-column="36" data-hide>Postal code</a>
+                        - <a class="toggle-link-vis" data-column="37" data-hide>Communes</a>
+                        - <a class="toggle-link-vis" data-column="38" data-hide>Canton codes</a>
+                        - <a class="toggle-link-vis" data-column="39" data-hide>Commune code</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Gmap):
+                        <a class="toggle-link-vis" data-column="40" data-hide>#</a>
+                        - <a class="toggle-link-vis" data-column="41" >Name</a>
+                        - <a class="toggle-link-vis" data-column="42" >True Name</a>
+                        - <a class="toggle-link-vis" data-column="43" data-hide>Short name</a>
+                        - <a class="toggle-link-vis" data-column="44" data-hide>Admin Level</a>
+                        - <a class="toggle-link-vis" data-column="45">Gmap AdmL1</a>
+                        - <a class="toggle-link-vis" data-column="46">Gmap AdmL2</a>
+                        - <a class="toggle-link-vis" data-column="47">Gmap AdmL3</a>
+                        - <a class="toggle-link-vis" data-column="48" data-hide>Gmap AdmL4</a>
+                        - <a class="toggle-link-vis" data-column="49" data-hide>Gmap AdmL5</a>
+                        - <a class="toggle-link-vis" data-column="50" data-hide>Gmap AdmL6</a>
+                        - <a class="toggle-link-vis" data-column="51" data-hide>Gmap AdmL7</a>
+                        - <a class="toggle-link-vis" data-column="52" data-hide>Gmap AdmL8</a>
+                        - <a class="toggle-link-vis" data-column="53" data-hide>Position</a>
+                        - <a class="toggle-link-vis" data-column="54" data-hide>Bounds</a>
+                        - <a class="toggle-link-vis" data-column="55" data-hide>Postal code</a>
+                    </div>
+                    <div class="text">
+                        Toggle column (Additional):
+                        <a class="toggle-link-vis" data-column="56" data-hide>#</a>
+                        - <a class="toggle-link-vis" data-column="57" data-hide>I_Code_Arrondissements</a>
+                        - <a class="toggle-link-vis" data-column="58" data-hide>I_Ar</a>
+                        - <a class="toggle-link-vis" data-column="59" data-hide>I_Cheflieu</a>
+                        - <a class="toggle-link-vis" data-column="60" data-hide>I_Code_canton</a>
+                        - <a class="toggle-link-vis" data-column="61" data-hide>I_Region</a>
+                        - <a class="toggle-link-vis" data-column="62" data-hide>I_Dep</a>
+                        - <a class="toggle-link-vis" data-column="63" data-hide>I_Canton</a>
+                        - <a class="toggle-link-vis" data-column="64" data-hide>I_Typct</a>
+                        - <a class="toggle-link-vis" data-column="65" data-hide>I_Burcentral</a>
+                        - <a class="toggle-link-vis" data-column="66" data-hide>I_Tncc</a>
+                        - <a class="toggle-link-vis" data-column="67" data-hide>I_Artmaj</a>
+                        - <a class="toggle-link-vis" data-column="68" data-hide>I_Ncc</a>
+                        - <a class="toggle-link-vis" data-column="69" data-hide>I_Armin</a>
+                        - <a class="toggle-link-vis" data-column="70" data-hide>I_Nccent</a>
+                        - <a class="toggle-link-vis" data-column="71" data-hide>I_Nccenr</a>
+                        - <a class="toggle-link-vis" data-column="1" >InseeXls_CodeCommune</a>
+                        - <a class="toggle-link-vis" data-column="2" >InseeXls_NameCommune</a>
+                        - <a class="toggle-link-vis" data-column="3" data-hide>InseeXls_Population</a>
+                        - <a class="toggle-link-vis" data-column="72" data-hide>I_Code_departament</a>
+                        - <a class="toggle-link-vis" data-column="73" data-hide>ColResultInSnipet</a>
+                    </div>
+
+                    <div class="text">
+                        Compare columns:
+                        <a class="toggle-link-vis" data-column="74" data-hide>INSEE code ≠ Wiki insee code</a>
+                        <a class="toggle-link-vis" data-column="75" data-hide>INSEE name ≠ Wiki name</a>
+                        <a class="toggle-link-vis" data-column="76" data-hide>Wiki name ≠ Gmaps name</a>
+                        <a class="toggle-link-vis" data-column="77" data-hide>Wiki post ≠ Gmaps post</a>
+                        <a class="toggle-link-vis" data-column="78" data-hide>Wiki admin ≠ GMaps admin</a>
+                        <a class="toggle-link-vis" data-column="79" data-hide>Wiki position >(5km) GMaps position</a>
+                    </div>
+
+                    <div>
+                        <div class="demo-switch">
+                            <div class="switch">
+                                <label>OFF<input type="checkbox" name="insee_code_not_wiki_insee_code" data-col-index=""><span
+                                        class="lever"></span>ON</label> INSEE code ≠ Wiki insee code
+                            </div>
+                        </div>
+
+                        <div class="demo-switch">
+                            <div class="switch">
+                                <label>OFF<input type="checkbox" name="insee_name_not_wiki_name" data-col-index=""><span
+                                        class="lever"></span>ON</label> INSEE name ≠ Wiki name
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                                <thead>
+<!--                                 <tr>
+                                    <th>#</th>
+                                    <th>InseeXls_CodeCommune</th>
+                                    <th>InseeXls_NameCommune</th>
+                                    <th>InseeXls_Population</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>AdmL1</th>
+                                    <th>AdmL2</th>
+                                    <th>AdmL3</th>
+                                    <th>AdmL4</th>
+                                    <th>AdmL5</th>
+                                    <th>AdmL6</th>
+                                    <th>AdmL7</th>
+                                    <th>AdmL8</th>
+                                    <th>Capital</th>
+                                    <th>Center</th>
+                                    <th>Population</th>
+                                    <th>Postal codes</th>
+
+                                    <th>Wiki #</th>
+                                    <th>Wiki Name</th>
+                                    <th>Wiki True Name</th>
+                                    <th>Wiki Type</th>
+                                    <th>Wiki AdmL1</th>
+                                    <th>Wiki AdmL2</th>
+                                    <th>Wiki AdmL3</th>
+                                    <th>Wiki AdmL4</th>
+                                    <th>Wiki AdmL5</th>
+                                    <th>Wiki AdmL6</th>
+                                    <th>Wiki AdmL7</th>
+                                    <th>Wiki AdmL8</th>
+                                    <th>Wiki Capital</th>
+                                    <th>Wiki Position</th>
+                                    <th>Wiki Altitude</th>
+                                    <th>Wiki Population</th>
+                                    <th>Wiki Density</th>
+                                    <th>Wiki Area</th>
+                                    <th>Wiki Postal code</th>
+                                    <th>Wiki Communes</th>
+                                    <th>Wiki Canton codes</th>
+                                    <th>Wiki Commune code</th>
+
+
+                                    <th>Gmap #</th>
+                                    <th>Gmap Name</th>
+                                    <th>Gmap True Name</th>
+                                    <th>Gmap Short name</th>
+                                    <th>Gmap Admin Level</th>
+                                    <th>Gmap AdmL1</th>
+                                    <th>Gmap AdmL2</th>
+                                    <th>Gmap AdmL3</th>
+                                    <th>Gmap AdmL4</th>
+                                    <th>Gmap AdmL5</th>
+                                    <th>Gmap AdmL6</th>
+                                    <th>Gmap AdmL7</th>
+                                    <th>Gmap AdmL8</th>
+                                    <th>Gmap Position</th>
+                                    <th>Gmap Bounds</th>
+                                    <th>Gmap Postal code</th>
+
+
+                                    <th>Additional #</th>
+                                    <th>I_Code_Arrondissements</th>
+                                    <th>I_Ar</th>
+                                    <th>I_Cheflieu</th>
+                                    <th>I_Code_canton</th>
+                                    <th>I_Region</th>
+                                    <th>I_Dep</th>
+                                    <th>I_Canton</th>
+                                    <th>I_Typct</th>
+                                    <th>I_Burcentral</th>
+                                    <th>I_Tncc</th>
+                                    <th>I_Artmaj</th>
+                                    <th>I_Ncc</th>
+                                    <th>I_Armin</th>
+                                    <th>I_Nccent</th>
+                                    <th>I_Nccenr</th>
+                                    <th>I_Code_departament</th>
+                                    <th>ColResultInSnipet</th>
+
+                                    <th>INSEE code ≠ Wiki insee code</th>
+                                    <th>INSEE name ≠ Wiki name</th>
+                                    <th>Wiki name ≠ Gmaps name</th>
+                                    <th>Wiki post ≠ Gmaps post</th>
+                                    <th>Wiki admin ≠ GMaps admin</th>
+                                    <th>Wiki position >(5km) GMaps position</th>
+
+                                </tr>
+                                </thead>
+                                <tfoot>
+                                <tr>
+                                    <th>#</th>
+                                    <th>InseeXls_CodeCommune</th>
+                                    <th>InseeXls_NameCommune</th>
+                                    <th>InseeXls_Population</th>
+                                    <th>Name</th>
+                                    <th>Type</th>
+                                    <th>AdmL1</th>
+                                    <th>AdmL2</th>
+                                    <th>AdmL3</th>
+                                    <th>AdmL4</th>
+                                    <th>AdmL5</th>
+                                    <th>AdmL6</th>
+                                    <th>AdmL7</th>
+                                    <th>AdmL8</th>
+                                    <th>Capital</th>
+                                    <th>Center</th>
+                                    <th>Population</th>
+                                    <th>Postal codes</th>
+
+                                    <th>Wiki #</th>
+                                    <th>Wiki Name</th>
+                                    <th>Wiki Type</th>
+                                    <th>Wiki AdmL1</th>
+                                    <th>Wiki AdmL2</th>
+                                    <th>Wiki AdmL3</th>
+                                    <th>Wiki AdmL4</th>
+                                    <th>Wiki AdmL5</th>
+                                    <th>Wiki AdmL6</th>
+                                    <th>Wiki AdmL7</th>
+                                    <th>Wiki AdmL8</th>
+                                    <th>Wiki Capital</th>
+                                    <th>Wiki Position</th>
+                                    <th>Wiki Altitude</th>
+                                    <th>Wiki Population</th>
+                                    <th>Wiki Density</th>
+                                    <th>Wiki Area</th>
+                                    <th>Wiki Postal code</th>
+                                    <th>Wiki Communes</th>
+                                    <th>Wiki Canton codes</th>
+                                    <th>Wiki Commune code</th>
+
+
+                                    <th>Gmap #</th>
+                                    <th>Gmap Name</th>
+                                    <th>Gmap Short name</th>
+                                    <th>Gmap Admin Level</th>
+                                    <th>Gmap AdmL1</th>
+                                    <th>Gmap AdmL2</th>
+                                    <th>Gmap AdmL3</th>
+                                    <th>Gmap AdmL4</th>
+                                    <th>Gmap AdmL5</th>
+                                    <th>Gmap AdmL6</th>
+                                    <th>Gmap AdmL7</th>
+                                    <th>Gmap AdmL8</th>
+                                    <th>Gmap Position</th>
+                                    <th>Gmap Bounds</th>
+                                    <th>Gmap Postal code</th>
+
+
+                                    <th>Additional #</th>
+                                    <th>I_Code_Arrondissements</th>
+                                    <th>I_Ar</th>
+                                    <th>I_Cheflieu</th>
+                                    <th>I_Code_canton</th>
+                                    <th>I_Region</th>
+                                    <th>I_Dep</th>
+                                    <th>I_Canton</th>
+                                    <th>I_Typct</th>
+                                    <th>I_Burcentral</th>
+                                    <th>I_Tncc</th>
+                                    <th>I_Artmaj</th>
+                                    <th>I_Ncc</th>
+                                    <th>I_Armin</th>
+                                    <th>I_Nccent</th>
+                                    <th>I_Nccenr</th>
+                                    <th>I_Code_departament</th>
+                                    <th>ColResultInSnipet</th>
+
+                                    <th>INSEE code ≠ Wiki insee code</th>
+                                    <th>INSEE name ≠ Wiki name</th>
+                                    <th>Wiki name ≠ Gmaps name</th>
+                                    <th>Wiki post ≠ Gmaps post</th>
+                                    <th>Wiki admin ≠ GMaps admin</th>
+                                    <th>Wiki position >(5km) GMaps position</th>
+
+                                </tr> -->
+                                </tfoot>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+</section>
+{% endblock %}
