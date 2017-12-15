@@ -46,7 +46,7 @@ class Keygen:
 			return 'None  distance API  KEY'
 
 
-	def createGmapsKey(key):
+	def createGmapsKey(self, key):
 		data = {
 			"key":key,
 			"geocode":0,
