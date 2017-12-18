@@ -21,6 +21,8 @@ import pymongo
 from bson.json_util import dumps
 from lib.keygen.gmap_keygen import Keygen
 
+
+
 # from lib.parser.wiki.Spain import Spain as ParserSpain
 country = 'Spain'
 config = Config('./config/config.yml')
@@ -30,7 +32,11 @@ db = conn.location
 coll = db.SPAININE
 
 doc_factory = DocFactory(config.get('mongodb'))
-df = pd.read_csv('./data/spain/Spain_notDublicate.csv',  skiprows=0, low_memory=False)
+try:
+	skiprows = sys.argv[1]
+except Exception as e:
+	skiprows = 0
+df = pd.read_csv('./data/spain/Spain_notDublicate.csv',  skiprows=int(skiprows), low_memory=False)
 loader = Loader.loader_with_mongodb(config.get('mongodb'))
 headers = {'User-Agent': 'Mozilla/5.0'}
 # print(config)
