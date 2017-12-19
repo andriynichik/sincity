@@ -88,6 +88,12 @@ def gmap_by_address(address):
     return gmap
 
 def gmap_by_place_id(place_id):
+    Key = Keygen()
+    keyAPI =  Key.get_key_geocode()
+    if not keyAPI:
+    	sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
     spider.gmap_loader._language = language
     objects = spider.get_gmap_place_id(place_id)
     gmap = {}
