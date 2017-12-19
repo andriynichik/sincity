@@ -289,8 +289,6 @@ def getINE(item):
 		return str(item[2])
 
 for index, row in df.iterrows():
-	if index > 995:
-		sys.exit()
 	print (index)
 	
 	distance_url = ''
