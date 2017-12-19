@@ -1,19 +1,18 @@
 # encoding=utf8
 import csv
-
+from lib.config.Yaml import Yaml as Config
 import pandas as pd
 import json
 import requests
-import pymongo
+from pymongo import MongoClient
 # from pymongo import Connection
-
+config = Config('./config/config.yml')
+mongo_config = config.get('mongodb')
 df = pd.read_csv('./data/spain/ENTIDADES.scv',  skiprows=0, low_memory=False)
-conn = pymongo.MongoClient()
-conn = pymongo.MongoClient('wiki_parser_mongodb', 27017)
+conn =  MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
-
-
+    
 for index, row in df.iterrows():
     data = {'23_SNIG_CODIGOINE': row[0],
             '24_SNIG_NOMBRE':row[1],

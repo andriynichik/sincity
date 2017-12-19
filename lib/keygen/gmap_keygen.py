@@ -22,7 +22,7 @@ class Keygen:
 		try:
 			return key['key']
 		except Exception as e:
-			return 'None geocode API KEY'
+			return False
 
 	def get_key_place(self):
 
@@ -32,7 +32,7 @@ class Keygen:
 		try:
 			return key['key']
 		except Exception as e:
-			return 'None place API KEY'
+			return False
 
 
 	def get_key_distance(self):
@@ -43,10 +43,10 @@ class Keygen:
 		try:
 			return key['key']
 		except Exception as e:
-			return 'None  distance API  KEY'
+			return False
 
 
-	def createGmapsKey(key):
+	def createGmapsKey(self, key):
 		data = {
 			"key":key,
 			"geocode":0,
