@@ -117,6 +117,7 @@ def gmap_by_address(wiki):
     address = []
     for name, value in wiki.get('admin_hierarchy', {}).items():
         address.append(value.get('name'))
+    address = address[0:3]
     address.append(wiki.get('name'))
     address_str = ','.join(address[0:3]).replace('Agglomération', ' ').replace(' d\'', ' ')
     print(address_str)
