@@ -118,7 +118,7 @@ def gmap_by_address(wiki):
     for name, value in wiki.get('admin_hierarchy', {}).items():
         address.append(value.get('name'))
     address.append(wiki.get('name'))
-    address_str = ','.join(address).replace('Agglomération', ' ').replace(' d\'', ' ')
+    address_str = ','.join(address[0:3]).replace('Agglomération', ' ').replace(' d\'', ' ')
     print(address_str)
     response = gmap_loader.by_address(address=address_str)
     map_objects = MapFactory.france(response)
