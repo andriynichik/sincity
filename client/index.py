@@ -285,8 +285,7 @@ def matching_france(region=None):
 @app.route('/matching/spain/<string:region>')
 def matching_spain(region=None):
     mode = request.args.get('mode', 'none')
-    if region is None:
-        Provincia = {
+    Provincia = {
                 '01' : 'Araba (Álava)',
                 '02' : 'Abacente ',
                 '03' : 'Alicante ',
@@ -340,23 +339,19 @@ def matching_spain(region=None):
                 '51' : 'Ceuta ',
                 '52' : 'Melilla ',
             }
-        config = Config('./config/config.yml')
+    if region is None:
 
-        factory = DocFactory(config.get('mongodb'))
-        internal = factory.internal_collection()
-        objects = internal.aggregate([
-        {'$match':
-            {
-                'name': {'$exists': True, '$not': {'$size': 0}},
-                '$and': [{'admin_hierarchy.ADMIN_LEVEL_1.name': 'France'}]
-            }
-        },
-        {'$group': {'_id': '$admin_hierarchy.ADMIN_LEVEL_2.name', 'count': {'$sum': 1}}}
-        ])
+
 
         return render_template('admin/matching-spain/region-list.html', data=Provincia)
     else:
-        return render_template('admin/matching-spain/list.html', region=region, mode=mode)
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
+        cnt =  db.internal.find({'20_SNIG_COD_PROV': int(region)}).count()
+        return render_template('admin/matching-spain/list.html', region=region, data=data, cnt=cnt)
 
 
 

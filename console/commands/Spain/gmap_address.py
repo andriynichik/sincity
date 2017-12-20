@@ -30,7 +30,7 @@ mongo_config = config.get('mongodb')
 conn = pymongo.MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
-
+print(config.get('googlemaps').get('geocoding').get('key'))
 doc_factory = DocFactory(config.get('mongodb'))
 try:
 	skiprows = sys.argv[1]
@@ -39,7 +39,8 @@ except Exception as e:
 df = pd.read_csv('./data/spain/Spain_notDublicate.csv',  skiprows=int(skiprows), low_memory=False)
 loader = Loader.loader_with_mongodb(config.get('mongodb'))
 headers = {'User-Agent': 'Mozilla/5.0'}
-# print(config)
+
+
 language='es'
 spider = Spider(
     loader_factory=LoaderFactory,
@@ -57,6 +58,8 @@ def getTranslate(address):
 	languages = ["uk","ru","ca", "lv",  "en" ,"pl" ,"de"  "fr" , "it", "es", "ro", "nl", "el" "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
 	for lang in languages:
 		Key.get_key_geocode()
+		cnf = {'geocoding':{'key': Key.get_key_geocode()}}
+		config.set(cnf)
 		spider.gmap_loader._language = lang
 		objects = spider.get_gmap_address(address)
 		gmap = {}
@@ -74,6 +77,8 @@ def gmap_by_address(address):
     keyAPI =  Key.get_key_geocode()
     if not keyAPI:
     	sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
     spider.gmap_loader._language = language
     objects = spider.get_gmap_address(address)
     gmap = {}
@@ -83,6 +88,12 @@ def gmap_by_address(address):
     return gmap
 
 def gmap_by_place_id(place_id):
+    Key = Keygen()
+    keyAPI =  Key.get_key_geocode()
+    if not keyAPI:
+    	sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
     spider.gmap_loader._language = language
     objects = spider.get_gmap_place_id(place_id)
     gmap = {}
@@ -185,7 +196,10 @@ def make_internal(gmap, row, wiki, Name_w_Article, additional_INE, distance_url)
 
 def getByPlace(adress, mytype, Name_w_Article):
 	Key = Keygen()
-	url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='+str(adress)+'&types=geocode&language=es&key='+str(Key.get_key_place())+''
+	keyAPI = Key.get_key_place()
+	if not keyAPI:
+		sys.exit()
+	url = 'https://maps.googleapis.com/maps/api/place/autocomplete/json?input='+str(adress)+'&types=geocode&language=es&key='+str(keyAPI)+''
 	types = {"Municipio": ["administrative_area_level_4"],
 			"Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
 			"Otras entidades": ["locality", "neighborhood"],
@@ -281,9 +295,8 @@ def getINE(item):
 		return str(item[2])
 
 for index, row in df.iterrows():
-	if index > 995:
-		sys.exit()
 	print (index)
+	
 	distance_url = ''
 	adress = ''
 	try:
@@ -324,7 +337,7 @@ for index, row in df.iterrows():
 			else:
 				gmap = gmap_by_address(adress)
 
-			gmap['translate'] = getTranslate(adress)
+			# gmap['translate'] = getTranslate(adress)
 		
 			
 			print (gmap)
@@ -349,6 +362,7 @@ for index, row in df.iterrows():
 
 		adress = ''
 		time.sleep(0.01)
+		# print(config.get('googlemaps').get('geocoding').get('key'))
 	except Exception as e:
 		print(str(e))
 
