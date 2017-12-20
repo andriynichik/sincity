@@ -147,20 +147,30 @@ for obj in objects:
             empty_doc = empty_doc + 1
             print(wiki_doc.get('type'))
             result = gmap_by_address(wiki_doc)
-            gmap_obj = doc_factory.gmaps(code=result.get('code'))
-            gmap_obj.update(new_data=gmap_obj.get_document())
-            source = obj.get('source', {})
-            source.update(gmap=gmap_code)
-            #internal_docs.update_one({'code': obj.get('code')}, {'$set': {'source': source}})
-            print(obj.get('name'))
-            print(gmap_obj.get_document())
-            raise
+            if result:
+                gmap_obj = doc_factory.gmaps(code=result.get('code'))
+                doc = gmap_obj.get_document()
+                gmap_obj.update(new_data=gmap_obj.get_document())
+
+                source = obj.get('source', {})
+                source.update(gmap=doc.get('code'))
+                internal_docs.update_one({'code': obj.get('code')}, {'$set': {'source': source}})
 
         if type_doc in exlude_type:
             locality = locality + 1
 
         if type_doc in replace:
             need_replace = need_replace + 1
+            print(wiki_doc.get('type'))
+            result = gmap_by_address(wiki_doc)
+            if result:
+                gmap_obj = doc_factory.gmaps(code=result.get('code'))
+                doc = gmap_obj.get_document()
+                gmap_obj.update(new_data=gmap_obj.get_document())
+
+                source = obj.get('source', {})
+                source.update(gmap=doc.get('code'))
+                internal_docs.update_one({'code': obj.get('code')}, {'$set': {'source': source}})
 
 print('empty:' + str(empty_doc))
 print('locality:' + str(locality))
