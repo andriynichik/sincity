@@ -119,7 +119,7 @@ def gmap_by_address(wiki):
         address.append(value.get('name'))
     address = address[0:3]
     address.append(wiki.get('name'))
-    address_str = ','.join(address).replace('Agglomération', ' ').replace(' d\'', ' ')
+    address_str = ','.join(address).replace('Agglomération', ' ').replace(' d\'', ' ').replace('Arrondissement de ', '').replace('Arrondissement ', '').replace('Canton de ', '')
     print(address_str)
     response = gmap_loader.by_address(address=address_str)
     map_objects = MapFactory.france(response)
