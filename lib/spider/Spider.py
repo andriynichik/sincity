@@ -23,6 +23,15 @@ class Spider:
         raw = self.gmap_loader.by_place_id(place_id=place_id, use_cache=self.use_cache)
         return self._gmap_documents(raw=raw, request=place_id)
 
+    def get_by_places_by_type(self, address,  placeName, myPlaceTypes):
+        raw = self.gmap_loader.by_places(address=address, use_cache=self.use_cache)
+        objects = self.gmap_parser(raw)
+        for objects_item in objects:
+            if objects_item.get_places_type() in myPlaceTypes and objects_item.get_places_name().strip() == placeName.strip():
+                    return objects_item.get_places_PlaceId()
+        return None
+        
+
     def get_wiki_url(self, url):
         wiki_content, code = self.wiki_loader.load(url, headers={'User-Agent': 'Mozilla/5.0'})
         wiki_parser = self.wiki_parser(wiki_content)
