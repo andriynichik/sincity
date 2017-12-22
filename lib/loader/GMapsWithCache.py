@@ -22,6 +22,19 @@ class LoaderGMapsWithCache(GMaps):
 
         return result
 
+
+    def by_places(self, address, use_cache=True):
+        result = {}
+        key = self.address_key(address)
+        if use_cache:
+            result = self.from_cache(key)
+
+        if not result:
+            result = super(LoaderGMapsWithCache, self).by_places(address=address)
+            self.to_cache(content=result, params=key)
+
+        return result
+
     def component_key(self, components):
         return ['component', components, self._language]
 

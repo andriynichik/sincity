@@ -17,3 +17,6 @@ class GMaps:
 
     def by_position(self, lat, lng):
         return self._googlemaps.reverse_geocode((lat, lng), language=self._language)
+
+    def by_places(self, address):
+        return self._googlemaps.places_autocomplete(input_text=address, types='geocode', language=self._language)
