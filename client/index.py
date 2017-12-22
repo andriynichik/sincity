@@ -17,6 +17,7 @@ from urllib.parse import unquote_plus
 from lib.factory.Loader import Loader as LoaderFactory
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
 from lib.compare.Comparison import Comparison
+from lib.spider.Spider import Spider
 
 
 app = Flask(__name__)
@@ -504,29 +505,44 @@ def test_gmap():
     raw = {}
     parsed = []
     if get:
+        use_cache = bool(get.get('use_cache', True))
+        method = get.get('method', 'address')
+        language = get.get('lang', 'en')
         config = Config('./config/config.yml')
         gmap_config = config.get('googlemaps')
-        gmap_config.update(language=get.get('lang', 'en'))
+        gmap_config.update(language=language)
 
         gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config,
                                                             storage_config=config.get('mongodb'))
-        use_cache = bool(get.get('use_cache', True))
-        method = get.get('method', 'address')
+        spider = Spider(
+            loader_factory=LoaderFactory,
+            gmap_parser=MapFactory.france,
+            language=language,
+            config=config,
+            use_cache=use_cache
+        )
+
         if method == 'address':
-            address = get.get('address') if get.get('address') else 'Magadan'
+            address = get.get('address', 'Magadan')
             raw = gmap_loader.by_address(address, use_cache=use_cache)
         elif method == 'position':
-            lat = get.get('latitude') if get.get('latitude') else 59.558208
-            lng = get.get('longitude') if get.get('longitude') else 150.822794
+            lat = get.get('latitude', 59.558208)
+            lng = get.get('longitude', 150.822794)
             raw = gmap_loader.by_position(lat=lat, lng=lng, use_cache=use_cache)
         elif method == 'place_id':
-            place_id = get.get('place_id') if get.get('place_id') else 'ChIJ6UpSLYGEaVkROrwiAnFmzXw'
+            place_id = get.get('place_id', 'ChIJ6UpSLYGEaVkROrwiAnFmzXw')
             raw = gmap_loader.by_place_id(place_id=place_id, use_cache=use_cache)
+        elif method == 'address_type':
+            address = get.get('address', 'Magadan')
+            type = get.get('type', 'locality')
+            raw = spider.gmap_loader.by_places(address=address, use_cache=spider.use_cache)
+            parsed = spider.get_place_ids_by_address_for_type(address=address, type=type)
 
-        objects = MapFactory.france(raw)
+        if method in ['address', 'position', 'place_id']:
+            objects = MapFactory.france(raw)
 
-        for element in objects:
-            parsed.append(element.as_dictionary())
+            for element in objects:
+                parsed.append(element.as_dictionary())
 
     return render_template('admin/gmap/test.html', form_data=get, raw=raw, parsed=parsed)
 

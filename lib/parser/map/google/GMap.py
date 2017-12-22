@@ -145,13 +145,10 @@ class GMap(Parser):
     def get_places_name(self):
         return self._content.get('structured_formatting').get('main_text')
 
-    def get_places_PlaceId(self):
-        return self._content.get('place_id')
-
-    def get_places_type(self):
-        result = None
+    def get_types(self):
+        result = []
         if 'types' in self._content:
-            result = self._content.get('types')[0]
+            result = self._content.get('types')
         return result
 
     def get_admin_hierarchy(self):

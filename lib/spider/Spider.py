@@ -1,6 +1,6 @@
 class Spider:
 
-    def __init__(self, loader_factory, gmap_parser, wiki_parser, doc_factory, language, config, use_cache=True):
+    def __init__(self, loader_factory, config, gmap_parser=None, wiki_parser=None, doc_factory=None, language=None, use_cache=True):
         self.use_cache=use_cache
         self.config = config
         self.language = language
@@ -23,13 +23,14 @@ class Spider:
         raw = self.gmap_loader.by_place_id(place_id=place_id, use_cache=self.use_cache)
         return self._gmap_documents(raw=raw, request=place_id)
 
-    def get_by_places_by_type(self, address,  placeName, myPlaceTypes):
+    def get_place_ids_by_address_for_type(self, address, type):
         raw = self.gmap_loader.by_places(address=address, use_cache=self.use_cache)
         objects = self.gmap_parser(raw)
+        place_ids = []
         for objects_item in objects:
-            if objects_item.get_places_type() in myPlaceTypes and objects_item.get_places_name().strip() == placeName.strip():
-                    return objects_item.get_places_PlaceId()
-        return None
+            if type in objects_item.get_types():
+                    place_ids.append(objects_item.get_place_id())
+        return place_ids
         
 
     def get_wiki_url(self, url):
