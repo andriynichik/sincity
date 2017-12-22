@@ -1,6 +1,38 @@
 {% extends "admin/layout.html" %}
 {% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('.js-exportable').DataTable( {
+        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
+        
+        dom: 'Bflrtip',
+        buttons: [
+            'csv', 'excel', 
+        ],
 
+    } );
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+
+        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
+           
+            $(this).removeAttr("style");
+         
+        } 
+        else { 
+
+            $(this).css('color', 'red');
+
+        }   
+
+        
+    } );
+} );
+
+</script>
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
@@ -12,45 +44,119 @@
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Spain Provincia list
+                            Spain Provincia: {{region}}
                         </h2>
+                    </div>
+                    <div class="text">
+                        Toggle column (INE):
+                        <a class="toggle-link-vis" data-column="0" style="color: red;" data-hide>INE_Municipio_Code</a>
+                        - <a class="toggle-link-vis" data-column="1">INE_Municipio_Name</a>
+                        - <a class="toggle-link-vis" data-column="2" style="color: red;" data-hide>INE_Collective_Entity_Code</a>
+                        - <a class="toggle-link-vis" data-column="3" >3_INE_Collective_Entity_Name</a>
+                        - <a class="toggle-link-vis" data-column="4" style="color: red;" data-hide>INE_Singular_Entity_Code</a>
+                        - <a class="toggle-link-vis" data-column="5">INE_Singular_Entity_Name</a>
+                        - <a class="toggle-link-vis" data-column="6" style="color: red;" data-hide>INE_Nuclea_Code</a>
+                        - <a class="toggle-link-vis" data-column="7">INE_Nuclea_Name</a>
+                        - <a class="toggle-link-vis" data-column="8">INE_Name_w_Article</a>
+                        - <a class="toggle-link-vis" data-column="9" style="color: red;" data-hide>INE_Población</a>
+                    </div>
+                    
+                    <div class="text">
+                        Toggle column (GMAP):
+                        - <a class="toggle-link-vis" data-column="10">Gmap_name</a>
+                        - <a class="toggle-link-vis" data-column="11">GMap_type</a>
+                        - <a class="toggle-link-vis" data-column="12" style="color: red;" data-hide>13_GMap_requests</a>
+                        - <a class="toggle-link-vis" data-column="13" style="color: red;" data-hide>14_GMap_center</a>
+                        - <a class="toggle-link-vis" data-column="14">15_GMap_center_SNIG_comparison</a>
+                        - <a class="toggle-link-vis" data-column="15" style="color: red;" data-hide>16_GMap_bounds</a>
+                        - <a class="toggle-link-vis" data-column="16" style="color: red;" data-hide>17_GMap_admin_hierarchy</a>
+
+                    </div>
+                    <div class="text">
+                        Toggle column (SNIG):
+                        - <a class="toggle-link-vis" data-column="17" style="color: red;" data-hide>20_SNIG_COD_PROV</a>
+                        - <a class="toggle-link-vis" data-column="18" style="color: red;" data-hide>21_SNIG_PROVINCIA</a>
+                        - <a class="toggle-link-vis" data-column="19" style="color: red;" data-hide>22_SNIG_INEMUNI</a>
+                        - <a class="toggle-link-vis" data-column="20" style="color: red;" data-hide>23_SNIG_CODIGOINE</a>
+                        - <a class="toggle-link-vis" data-column="21">24_SNIG_NOMBRE</a>
+                        - <a class="toggle-link-vis" data-column="22">25_SNIG_TIPO</a>
+                        - <a class="toggle-link-vis" data-column="23" style="color: red;" data-hide>26_SNIG_POBLACION</a>
+                        - <a class="toggle-link-vis" data-column="24" style="color: red;" data-hide>27_SNIG_ALTITUD</a>
+                        - <a class="toggle-link-vis" data-column="25">28_SNIG_ETRS89</a>
+                        - <a class="toggle-link-vis" data-column="26" style="color: red;" data-hide>30_SNIG_HOJA_MTN25</a>
+                        - <a class="toggle-link-vis" data-column="27" style="color: red;" data-hide>31_SNIG_ORIGENCOOR</a>
+                        - <a class="toggle-link-vis" data-column="28" style="color: red;" data-hide>32_SNIG_ORIGENALTITUD</a>
+                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <div class="body">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover dataTable js-exportable">
+                            <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
                                 <thead>
                                 <tr>
+                                    <th>INE_Municipio_Code </th>
                                     <th>INE_Municipio_Name</th>
+                                    <th>INE_Collective_Entity_Code</th>
                                     <th>INE_Collective_Entity_Name</th>
+                                    <th>INE_Singular_Entity_Code</th>
                                     <th>INE_Singular_Entity_Name</th>
+                                    <th>INE_Nuclea_Code</th>
                                     <th>INE_Nuclea_Name</th>
                                     <th>INE_Name_w_Article</th>
+                                    <th>INE_Población</th>
                                     <th>gmap_name</th>
-                                    <th>INE-GMap_Name_comparison</th>
                                     <th>GMap_type</th>
-                                    <th>GMap_center_SNIG_comparison</th>
-                                    <th>SNIG_NOMBRE</th>
-                                    <th>SNIG_TIPO</th>
-                                    <th>SNIG_ETRS89</th>
-                        
+                                    <th>GMap_requests</th>
+                                    <th>GMap_center</th>
+                                    <th>15_GMap_center_SNIG_comparison</th>
+                                    <th>16_GMap_bounds</th>
+                                     <th>17_GMap_admin_hierarchy</th>
+                                    <th>20_SNIG_COD_PROV</th>
+                                    <th>21_SNIG_PROVINCIA</th>
+                                    <th>22_SNIG_INEMUNI</th>
+                                    <th>23_SNIG_CODIGOINE</th>
+                                    <th>24_SNIG_NOMBRE</th>
+                                    <th>25_SNIG_TIPO</th>
+                                    <th>26_SNIG_POBLACION</th>
+                                    <th>27_SNIG_ALTITUD</th>
+                                    <th>28_SNIG_ETRS89</th>
+                                    <th>30_SNIG_HOJA_MTN25</th>
+                                    <th>31_SNIG_ORIGENCOOR</th>
+                                    <th>32_SNIG_ORIGENALTITUD</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
                                 <tr>
+                                     <th>INE_Municipio_Code </th>
                                     <th>INE_Municipio_Name</th>
-                                    
+                                    <th>INE_Collective_Entity_Code</th>
                                     <th>INE_Collective_Entity_Name</th>
+                                    <th>INE_Singular_Entity_Code</th>
                                     <th>INE_Singular_Entity_Name</th>
+                                    <th>INE_Nuclea_Code</th>
                                     <th>INE_Nuclea_Name</th>
                                     <th>INE_Name_w_Article</th>
+                                    <th>INE_Población</th>
                                     <th>gmap_name</th>
-                                    <th>INE-GMap_Name_comparison</th>
-                                    <th>GMap_type</th>
-                                    <th>GMap_center_SNIG_comparison</th>
-                                    <th>SNIG_NOMBRE</th>
-                                    <th>SNIG_TIPO</th>
-                                    <th>SNIG_ETRS89</th>
-                                  
+                                     <th>GMap_type</th>
+                                     <th>GMap_requests</th>
+                                     <th>GMap_center</th>
+                                     <th>15_GMap_center_SNIG_comparison</th>
+                                       <th>16_GMap_bounds</th>
+                                     <th>17_GMap_admin_hierarchy</th>
+                                     <th>20_SNIG_COD_PROV</th>
+                                    <th>21_SNIG_PROVINCIA</th>
+                                    <th>22_SNIG_INEMUNI</th>
+                                    <th>23_SNIG_CODIGOINE</th>
+                                    <th>24_SNIG_NOMBRE</th>
+                                    <th>25_SNIG_TIPO</th>
+                                    <th>26_SNIG_POBLACION</th>
+                                    <th>27_SNIG_ALTITUD</th>
+                                    <th>28_SNIG_ETRS89</th>
+                                    <th>30_SNIG_HOJA_MTN25</th>
+                                    <th>31_SNIG_ORIGENCOOR</th>
+                                    <th>32_SNIG_ORIGENALTITUD</th>
+
+
 
                                 </tr>
                                 </tfoot>
@@ -59,26 +165,39 @@
                                     {% for item in data %}
 
                                         <tr>
+                                             <td>{{item['00_INE_Municipio_Code']}} </td>
                                             <td>{{item['01_INE_Municipio_Name']}}</td>
-                             
+                                            <td>{{item['02_INE_Collective_Entity_Code']}}</td>
                                             <td>{{item['03_INE_Collective_Entity_Name']}}</td>
+                                            <td>{{item['04_INE_Singular_Entity_Code']}}</td>
                                             <td>{{item['05_INE_Singular_Entity_Name']}}</td>
+                                            <td>{{item['06_INE_Nuclea_Code']}}</td>
                                             <td>{{item['07_INE_Nuclea_Name']}}</td>
                                             <td>{{item['08_INE_Name_w_Article']}}</td>
-                                            <td>{{item['10_gmap_name']}}</td>
-                                            <td>{{item['11_gmap_comparison']}}</td>
-                                            <td>{{item['12_GMap_type']}}</td>
-                                            <td><a href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                            <th>{{item['09_INE_Población']}}</th>
+                                            {% if item['11_gmap_comparison'] %}
+                                                   <td style="background-color: #9efb9e;">{{item['10_gmap_name']}}</td>
+                                                {% else %}
+                                                    <td style="background-color: #f0b7ab;">{{item['10_gmap_name']}}</td>
+                                                {% endif %}
+                                            <td>{{item['12_gmap_type']}}</td>
+                                            <td>{{item['13_GMap_requests']}}</td>
+                                            <td>{{item['gmap_center']}}</td>
+                                            <td><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                            <td>{{item['gmap_bounds']}}</td>
+                                            <td>{{item['17_gmap_admin_hierarchy']}}</td>
+                                            <td>{{item['20_SNIG_COD_PROV']}}</td>
+                                            <td>{{item['21_SNIG_PROVINCIA']}}</td>
+                                            <td>{{item['22_SNIG_INEMUNI']}}</td>
+                                            <td>{{item['23_SNIG_CODIGOINE']}}</td>
                                             <td>{{item['24_SNIG_NOMBRE']}}</td>
                                             <td>{{item['25_SNIG_TIPO']}}</td>
-                                            <td><a href="https://www.google.com.ua/maps/dir/{{item['28_SNIG_LATITUD_ETRS89']}},{{item['29_SNIG_LONGITUD_ETRS89']}}">{{item['28_SNIG_LATITUD_ETRS89']}},{{item['29_SNIG_LONGITUD_ETRS89']}}</a> </td>
-                                           
-                                        
-           
-
-                                  
-                                            
-                                            
+                                            <td>{{item['26_SNIG_POBLACION']}}</td>
+                                            <td>{{item['27_SNIG_ALTITUD']}}</td>
+                                            <td><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['28_SNIG_LATITUD_ETRS89']}},{{item['29_SNIG_LONGITUD_ETRS89']}}">{{item['28_SNIG_LATITUD_ETRS89']}},{{item['29_SNIG_LONGITUD_ETRS89']}}</a> </td>
+                                            <td>{{item['30_SNIG_HOJA_MTN25']}}</td>
+                                            <td>{{item['31_SNIG_ORIGENCOOR']}}</td>
+                                            <td>{{item['32_SNIG_ORIGENALTITUD']}}</td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>

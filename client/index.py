@@ -341,7 +341,7 @@ def matching_spain(region=None):
                 '52' : 'Melilla ',
             }
     if region is None:
-
+ 
 
 
         return render_template('admin/matching-spain/region-list.html', data=Provincia)
@@ -351,8 +351,7 @@ def matching_spain(region=None):
         connection = MongoClient(mongo_config['host'], mongo_config['port'])
         db = connection.location
         data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
-        cnt =  db.internal.find({'20_SNIG_COD_PROV': int(region)}).count()
-        return render_template('admin/matching-spain/list.html', region=region, data=data, cnt=cnt)
+        return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], data=data)
 
 
 

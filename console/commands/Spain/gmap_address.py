@@ -337,7 +337,7 @@ for index, row in df.iterrows():
 			else:
 				gmap = gmap_by_address(adress)
 
-			# gmap['translate'] = getTranslate(adress)
+			gmap['translate'] = getTranslate(adress)
 		
 			
 			print (gmap)
