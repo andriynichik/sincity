@@ -22,10 +22,12 @@ class LoaderGMapsWithCache(GMaps):
 
         return result
 
+    def places_key(self, address):
+        return ['places', address, self._language]
 
     def by_places(self, address, use_cache=True):
         result = {}
-        key = self.address_key(address)
+        key = self.places_key(address)
         if use_cache:
             result = self.from_cache(key)
 
