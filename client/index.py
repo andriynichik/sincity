@@ -340,6 +340,11 @@ def matching_spain(region=None):
                 '51' : 'Ceuta ',
                 '52' : 'Melilla ',
             }
+    types = {"Municipio": ["administrative_area_level_4"],
+            "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
+            "Otras entidades": ["locality", "neighborhood"],
+            "Capital de municipio":["locality"],
+            "Entidad singular": ["locality"]}
     if region is None:
  
 
@@ -351,7 +356,7 @@ def matching_spain(region=None):
         connection = MongoClient(mongo_config['host'], mongo_config['port'])
         db = connection.location
         data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
-        return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], data=data)
+        return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], types=types, data=data)
 
 
 

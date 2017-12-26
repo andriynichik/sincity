@@ -2,7 +2,7 @@
 {% block body %}
 <script type="text/javascript">
     $(document).ready(function() {
-    var table = $('.js-exportable').DataTable( {
+    var table = $('.js-exportable').css("width", "").DataTable( {
         "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
         
         dom: 'Bflrtip',
@@ -11,6 +11,44 @@
         ],
 
     } );
+
+
+     $('#dropdown1').on('change', function () {
+                    table.columns(30).search( this.value ).draw();
+                } );
+     $('#dropdown2').on('change', function () {
+                    table.columns(29).search( this.value ).draw();
+                } );
+    $('#dropdown3').on('change', function () {
+                    table.columns(31).search( this.value ).draw();
+                } ); 
+//     $('select').on('change', function() {
+//     $.fn.dataTable.ext.search.push(
+//         function( settings, data, dataIndex ) {
+//             return parseFloat(data[8])>1
+//                 ? true
+//                 : false
+//         }     
+//     );
+//     table.draw();
+   
+// })
+
+    // table.yadcf([{
+    //     column_number: 0
+    // }, {
+    //     column_number: 1,
+    //     filter_type: "text"
+    // }, {
+    //     column_number: 2,
+    //     filter_type: "auto_complete"
+    // }, {
+    //     column_number: 3,
+    //     filter_type: "range_number_slider"
+    // }, {
+    //     column_number: 4
+    // }], 'footer');
+
 
     $('a.toggle-link-vis').on( 'click', function (e) {
         e.preventDefault();
@@ -86,8 +124,33 @@
                         - <a class="toggle-link-vis" data-column="26" style="color: red;" data-hide>30_SNIG_HOJA_MTN25</a>
                         - <a class="toggle-link-vis" data-column="27" style="color: red;" data-hide>31_SNIG_ORIGENCOOR</a>
                         - <a class="toggle-link-vis" data-column="28" style="color: red;" data-hide>32_SNIG_ORIGENALTITUD</a>
+                         <a class="toggle-link-vis" data-column="29" style="color: red;" data-hide></a>
+                          <a class="toggle-link-vis" data-column="30" style="color: red;" data-hide></a>
+                          <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide ></a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
+                    <label>INE_Name_w_Article ≠ gmap_name :</label>
+                    <select id="dropdown1">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+
+                    <label>GMap_type  ≠ SNIG_TIPO :</label>
+                    <select id="dropdown3">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+
+
+                     <label>distance > 1km : </label>
+                    <select id="dropdown2">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+                    
                     <div class="body">
                         <div class="table-responsive">
                             <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable">
@@ -122,6 +185,9 @@
                                     <th>30_SNIG_HOJA_MTN25</th>
                                     <th>31_SNIG_ORIGENCOOR</th>
                                     <th>32_SNIG_ORIGENALTITUD</th>
+                                    <th>distance > 1km</th>
+                                    <th>11_gmap_comparison</th>
+                                    <th>tp</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -155,6 +221,9 @@
                                     <th>30_SNIG_HOJA_MTN25</th>
                                     <th>31_SNIG_ORIGENCOOR</th>
                                     <th>32_SNIG_ORIGENALTITUD</th>
+                                    <th>distance > 1km</th>
+                                    <th>11_gmap_comparison</th>
+                                    <th>tp</th>
 
 
 
@@ -177,13 +246,24 @@
                                             <th>{{item['09_INE_Población']}}</th>
                                             {% if item['11_gmap_comparison'] %}
                                                    <td style="background-color: #9efb9e;">{{item['10_gmap_name']}}</td>
-                                                {% else %}
+                                            {% else %}
                                                     <td style="background-color: #f0b7ab;">{{item['10_gmap_name']}}</td>
-                                                {% endif %}
-                                            <td>{{item['12_gmap_type']}}</td>
+                                            {% endif %}
+                                            {% if item['12_gmap_type'] in types[item['25_SNIG_TIPO']] %}
+                                                   <td style="background-color: #9efb9e;">{{item['12_gmap_type']}}</td>
+                                            {% else %}
+                                                    <td style="background-color: #f0b7ab;">{{item['12_gmap_type']}}</td>
+                                            {% endif %}
+
+
                                             <td>{{item['13_GMap_requests']}}</td>
                                             <td>{{item['gmap_center']}}</td>
-                                            <td><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+
+                                            {% if item['15_GMap_center_SNIG_comparison'] != None and item['15_GMap_center_SNIG_comparison'] <= 1 %}
+                                                    <td  style="background-color: #9efb9e;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                            {% else %}
+                                                        <td style="background-color: #f0b7ab;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                            {% endif %}
                                             <td>{{item['gmap_bounds']}}</td>
                                             <td>{{item['17_gmap_admin_hierarchy']}}</td>
                                             <td>{{item['20_SNIG_COD_PROV']}}</td>
@@ -198,6 +278,19 @@
                                             <td>{{item['30_SNIG_HOJA_MTN25']}}</td>
                                             <td>{{item['31_SNIG_ORIGENCOOR']}}</td>
                                             <td>{{item['32_SNIG_ORIGENALTITUD']}}</td>
+                                            {% if item['15_GMap_center_SNIG_comparison'] != None and item['15_GMap_center_SNIG_comparison'] <= 1 %}
+                                                   <td style="background-color: #9efb9e;">true</td>
+                                            {% else %}
+                                                    <td style="background-color: #f0b7ab;">false</td>
+                                            {% endif %}
+                                            <td>{{item['11_gmap_comparison']}}</td>
+
+                                            {% if item['12_gmap_type'] in types[item['25_SNIG_TIPO']] %}
+                                                   <td style="background-color: #9efb9e;">true</td>
+                                            {% else %}
+                                                    <td style="background-color: #f0b7ab;">false</td>
+                                            {% endif %}
+                                            <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}
                                 </tbody>
