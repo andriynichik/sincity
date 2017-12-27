@@ -18,10 +18,21 @@ from lib.factory.Loader import Loader as LoaderFactory
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
 from lib.compare.Comparison import Comparison
 from lib.spider.Spider import Spider
-
+from forms import LoginForm
+from user import User
+from flask.ext.login import login_user, logout_user, login_required
+from flask import request, redirect, render_template, url_for, flash
+from flask.ext.login import LoginManager
 
 app = Flask(__name__)
+app.config.update(dict(
+    SECRET_KEY="d4MQDYRuUw",
+    WTF_CSRF_SECRET_KEY="h3PxyC5QSO"
+))
 
+lm = LoginManager()
+lm.init_app(app)
+lm.login_view = 'login'
 
 def escape(val):
     return re.escape(str(val))
@@ -32,13 +43,49 @@ def index():
     return render_template('admin/index.html')
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    if request.method == 'POST' and form.validate_on_submit():
+        user = db.users.find_one({"_id": form.username.data})
+        if user and User.validate_login(user['password'], form.password.data):
+            user_obj = User(user['_id'])
+            login_user(user_obj)
+            flash("Logged in successfully!", category='success')
+            return redirect(url_for('index'))
+        flash("Wrong username or password!", category='error')
+    return render_template('admin/login/sign-in.html', form=form)
+
+@lm.user_loader
+def load_user(username):
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    u = db.users.find_one({"_id": username})
+    if not u:
+        return None
+    return User(u['_id'])
+
+
+@app.route('/logout')
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
 @app.route('/internal')
 @app.route('/internal/<string:country>')
+@login_required
 def internal_list(country=None):
     return render_template('admin/internal/list.html', country=country)
 
 
 @app.route('/internal/unit/<string:id>')
+@login_required
 def internal_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding')
@@ -50,6 +97,7 @@ def internal_unit(id):
 @app.route('/internal/edit')
 @app.route('/internal/edit/<string:id>')
 @app.route('/internal/edit/<string:id>/<string:saved>')
+@login_required
 def internal_edit(id=None, saved=0):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding')
@@ -87,6 +135,7 @@ def internal_edit(id=None, saved=0):
 
 
 @app.route('/internal/save', methods=['POST'])
+@login_required
 def internal_save():
     post = request.form.copy()
     config = Config('./config/config.yml')
@@ -103,7 +152,7 @@ def internal_save():
         obj.update(_id=result.inserted_id)
     return redirect(url_for('internal_edit', id=obj.get('_id'), saved=1))
 
-
+@login_required
 def internal_form_mapping(data):
     obj = {
         'name': data.get('name', ''),
@@ -149,6 +198,7 @@ def internal_form_mapping(data):
 
 
 @app.route('/internal/delete/<string:id>')
+@login_required
 def internal_delete(id):
     config = Config('./config/config.yml')
     factory = DocFactory(config.get('mongodb'))
@@ -159,6 +209,7 @@ def internal_delete(id):
 
 @app.route('/data/<string:provider_type>.js')
 @app.route('/data/<string:provider_type>/<string:country>.js')
+@login_required
 def data_provider(provider_type, country=None):
     config = Config('./config/config.yml')
 
@@ -194,6 +245,7 @@ def data_provider(provider_type, country=None):
 
 
 @app.route('/data/matching-france-<string:region>.js')
+@login_required
 def matching_france_js(region):
     region = unquote_plus(region)
     #mode = request.args.get('mode', 'none')
@@ -261,6 +313,7 @@ def matching_france_js(region):
 
 @app.route('/matching/france/')
 @app.route('/matching/france/<string:region>')
+@login_required
 def matching_france(region=None):
     mode = request.args.get('mode', 'none')
     if region is None:
@@ -284,6 +337,7 @@ def matching_france(region=None):
 
 @app.route('/matching/spain/')
 @app.route('/matching/spain/<string:region>')
+@login_required
 def matching_spain(region=None):
     mode = request.args.get('mode', 'none')
     Provincia = {
@@ -362,11 +416,13 @@ def matching_spain(region=None):
 
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
+@login_required
 def gmaps_list(country=None):
     return render_template('admin/gmap/list.html', country=country)
 
 
 @app.route('/gmaps/unit/<string:id>')
+@login_required
 def gmaps_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding').get('key')
@@ -377,6 +433,7 @@ def gmaps_unit(id):
 
 
 @app.route('/gmaps/unit/code/<string:id>')
+@login_required
 def gmap_code_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding').get('key')
@@ -388,11 +445,13 @@ def gmap_code_unit(id):
 
 @app.route('/wiki/')
 @app.route('/wiki/<string:country>')
+@login_required
 def wiki_list(country=None):
     return render_template('admin/wiki/list.html', country=country)
 
 
 @app.route('/wiki/unit/<string:id>')
+@login_required
 def wiki_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding').get('key')
@@ -403,6 +462,7 @@ def wiki_unit(id):
 
 
 @app.route('/wiki/unit/code/<string:id>')
+@login_required
 def wiki_code_unit(id):
     config = Config('./config/config.yml')
     api_key = config.get('googlemaps').get('geocoding').get('key')
@@ -413,6 +473,7 @@ def wiki_code_unit(id):
 
 
 @app.route('/insee/unit/code/<string:id>')
+@login_required
 def insee_code_unit(id):
     config = Config('./config/config.yml')
     factory = DocFactory(config.get('mongodb'))
@@ -423,6 +484,7 @@ def insee_code_unit(id):
 
 @app.route('/tasks/<string:journal_id>')
 @app.route('/tasks/<string:journal_id>/<string:status>')
+@login_required
 def tasks_list(journal_id, status='active'):
     config = Config('./config/config.yml')
     storage = JobStorage(job_name=journal_id, storage_config=config.get('mongodb'))
@@ -441,6 +503,7 @@ def tasks_list(journal_id, status='active'):
 
 
 @app.route('/tasks/remove/<string:journal_id>')
+@login_required
 def clear_tasks(journal_id):
     config = Config('./config/config.yml')
     storage = JobStorage(job_name=journal_id, storage_config=config.get('mongodb'))
@@ -449,6 +512,7 @@ def clear_tasks(journal_id):
 
 
 @app.route('/logs/<string:name>/<int:status>')
+@login_required
 def logs(name, status=None):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -466,6 +530,7 @@ def logs(name, status=None):
 
 
 @app.route('/logs/remove/<string:name>')
+@login_required
 def clear_logs(name):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -474,6 +539,7 @@ def clear_logs(name):
 
 
 @app.route('/logs/close/<string:name>/<string:id>')
+@login_required
 def log_close(name, id):
     config = Config('./config/config.yml').get('mongodb')
     log = MongoDBLog(log_name=name, config=config)
@@ -481,6 +547,7 @@ def log_close(name, id):
 
 
 @app.route('/clear/wiki/<string:name>')
+@login_required
 def clear_wiki_country(name):
     config = Config('./config/config.yml').get('mongodb')
     factory = DocFactory(config)
@@ -490,6 +557,7 @@ def clear_wiki_country(name):
 
 
 @app.route('/clear/gmaps/<string:name>')
+@login_required
 def clear_gmaps_country(name):
     config = Config('./config/config.yml').get('mongodb')
     factory = DocFactory(config)
@@ -499,11 +567,13 @@ def clear_gmaps_country(name):
 
 
 @app.route('/test/wiki')
+@login_required
 def test_wiki():
     pass
 
 
 @app.route('/test/gmap')
+@login_required
 def test_gmap():
     get = request.args.copy()
     raw = {}
@@ -552,6 +622,7 @@ def test_gmap():
 
 
 @app.route('/recursive/parsed_page/<string:name>')
+@login_required
 def recursive_parsed_page_cache(name):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -561,6 +632,7 @@ def recursive_parsed_page_cache(name):
 
 
 @app.route('/recursive/parsed_page/drop/<string:name>')
+@login_required
 def recursive_parsed_page_drop(name):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -570,6 +642,7 @@ def recursive_parsed_page_drop(name):
 
 
 @app.route('/recursive/url_pool/drop/<string:name>')
+@login_required
 def recursive_url_pool_drop(name):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -579,6 +652,7 @@ def recursive_url_pool_drop(name):
 
 
 @app.route('/recursive/url_pool/<string:name>')
+@login_required
 def recursive_url_pool_cache(name):
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -588,6 +662,7 @@ def recursive_url_pool_cache(name):
 
 
 @app.route('/recursive')
+@login_required
 def recursive_cache_list():
     config = Config('./config/config.yml').get('mongodb')
     connection = MongoClient(config['host'], config['port'])
@@ -606,6 +681,7 @@ def recursive_cache_list():
 
 
 @app.route('/worth-it/<string:word>')
+@login_required
 def secret_page(word):
     md5 = hashlib.md5()
     md5.update(word.encode('utf-8'))
