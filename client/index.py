@@ -39,6 +39,7 @@ def escape(val):
 
 
 @app.route("/")
+@login_required
 def index():
     return render_template('admin/index.html')
 
