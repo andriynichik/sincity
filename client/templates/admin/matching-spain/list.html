@@ -22,6 +22,11 @@
     $('#dropdown3').on('change', function () {
                     table.columns(31).search( this.value ).draw();
                 } ); 
+        $('#dropdown4').on('change', function () {
+                    table.columns(32).search( this.value ).draw();
+                } ); 
+
+
 
 
     $('a.toggle-link-vis').on( 'click', function (e) {
@@ -42,6 +47,16 @@
 
         
     } );
+
+$('[name="WOFButton"]').on('click', function(event) {
+
+
+    $.post( "/matching-spain-update", { id: $(this).attr('id') })
+        .done(function( data ) {
+    alert( "Data Loaded: " + data );
+  });
+});
+
 } );
 
 </script>
@@ -101,6 +116,7 @@
                          <a class="toggle-link-vis" data-column="29" style="color: red;" data-hide></a>
                           <a class="toggle-link-vis" data-column="30" style="color: red;" data-hide></a>
                           <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide ></a>
+                           <a class="toggle-link-vis" data-column="32" style="color: red;" ></a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <label>INE_Name_w_Article ≠ gmap_name :</label>
@@ -123,6 +139,14 @@
                         <option value="">Всі результати</option>
                       <option value="true">true</option>
                       <option value="false">false</option>
+                    </select>
+
+                    <label>Status : </label>
+                    <select id="dropdown4">
+                        <option value="">Всі результати</option>
+                      <option value="TRUSTED">TRUSTED</option>
+                      <option value="Confirmed">Confirmed</option>
+                      <option value="Error">Error</option>
                     </select>
                     
                     <div class="body">
@@ -162,6 +186,7 @@
                                     <th>distance > 1km</th>
                                     <th>11_gmap_comparison</th>
                                     <th>tp</th>
+                                    <th>status</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -177,13 +202,13 @@
                                     <th>INE_Name_w_Article</th>
                                     <th>INE_Población</th>
                                     <th>gmap_name</th>
-                                     <th>GMap_type</th>
+                                    <th>GMap_type</th>
                                      <th>GMap_requests</th>
                                      <th>GMap_center</th>
                                      <th>15_GMap_center_SNIG_comparison</th>
-                                       <th>16_GMap_bounds</th>
-                                     <th>17_GMap_admin_hierarchy</th>
-                                     <th>20_SNIG_COD_PROV</th>
+                                    <th>16_GMap_bounds</th>
+                                    <th>17_GMap_admin_hierarchy</th>
+                                    <th>20_SNIG_COD_PROV</th>
                                     <th>21_SNIG_PROVINCIA</th>
                                     <th>22_SNIG_INEMUNI</th>
                                     <th>23_SNIG_CODIGOINE</th>
@@ -198,6 +223,7 @@
                                     <th>distance > 1km</th>
                                     <th>11_gmap_comparison</th>
                                     <th>tp</th>
+                                    <th>status</th>
 
 
 
@@ -218,12 +244,16 @@
                                             <td>{{item['07_INE_Nuclea_Name']}}</td>
                                             <td>{{item['08_INE_Name_w_Article']}}</td>
                                             <th>{{item['09_INE_Población']}}</th>
+                                           
                                             {% if item['11_gmap_comparison'] %}
+                                                {% set com = com +1 %}
                                                    <td style="background-color: #9efb9e;">{{item['10_gmap_name']}}</td>
+                                                
                                             {% else %}
                                                     <td style="background-color: #f0b7ab;">{{item['10_gmap_name']}}</td>
                                             {% endif %}
                                             {% if item['12_gmap_type'] in types[item['25_SNIG_TIPO']] %}
+                                             {% set com = com +1 %}
                                                    <td style="background-color: #9efb9e;">{{item['12_gmap_type']}}</td>
                                             {% else %}
                                                     <td style="background-color: #f0b7ab;">{{item['12_gmap_type']}}</td>
@@ -234,6 +264,7 @@
                                             <td>{{item['gmap_center']}}</td>
 
                                             {% if item['15_GMap_center_SNIG_comparison'] != None and item['15_GMap_center_SNIG_comparison'] <= 1 %}
+                                             {% set com = com +1 %}
                                                     <td  style="background-color: #9efb9e;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
                                             {% else %}
                                                         <td style="background-color: #f0b7ab;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
@@ -264,6 +295,14 @@
                                             {% else %}
                                                     <td style="background-color: #f0b7ab;">false</td>
                                             {% endif %}
+                                            {% if com == 3 %}
+                                                <td id="error"> <label class="label label-warning">TRUSTED</label>  <button name="WOFButton" id = "{{item['_id']}}"  type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                            {% elif com == 4   %}
+                                                <td id="good">   <label class="label label-success">Confirmed</label> </td>
+                                            {% else %}
+                                              <td><label class="label label-danger">Error</label>  <button  name="WOFButton" id = "{{item['_id']}}" type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                            {% endif %}
+                                           
                                             <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}

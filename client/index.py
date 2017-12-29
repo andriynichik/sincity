@@ -411,8 +411,19 @@ def matching_spain(region=None):
         connection = MongoClient(mongo_config['host'], mongo_config['port'])
         db = connection.location
         data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
-        return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], types=types, data=data)
+        return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], com = 0, types=types, data=data)
 
+@app.route('/matching-spain-update', methods=['GET', 'POST'])
+@login_required
+def update_status():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.internal.update({"_id" : request.form['id'] },{'$set' : {"status":4}})
+    return 'True'
 
 
 @app.route('/gmaps/')
