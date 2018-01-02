@@ -422,8 +422,8 @@ def update_status():
     mongo_config = config.get('mongodb')
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
-    db.internal.update({"_id" : request.form['id'] },{'$set' : {"status":4}})
-    return 'True'
+    db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    return request.form['id'] 
 
 
 @app.route('/gmaps/')

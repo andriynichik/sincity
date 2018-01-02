@@ -295,11 +295,11 @@ $('[name="WOFButton"]').on('click', function(event) {
                                             {% else %}
                                                     <td style="background-color: #f0b7ab;">false</td>
                                             {% endif %}
-                                            {% if com == 3 %}
+                                            {% if com == 3 and item['status'] != 4  %}
                                                 <td id="error"> <label class="label label-warning">TRUSTED</label>  <button name="WOFButton" id = "{{item['_id']}}"  type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
-                                            {% elif com == 4   %}
+                                            {% elif item['status'] == 4   %}
                                                 <td id="good">   <label class="label label-success">Confirmed</label> </td>
-                                            {% else %}
+                                            {% elif  item['status'] != 4 and com < 3  %}
                                               <td><label class="label label-danger">Error</label>  <button  name="WOFButton" id = "{{item['_id']}}" type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
                                             {% endif %}
                                            
