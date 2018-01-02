@@ -1,6 +1,68 @@
 {% extends "admin/layout.html" %}
 {% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('.js-exportable').css("width", "").DataTable( {
+        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
+        
+        dom: 'Bflrtip',
+        buttons: [
+            'csv', 'excel', 
+        ],
 
+    } );
+
+
+     $('#dropdown1').on('change', function () {
+                    table.columns(30).search( this.value ).draw();
+                } );
+     $('#dropdown2').on('change', function () {
+                    table.columns(29).search( this.value ).draw();
+                } );
+    $('#dropdown3').on('change', function () {
+                    table.columns(31).search( this.value ).draw();
+                } ); 
+        $('#dropdown4').on('change', function () {
+                    table.columns(32).search( this.value ).draw();
+                } ); 
+
+
+
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+
+        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
+           
+            $(this).removeAttr("style");
+         
+        } 
+        else { 
+
+            $(this).css('color', 'red');
+
+        }   
+
+        
+    } );
+// $('[name="WOFButton"]').on('click', function(event) {
+//     alert("clicked");
+//     // $('.Main').load('wof.html');
+// });
+// $('[name="WOFButton"]').on('click', function(event) {
+
+
+//     $.post( "/matching-spain-update", { id: $(this).attr('id') })
+//         .done(function( data ) {
+    
+//   });
+// });
+
+} );
+
+</script>
 <section class="content">
     <div class="container-fluid">
         <div class="block-header">
@@ -271,67 +333,5 @@ function cheked(id) {
     // document.getElementById("demo").innerHTML = "Hello World";
 }
 </script>
-<script type="text/javascript">
-    $(document).ready(function() {
-    var table = $('.js-exportable').css("width", "").DataTable( {
-        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
-        
-        dom: 'Bflrtip',
-        buttons: [
-            'csv', 'excel', 
-        ],
 
-    } );
-
-
-     $('#dropdown1').on('change', function () {
-                    table.columns(30).search( this.value ).draw();
-                } );
-     $('#dropdown2').on('change', function () {
-                    table.columns(29).search( this.value ).draw();
-                } );
-    $('#dropdown3').on('change', function () {
-                    table.columns(31).search( this.value ).draw();
-                } ); 
-        $('#dropdown4').on('change', function () {
-                    table.columns(32).search( this.value ).draw();
-                } ); 
-
-
-
-
-    $('a.toggle-link-vis').on( 'click', function (e) {
-        e.preventDefault();
-        var column = table.column($(this).attr('data-column'));
-        column.visible(!column.visible());
-
-        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
-           
-            $(this).removeAttr("style");
-         
-        } 
-        else { 
-
-            $(this).css('color', 'red');
-
-        }   
-
-        
-    } );
-// $('[name="WOFButton"]').on('click', function(event) {
-//     alert("clicked");
-//     // $('.Main').load('wof.html');
-// });
-// $('[name="WOFButton"]').on('click', function(event) {
-
-
-//     $.post( "/matching-spain-update", { id: $(this).attr('id') })
-//         .done(function( data ) {
-    
-//   });
-// });
-
-} );
-
-</script>
 {% endblock %}
