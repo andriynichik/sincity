@@ -352,7 +352,7 @@ for index, row in df.iterrows():
 			m = hashlib.sha512(str(codeIne).encode('utf-8')).hexdigest()
 			gmap['code'] = m
 			# wikidata = get_wiki(adress, Name_w_Article, row[1])
-			# print (gmap['center'])
+			# print (gmap['center'])	
 			if 'center' in gmap.keys():
 
 				gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],additional_INE['28_SNIG_LATITUD_ETRS89'],additional_INE['29_SNIG_LONGITUD_ETRS89'])

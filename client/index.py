@@ -23,6 +23,8 @@ from user import User
 from flask.ext.login import login_user, logout_user, login_required
 from flask import request, redirect, render_template, url_for, flash
 from flask.ext.login import LoginManager
+from lib.keygen.gmap_keygen import Keygen
+import json
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -424,6 +426,44 @@ def update_status():
     db = connection.location
     db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
     return request.form['id'] 
+
+
+@app.route('/spain-reparse_by_geocode', methods=['GET', 'POST'])
+@login_required
+def reparse_by_geocode():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    # use_cache = bool(get.get('use_cache', True))
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    doc = db.internal.find_one({"_id" : ObjectId(request.form['id']) })
+    
+    Key = Keygen()
+    keyAPI =  Key.get_key_place()
+    if not keyAPI:
+        sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
+    gmap_config = config.get('googlemaps')
+    # gmap_config.update(language=language)
+    language = 'es'
+
+    gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config,
+                                                            storage_config=config.get('mongodb'))
+    spider = Spider(
+            loader_factory=LoaderFactory,
+            gmap_parser=MapFactory.france,
+            language=language,
+            config=config,
+            # use_cache=use_cache
+        )
+
+    raw = gmap_loader.by_places(doc['08_INE_Name_w_Article'] + ', España')
+    
+    return json.dumps(raw)
+
 
 
 @app.route('/gmaps/')
