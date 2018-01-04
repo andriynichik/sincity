@@ -57,7 +57,7 @@
             .done(function( data ) {
                 console.log(JSON.parse(data))
                 arr = JSON.parse(data)
-                txt = esseyId+'<form>'
+                txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>'
                 for (var i = 0; i < arr.length; i++){
                     var obj = arr[i];
                     // for (var key in obj){
@@ -377,11 +377,12 @@
                     ...
 
                     </div>
-                   
+                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Ваш place_id">
+                   <button type="button"  class="btn btn-primary" onclick="by_my_place()">Save changes</button>
                 </form>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    
                 </div>
             </div>
         </div>
@@ -408,6 +409,15 @@ function reparse_by_geocode(id) {
         });
     // var id;
     // alert(id);
+}
+
+function by_my_place() {
+    var place_id = $('#place_id_reparse').val();
+    var mongo_id =  $('.mongo_pars_is').text();
+
+    repars(mongo_id, place_id);
+    var place_id = $('#place_id_reparse').val('');
+    // alert(mongo_id);
 }
 
 function repars(mongo_id, place_id) {
