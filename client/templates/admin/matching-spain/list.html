@@ -49,11 +49,11 @@
     } );
 
         $('#dataTable').css("width", "auto");
-          $('#edit-modal').on('show.bs.modal', function(e) {
+        $('#edit-modal').on('show.bs.modal', function(e) {
             
             var $modal = $(this),
                 esseyId = e.relatedTarget.id;
-                    $.post( "/spain-reparse_by_geocode", { id: esseyId })
+                    $.post( "/spain-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
             .done(function( data ) {
                 console.log(JSON.parse(data))
                 arr = JSON.parse(data)
@@ -292,16 +292,16 @@
                                            
                                             {% if item['11_gmap_comparison'] %}
                                                 {% set com = com +1 %}
-                                                <td style="background-color: #9efb9e;"><div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>{{item['10_gmap_name']}}</td>
+                                                <td  class="gmap_name_{{item['_id']}}" style="background-color: #9efb9e;"><div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>{{item['10_gmap_name']}}</td>
                                                 
                                             {% else %}
-                                                <td style="background-color: #f0b7ab;">    <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['10_gmap_name']}}</td>
+                                                <td  class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">    <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['10_gmap_name']}}</td>
                                             {% endif %}
                                             {% if item['12_gmap_type'] in types[item['25_SNIG_TIPO']] %}
                                              {% set com = com +1 %}
-                                                <td style="background-color: #9efb9e;">{{item['12_gmap_type']}}</td>
+                                                <td class="gmap_type_{{item['_id']}}" style="background-color: #9efb9e;">{{item['12_gmap_type']}}</td>
                                             {% else %}
-                                                <td style="background-color: #f0b7ab;">{{item['12_gmap_type']}}</td>
+                                                <td class="gmap_type_{{item['_id']}}" style="background-color: #f0b7ab;">{{item['12_gmap_type']}}</td>
                                             {% endif %}
 
 
@@ -310,9 +310,9 @@
 
                                             {% if item['15_GMap_center_SNIG_comparison'] != None and item['15_GMap_center_SNIG_comparison'] <= 1 %}
                                              {% set com = com +1 %}
-                                                    <td  style="background-color: #9efb9e;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                                    <td  class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
                                             {% else %}
-                                                        <td style="background-color: #f0b7ab;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;"><a target="_blank" href="{{item['15_gmap_comparison_url']}}">{{item['15_GMap_center_SNIG_comparison']}}</a></td>
                                             {% endif %}
                                             <td>{{item['gmap_bounds']}}</td>
                                             <td>{{item['17_gmap_admin_hierarchy']}}</td>
@@ -329,7 +329,7 @@
                                             <td>{{item['31_SNIG_ORIGENCOOR']}}</td>
                                             <td>{{item['32_SNIG_ORIGENALTITUD']}}</td>
                                             {% if item['15_GMap_center_SNIG_comparison'] != None and item['15_GMap_center_SNIG_comparison'] <= 1 %}
-                                                   <td style="background-color: #9efb9e;">true</td>
+                                                   <td  style="background-color: #9efb9e;">true</td>
                                             {% else %}
                                                     <td style="background-color: #f0b7ab;">false</td>
                                             {% endif %}
@@ -342,7 +342,7 @@
                                             {% endif %}
                                             {% if com == 3 and item['status'] != 4  %}
                                                 <td  id = "{{item['_id']}}"> <label class="label label-warning">TRUSTED</label>  <button onclick="cheked('{{item['_id']}}')" name="WOFButton" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
-                                            {% elif item['status'] == 4   %}
+                                            {% elif item['status'] == 4  %}
                                                 <td id="status">   <label class="label label-success">Confirmed</label> </td>
                                             {% elif  item['status'] != 4 and com < 3  %}
                                               <td  id = "{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
@@ -401,7 +401,7 @@ function cheked(id) {
 
 function reparse_by_geocode(id) {
     
-    $.post( "/spain-reparse_by_geocode", { id: id })
+    $.post( "/spain-reparse_by_geocode", { id: id, type: 'autocomplete' })
             .done(function( data ) {
                 
             alert(data)
@@ -411,9 +411,33 @@ function reparse_by_geocode(id) {
 }
 
 function repars(mongo_id, place_id) {
-    var mongo_id;
-    var place_id;
-    alert(place_id);
+        $.post( "/spain-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+            .done(function( data ) {
+                arr = JSON.parse(data)
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gm_comp = "<a target='_blank' href='"+arr['15_gmap_comparison_url']+"'>"+arr['15_GMap_center_SNIG_comparison']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+
+                if (arr['gmap_type_status']) {
+                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+                if (arr['gmap_name_status']) {
+                    $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+
+                if (arr['gmap_comp_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+        });
 }
 </script>
 

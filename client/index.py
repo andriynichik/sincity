@@ -25,6 +25,7 @@ from flask import request, redirect, render_template, url_for, flash
 from flask.ext.login import LoginManager
 from lib.keygen.gmap_keygen import Keygen
 import json
+import requests
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -337,7 +338,9 @@ def matching_france(region=None):
     else:
         return render_template('admin/matching-france/list.html', region=region, mode=mode)
 
-
+##############################################
+# SPAIN
+##############################################
 @app.route('/matching/spain/')
 @app.route('/matching/spain/<string:region>')
 @login_required
@@ -428,6 +431,20 @@ def update_status():
     return request.form['id'] 
 
 
+def getDistance(lat1,lon1,lat2,lon2):
+    Key = Keygen()
+    url = 'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins='+str(lat1)+','+str(lon1)+'&destinations='+str(lat2)+','+str(lon2)+'&key='+str(Key.get_key_distance())+''
+    # print(url)
+    response = requests.get(url)
+    data = response.json()
+    try:
+        resp = data['rows'][0]['elements'][0]['distance']['value'] / 1000
+    except Exception as e:
+        resp = 0
+    
+    print (round(resp, 2))
+    return round(resp, 2)
+
 @app.route('/spain-reparse_by_geocode', methods=['GET', 'POST'])
 @login_required
 def reparse_by_geocode():
@@ -439,7 +456,7 @@ def reparse_by_geocode():
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
     doc = db.internal.find_one({"_id" : ObjectId(request.form['id']) })
-    
+    doc_factory = DocFactory(config.get('mongodb'))
     Key = Keygen()
     keyAPI =  Key.get_key_place()
     if not keyAPI:
@@ -454,17 +471,79 @@ def reparse_by_geocode():
                                                             storage_config=config.get('mongodb'))
     spider = Spider(
             loader_factory=LoaderFactory,
-            gmap_parser=MapFactory.france,
+            gmap_parser=MapFactory.spain,
+            doc_factory=doc_factory,
             language=language,
             config=config,
-            # use_cache=use_cache
+            use_cache=True
+    )
+    if request.form['type'] == "autocomplete":
+        raw = gmap_loader.by_places(doc['08_INE_Name_w_Article'] + ', España')
+        return json.dumps(raw)
+    else:
+        objects = spider.get_gmap_place_id(request.form['place_id'])
+        gmap = {}
+        gmap = objects[0].get_document()
+        try:
+            if gmap['name'].lower().lstrip().strip() == doc['08_INE_Name_w_Article'].lower().lstrip().strip():
+                gmap['comparison'] = True
+            else:
+                gmap['comparison'] = False
+        except Exception as e: 
+            gmap['comparison'] = False
+
+        gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        gmap['15_gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc['28_SNIG_LATITUD_ETRS89'])+","+str(doc['29_SNIG_LONGITUD_ETRS89'])+"")
+        db.internal.update_one(
+                {"_id": ObjectId(request.form['id']) },
+                    {
+                        "$set": {
+                        "10_gmap_name": gmap.get('name'),
+                        "17_gmap_admin_hierarchy": gmap.get('admin_hierarchy', {}),
+                        "gmap_center": gmap.get('center'),
+                        "gmap_bounds": gmap.get('bounds'),
+                        "12_gmap_type": gmap.get('type'),
+                        "15_GMap_center_SNIG_comparison": gmap.get('15_GMap_center_SNIG_comparison'),
+                        "15_gmap_comparison_url": gmap.get('15_gmap_comparison_url'),
+                        "11_gmap_comparison" : gmap['comparison']
+                        
+                    }
+               }
         )
+        gmap.pop('_id')
+        gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        if gmap['15_GMap_center_SNIG_comparison'] <= 1:
+            gm_comp_status = True
+        else:
+            gm_comp_status = False
 
-    raw = gmap_loader.by_places(doc['08_INE_Name_w_Article'] + ', España')
-    
-    return json.dumps(raw)
+        types = {"Municipio": ["administrative_area_level_4"],
+            "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
+            "Otras entidades": ["locality", "neighborhood"],
+            "Capital de municipio":["locality"],
+            "Entidad singular": ["locality"]}
+        if gmap.get('type') in types[doc['25_SNIG_TIPO']]:
+            gm_type_status = True
+        else:
+            gm_type_status = False
+
+        raw = {
+                "gmap_name": gmap.get('name'),
+                "gmap_name_status" : gmap['comparison'],
+                "gmap_type": gmap.get('type'),
+                "15_GMap_center_SNIG_comparison": gmap.get('15_GMap_center_SNIG_comparison'),
+                "15_gmap_comparison_url": gmap.get('15_gmap_comparison_url'),
+                "gmap_comp_status":gm_comp_status,
+                "gmap_type_status":gm_type_status,
+
+            }
+        
+        return json.dumps(raw)
 
 
+##############################################
+# END SPAIN
+##############################################
 
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
