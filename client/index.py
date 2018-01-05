@@ -21,11 +21,12 @@ from lib.spider.Spider import Spider
 from forms import LoginForm
 from user import User
 from flask.ext.login import login_user, logout_user, login_required
-from flask import request, redirect, render_template, url_for, flash
+from flask import request, redirect, render_template, url_for, flash, session, abort
 from flask.ext.login import LoginManager
 from lib.keygen.gmap_keygen import Keygen
 import json
 import requests
+import random
 
 app = Flask(__name__)
 app.config.update(dict(
@@ -46,6 +47,39 @@ def escape(val):
 def index():
     return render_template('admin/index.html')
 
+def generate_code():
+    return str(random.randrange(100000, 999999))
+
+def send_confirmation_code(to_number):
+    verification_code = generate_code()
+    session['verification_code'] = verification_code
+    headers = {'Content-type': 'application/json',  
+           'Accept': 'text/plain',
+           'Content-Encoding': 'utf-8'}
+    data = {"to":str(to_number) , "message":"Код підтвердження авторизації Sinoptik Parser: "+str(verification_code)+""}
+    response = requests.post('http://sms-gate.ukr.net/sms/send', data=json.dumps(data), headers=headers)
+
+    # verification_code = generate_code()
+    # send_sms(to_number, verification_code)
+    # session['verification_code'] = verification_code
+    # return verification_code
+
+
+@app.route("/confirm", methods=['GET', 'POST'] )
+def confirm():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    user = db.users.find_one({"_id": session.get('userphone', '')}) or abort(401)
+    print (session.get('userphone', ''))
+    if request.method == 'POST':
+        if request.form['verification_code'] == session['verification_code']:
+            user_obj = User(user['_id'])
+            login_user(user_obj)
+            return redirect(url_for('index'))
+    return render_template('admin/login/confirm.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -57,10 +91,13 @@ def login():
     if request.method == 'POST' and form.validate_on_submit():
         user = db.users.find_one({"_id": form.username.data})
         if user and User.validate_login(user['password'], form.password.data):
-            user_obj = User(user['_id'])
-            login_user(user_obj)
+            # user_obj = User(user['_id'])
+            session['userphone'] = user['_id']
+            send_confirmation_code(user['_id'])
+            return redirect(url_for('confirm'))
+            # login_user(user_obj)
             flash("Logged in successfully!", category='success')
-            return redirect(url_for('index'))
+            # return redirect(url_for('index'))
         flash("Wrong username or password!", category='error')
     return render_template('admin/login/sign-in.html', form=form)
 
@@ -79,6 +116,7 @@ def load_user(username):
 @app.route('/logout')
 def logout():
     logout_user()
+    session.clear()
     return redirect(url_for('login'))
 
 @app.route('/internal')
@@ -511,7 +549,7 @@ def reparse_by_geocode():
                }
         )
         gmap.pop('_id')
-        gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
         if gmap['15_GMap_center_SNIG_comparison'] <= 1:
             gm_comp_status = True
         else:

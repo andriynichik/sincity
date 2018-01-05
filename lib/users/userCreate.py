@@ -10,7 +10,7 @@ def main():
     mongo_config = config.get('mongodb')
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.local
-    user = input("Enter your username: ")
+    user = input("Enter your phone number (format - 380630000000 ): ")
     password = input("Enter your password: ")
     pass_hash = generate_password_hash(password, method='pbkdf2:sha256')
 
