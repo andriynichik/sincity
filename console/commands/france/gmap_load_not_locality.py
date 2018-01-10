@@ -132,11 +132,28 @@ def gmap_by_address(wiki):
     address = []
     for name, value in wiki.get('admin_hierarchy', {}).items():
         address.append(value.get('name'))
-    address = address[0:3]
+    address = address[0:2]
     address.append(wiki.get('name'))
+    address = list(reversed(address))
     address_str = ','.join(address).replace('Agglomération', ' ').replace(' d\'', ' ').replace('Arrondissement de ', '').replace('Arrondissement ', '').replace('Canton de ', '')
     print(address_str)
-    #places = spider.get_place_ids_by_address_for_type(address=address_str)
+    type = wiki.get('type')
+    if type:
+        g_type = 'locality'
+        places = spider.get_place_ids_by_address_for_type(address=address_str,type=g_type)
+        if len(places):
+            gmap_loader.by_place_id(place_id=places[0])
+            response = gmap_loader.by_address(address=address_str)
+            map_objects = MapFactory.france(response)
+
+            gmap_dic = {}
+            if map_objects:
+                gmap_dic = map_objects[0].as_dictionary()
+                gmap_dic.update(language=language)
+
+            return gmap_dic
+
+
     response = gmap_loader.by_address(address=address_str)
     map_objects = MapFactory.france(response)
 
