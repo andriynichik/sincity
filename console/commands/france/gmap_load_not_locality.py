@@ -2,7 +2,9 @@ from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.factory.Loader import Loader
 from lib.config.Yaml import Yaml as Config
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
-
+from lib.factory.Loader import Loader as LoaderFactory
+from lib.parser.wiki.France import France as ParserFranceWiki
+from lib.spider.Spider import Spider
 
 config = Config('./config/config.yml')
 
@@ -23,6 +25,19 @@ document_filter = {
     'name': {'$exists': True, '$not': {'$size': 0}},
     '$and': [{'admin_hierarchy.ADMIN_LEVEL_1.name': 'France'}]
 }
+
+spider = Spider(
+    loader_factory=LoaderFactory,
+    gmap_parser=MapFactory.france,
+    wiki_parser=ParserFranceWiki,
+    doc_factory=doc_factory,
+    language=language,
+    config=config,
+    use_cache=True
+)
+
+
+
 
 objects = internal_docs.find(document_filter)
 
@@ -121,6 +136,7 @@ def gmap_by_address(wiki):
     address.append(wiki.get('name'))
     address_str = ','.join(address).replace('Agglomération', ' ').replace(' d\'', ' ').replace('Arrondissement de ', '').replace('Arrondissement ', '').replace('Canton de ', '')
     print(address_str)
+    #places = spider.get_place_ids_by_address_for_type(address=address_str)
     response = gmap_loader.by_address(address=address_str)
     map_objects = MapFactory.france(response)
 
@@ -147,11 +163,17 @@ for obj in objects:
         if not type_doc:
             empty_doc = empty_doc + 1
             print(wiki_doc.get('type'))
-            result = gmap_by_address(wiki_doc)
+            if gmap_doc.get('code') and len(gmap_doc.get('code')) < 32:
+                g_objects = gmap_loader.by_place_id(gmap_doc.get('code'))
+                map_objects = MapFactory.france(g_objects)
+                result = map_objects[0].as_dictionary()
+                result.update(language=language)
+            else:
+                result = gmap_by_address(wiki_doc)
             if result:
                 gmap_obj = doc_factory.gmaps(code=result.get('code'))
                 doc = gmap_obj.get_document()
-                gmap_obj.update(new_data=gmap_obj.get_document())
+                gmap_obj.update(new_data=result)
 
                 source = obj.get('source', {})
                 source.update(gmap=doc.get('code'))
@@ -167,7 +189,7 @@ for obj in objects:
             if result:
                 gmap_obj = doc_factory.gmaps(code=result.get('code'))
                 doc = gmap_obj.get_document()
-                gmap_obj.update(new_data=gmap_obj.get_document())
+                gmap_obj.update(new_data=result)
 
                 source = obj.get('source', {})
                 source.update(gmap=doc.get('code'))
