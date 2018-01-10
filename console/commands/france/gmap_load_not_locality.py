@@ -141,6 +141,7 @@ def gmap_by_address(wiki):
     if type:
         g_type = 'locality'
         places = spider.get_place_ids_by_address_for_type(address=address_str,type=g_type)
+        print(places)
         if len(places):
             gmap_loader.by_place_id(place_id=places[0])
             response = gmap_loader.by_address(address=address_str)
