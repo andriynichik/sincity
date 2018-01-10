@@ -163,13 +163,13 @@ for obj in objects:
         if not type_doc:
             empty_doc = empty_doc + 1
             print(wiki_doc.get('type'))
-            if gmap_doc.get('code') and len(gmap_doc.get('code')) < 32:
-                g_objects = gmap_loader.by_place_id(gmap_doc.get('code'))
-                map_objects = MapFactory.france(g_objects)
-                result = map_objects[0].as_dictionary()
-                result.update(language=language)
-            else:
-                result = gmap_by_address(wiki_doc)
+            #if gmap_doc.get('code') and len(gmap_doc.get('code')) < 32:
+            #    g_objects = gmap_loader.by_place_id(gmap_doc.get('code'))
+            #    map_objects = MapFactory.france(g_objects)
+            #    result = map_objects[0].as_dictionary()
+            #    result.update(language=language)
+            #else:
+            result = gmap_by_address(wiki_doc)
             if result:
                 gmap_obj = doc_factory.gmaps(code=result.get('code'))
                 doc = gmap_obj.get_document()
