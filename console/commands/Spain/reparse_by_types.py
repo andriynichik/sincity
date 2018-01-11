@@ -71,7 +71,7 @@ mongo_config = config.get('mongodb')
 connection = pymongo.MongoClient(mongo_config['host'], mongo_config['port'])
 db = connection.location
 
-for doc in db.internal.find():
+for doc in db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
 	print (doc['25_SNIG_TIPO'])
 	try:
 		print (doc['12_gmap_type'])
