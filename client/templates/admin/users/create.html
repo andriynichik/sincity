@@ -1,0 +1,73 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+    <section class="content">
+        <div class="container-fluid">
+            <div class="block-header">
+                
+            </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                Створення користувачів
+                            </h2>
+                        </div>
+                        <div class="body">
+                            <form method="post" action="{{ url_for('user_create') }}">
+                                <div class="row clearfix">
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input  type="tel"  name="phone" class="form-control" required />
+                                                <label class="form-label">(Номер телефону в форматі 360630000000)</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input  type="text" name="password" class="form-control" required/>
+                                                <label class="form-label">Пароль</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input  type="email" name="email" class="form-control"/>
+                                                <label class="form-label">email</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <div class="form-group form-float">
+                                            <div class="form-line">
+                                                <input type="text" name="username" class="form-control"/>
+                                                <label class="form-label">Прізвище імя Побатькові</label>
+                                            </div>
+                                        </div>
+                                    </div>
+               
+                                </div>
+
+
+         
+                                <input type="submit" value="Send" class="btn btn-primary m-t-15 waves-effect">
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+<!-- Autosize Plugin Js -->
+<script src="../plugins/autosize/autosize.js"></script>
+
+<script>
+    autosize($('textarea.auto-growth'));
+</script>
+{% endblock %}

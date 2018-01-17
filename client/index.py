@@ -5,6 +5,7 @@ from lib.config.Yaml import Yaml as Config
 from lib.job.storage.MongoDB import MongoDB as JobStorage
 from pymongo import MongoClient
 import re
+from werkzeug.security import generate_password_hash
 from lib.location.Wiki import Wiki
 from lib.location.GMap import GMap
 from lib.logger.MongoDB import MongoDB as MongoDBLog
@@ -583,6 +584,32 @@ def reparse_by_geocode():
 # END SPAIN
 ##############################################
 
+
+@app.route('/users/create',  methods=['GET', 'POST'] )
+@login_required
+def user_create():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    if request.method == 'POST':
+        pass_hash = generate_password_hash(request.form['password'], method='pbkdf2:sha256')
+        db.users.insert({"_id": request.form['phone'], "password": pass_hash, "userName": request.form['username'], "userEmail":request.form['email'], "phone": '+'+str(request.form['phone']) })
+        return redirect(url_for('user_list'))
+    return render_template('admin/users/create.html')
+
+@app.route('/users/list')
+@login_required
+def user_list():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    data = db.users.find()
+    return render_template('admin/users/list.html', data=data)
+    # return render_template('admin/users/create.html')
+
+
 @app.route('/gmaps/')
 @app.route('/gmaps/<string:country>')
 @login_required
@@ -622,7 +649,7 @@ def wiki_list(country=None):
 @app.route('/wiki/unit/<string:id>')
 @login_required
 def wiki_unit(id):
-    config = Config('./config/config.yml')
+    config = Config('./config/config.yml') 
     api_key = config.get('googlemaps').get('geocoding').get('key')
     factory = DocFactory(config.get('mongodb'))
     collection = factory.wiki_collection()
