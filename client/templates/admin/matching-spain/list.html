@@ -341,11 +341,11 @@
                                                     <td style="background-color: #f0b7ab;">false</td>
                                             {% endif %}
                                             {% if com == 3 and item['status'] != 4  %}
-                                                <td  id = "{{item['_id']}}"> <label class="label label-warning">TRUSTED</label>  <button onclick="cheked('{{item['_id']}}')" name="WOFButton" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                                <td id="status_{{item['_id']}}"> <label class="label label-warning">TRUSTED</label>  <button onclick="cheked('{{item['_id']}}')" name="WOFButton" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
                                             {% elif item['status'] == 4  %}
-                                                <td id="status">   <label class="label label-success">Confirmed</label> </td>
+                                                <td id="status_{{item['_id']}}">   <label class="label label-success">Confirmed</label> <button onclick="dell('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i></button>  </td>
                                             {% elif  item['status'] != 4 and com < 3  %}
-                                              <td  id = "{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                              <td  id="status_{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
                                             {% endif %}
                                            
                                             <!-- <td></td> -->
@@ -391,14 +391,27 @@
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
 <script type="text/javascript">
+
 function cheked(id) {
        var id;
           $.post( "/matching-spain-update", { id: id })
             .done(function( data ) {
-                 document.getElementById(id).innerHTML = "<label class='label label-success'>Confirmed</label>";
+                 document.getElementById('status_'+id).innerHTML = '<label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
     
         });
 }
+
+function dell(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-spain-delete-confirm", { id: id })
+            .done(function( data ) {
+                 document.getElementById('status_'+id).innerHTML =      '  <td  id="status_'+id+'"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>';
+    
+        });
+}
+
+
 
 function reparse_by_geocode(id) {
     

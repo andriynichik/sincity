@@ -381,9 +381,9 @@ def matching_france(region=None):
 # SPAIN
 ##############################################
 @app.route('/matching/spain/')
-@app.route('/matching/spain/<string:region>')
+@app.route('/matching/spain/<string:region>/<string:provincia>')
 @login_required
-def matching_spain(region=None):
+def matching_spain(region=None, provincia=None):
     mode = request.args.get('mode', 'none')
     Provincia = {
                 '01' : 'Araba (Álava)',
@@ -467,6 +467,18 @@ def update_status():
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
     db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/matching-spain-delete-confirm', methods=['GET', 'POST'])
+@login_required
+def delete_status_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status":4}})
     return request.form['id'] 
 
 
@@ -606,6 +618,7 @@ def user_list():
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.local
     data = db.users.find()
+
     return render_template('admin/users/list.html', data=data)
     # return render_template('admin/users/create.html')
 
