@@ -20,11 +20,11 @@ RUN pip install Flask==0.12.2
 
 ENV PYTHONPATH "$PYTHONPATH:/app/"
 ENV PYTHONIOENCODING "utf-8"
-ENV FLASK_APP "/app/client/index.py"
+ENV FLASK_APP /app/client/app
 ENV FLASK_DEBUG 1
 
 WORKDIR /app
 
-RUN git clone https://github.com/bpteam/WebCrawler_FR.git .
+pip install -e ./client
 
 CMD ["flask", "run", "--host=0.0.0.0"]

@@ -1,7 +1,10 @@
 Sindev
 
+First setup
+pip install -e ./client
+
 Run flask
-PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/index.py PYTHONIOENCODING=utf-8 FLASK_DEBUG=1 flask run >& /dev/null &
+PYTHONPATH=/var/www/webcrawler FLASK_APP=/var/www/webcrawler/client/app PYTHONIOENCODING=utf-8 FLASK_DEBUG=1 flask run >& /dev/null &
 
 Worker run
 python3.6 console/workers/italy/wiki_task_recursive.py -t italy_recursive_2017-09-19-01-42-11 >& /dev/null &

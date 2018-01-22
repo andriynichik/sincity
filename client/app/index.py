@@ -1,4 +1,4 @@
-from flask import Flask
+from app import app
 from flask import render_template
 from lib.factory.StorageLocation import StorageLocation as DocFactory
 from lib.config.Yaml import Yaml as Config
@@ -19,8 +19,8 @@ from lib.factory.Loader import Loader as LoaderFactory
 from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
 from lib.compare.Comparison import Comparison
 from lib.spider.Spider import Spider
-from forms import LoginForm
-from user import User
+from app.forms import LoginForm
+from app.user import User
 from flask.ext.login import login_user, logout_user, login_required
 from flask import request, redirect, render_template, url_for, flash, session, abort
 from flask.ext.login import LoginManager
@@ -29,7 +29,6 @@ import json
 import requests
 import random
 
-app = Flask(__name__)
 app.config.update(dict(
     SECRET_KEY="d4MQDYRuUw",
     WTF_CSRF_SECRET_KEY="h3PxyC5QSO"
