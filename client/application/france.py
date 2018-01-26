@@ -2,14 +2,13 @@ from application import app
 from flask.ext.login import login_user, logout_user, login_required
 from lib.config.Yaml import Yaml as Config
 from lib.factory.StorageLocation import StorageLocation as DocFactory
-from flask import render_template
 from urllib.parse import unquote_plus
 from lib.compare.Comparison import Comparison
-from re import escape
+from application.index import escape
 from flask import request, redirect, render_template, url_for, flash, session, abort
 
 @app.route('/data/matching-france-<string:region>.js')
-@login_required
+#@login_required
 def matching_france_js(region):
     region = unquote_plus(region)
     #mode = request.args.get('mode', 'none')
@@ -77,7 +76,7 @@ def matching_france_js(region):
 
 @app.route('/matching/france/')
 @app.route('/matching/france/<string:region>')
-@login_required
+#@login_required
 def matching_france(region=None):
     mode = request.args.get('mode', 'none')
     if region is None:
@@ -100,7 +99,7 @@ def matching_france(region=None):
 
 
 @app.route('/insee/unit/code/<string:id>')
-@login_required
+#@login_required
 def insee_code_unit(id):
     config = Config('./config/config.yml')
     factory = DocFactory(config.get('mongodb'))

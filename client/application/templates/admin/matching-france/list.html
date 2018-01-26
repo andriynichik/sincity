@@ -127,6 +127,14 @@
                                         class="lever"></span>ON</label> INSEE name ≠ Wiki name
                             </div>
                         </div>
+
+                        <label for="insee_name_not_wiki_name">INSEE name ≠ Wiki name </label>
+                        <select class="switch-for-filter" data-field="75" id="insee_name_not_wiki_name">
+                            <option value="">Off</option>
+                            <option value="1">Yes</option>
+                            <option value="0">No</option>
+                        </select>
+
                     </div>
 
                     <div class="body">
@@ -134,92 +142,92 @@
                             <table class="table table-bordered table-striped table-hover dataTable js-exportable">
                                 <thead>
                                 <tr>
-                                    <th>#</th>
-                                    <th>InseeXls_CodeCommune</th>
-                                    <th>InseeXls_NameCommune</th>
-                                    <th>InseeXls_Population</th>
-                                    <th>Name</th>
-                                    <th>Type</th>
-                                    <th>AdmL1</th>
-                                    <th>AdmL2</th>
-                                    <th>AdmL3</th>
-                                    <th>AdmL4</th>
-                                    <th>AdmL5</th>
-                                    <th>AdmL6</th>
-                                    <th>AdmL7</th>
-                                    <th>AdmL8</th>
-                                    <th>Capital</th>
-                                    <th>Center</th>
-                                    <th>Population</th>
-                                    <th>Postal codes</th>
+                                    <th data-n="0">#</th>
+                                    <th data-n="1">InseeXls_CodeCommune</th>
+                                    <th data-n="2">InseeXls_NameCommune</th>
+                                    <th data-n="3">InseeXls_Population</th>
+                                    <th data-n="4">Name</th>
+                                    <th data-n="5">Type</th>
+                                    <th data-n="6">AdmL1</th>
+                                    <th data-n="7">AdmL2</th>
+                                    <th data-n="8">AdmL3</th>
+                                    <th data-n="9">AdmL4</th>
+                                    <th data-n="10">AdmL5</th>
+                                    <th data-n="11">AdmL6</th>
+                                    <th data-n="12">AdmL7</th>
+                                    <th data-n="13">AdmL8</th>
+                                    <th data-n="14">Capital</th>
+                                    <th data-n="15">Center</th>
+                                    <th data-n="16">Population</th>
+                                    <th data-n="17">Postal codes</th>
 
-                                    <th>Wiki #</th>
-                                    <th>Wiki Name</th>
-                                    <th>Wiki True Name</th>
-                                    <th>Wiki Type</th>
-                                    <th>Wiki AdmL1</th>
-                                    <th>Wiki AdmL2</th>
-                                    <th>Wiki AdmL3</th>
-                                    <th>Wiki AdmL4</th>
-                                    <th>Wiki AdmL5</th>
-                                    <th>Wiki AdmL6</th>
-                                    <th>Wiki AdmL7</th>
-                                    <th>Wiki AdmL8</th>
-                                    <th>Wiki Capital</th>
-                                    <th>Wiki Position</th>
-                                    <th>Wiki Altitude</th>
-                                    <th>Wiki Population</th>
-                                    <th>Wiki Density</th>
-                                    <th>Wiki Area</th>
-                                    <th>Wiki Postal code</th>
-                                    <th>Wiki Communes</th>
-                                    <th>Wiki Canton codes</th>
-                                    <th>Wiki Commune code</th>
-
-
-                                    <th>Gmap #</th>
-                                    <th>Gmap Name</th>
-                                    <th>Gmap True Name</th>
-                                    <th>Gmap Short name</th>
-                                    <th>Gmap Admin Level</th>
-                                    <th>Gmap AdmL1</th>
-                                    <th>Gmap AdmL2</th>
-                                    <th>Gmap AdmL3</th>
-                                    <th>Gmap AdmL4</th>
-                                    <th>Gmap AdmL5</th>
-                                    <th>Gmap AdmL6</th>
-                                    <th>Gmap AdmL7</th>
-                                    <th>Gmap AdmL8</th>
-                                    <th>Gmap Position</th>
-                                    <th>Gmap Bounds</th>
-                                    <th>Gmap Postal code</th>
+                                    <th data-n="18">Wiki #</th>
+                                    <th data-n="19">Wiki Name</th>
+                                    <th data-n="20">Wiki True Name</th>
+                                    <th data-n="21">Wiki Type</th>
+                                    <th data-n="22">Wiki AdmL1</th>
+                                    <th data-n="23">Wiki AdmL2</th>
+                                    <th data-n="24">Wiki AdmL3</th>
+                                    <th data-n="25">Wiki AdmL4</th>
+                                    <th data-n="26">Wiki AdmL5</th>
+                                    <th data-n="27">Wiki AdmL6</th>
+                                    <th data-n="28">Wiki AdmL7</th>
+                                    <th data-n="29">Wiki AdmL8</th>
+                                    <th data-n="30">Wiki Capital</th>
+                                    <th data-n="31">Wiki Position</th>
+                                    <th data-n="32">Wiki Altitude</th>
+                                    <th data-n="33">Wiki Population</th>
+                                    <th data-n="34">Wiki Density</th>
+                                    <th data-n="35">Wiki Area</th>
+                                    <th data-n="36">Wiki Postal code</th>
+                                    <th data-n="37">Wiki Communes</th>
+                                    <th data-n="38">Wiki Canton codes</th>
+                                    <th data-n="39">Wiki Commune code</th>
 
 
-                                    <th>Additional #</th>
-                                    <th>I_Code_Arrondissements</th>
-                                    <th>I_Ar</th>
-                                    <th>I_Cheflieu</th>
-                                    <th>I_Code_canton</th>
-                                    <th>I_Region</th>
-                                    <th>I_Dep</th>
-                                    <th>I_Canton</th>
-                                    <th>I_Typct</th>
-                                    <th>I_Burcentral</th>
-                                    <th>I_Tncc</th>
-                                    <th>I_Artmaj</th>
-                                    <th>I_Ncc</th>
-                                    <th>I_Armin</th>
-                                    <th>I_Nccent</th>
-                                    <th>I_Nccenr</th>
-                                    <th>I_Code_departament</th>
-                                    <th>ColResultInSnipet</th>
+                                    <th data-n="40">Gmap #</th>
+                                    <th data-n="41">Gmap Name</th>
+                                    <th data-n="42">Gmap True Name</th>
+                                    <th data-n="43">Gmap Short name</th>
+                                    <th data-n="44">Gmap Admin Level</th>
+                                    <th data-n="45">Gmap AdmL1</th>
+                                    <th data-n="46">Gmap AdmL2</th>
+                                    <th data-n="47">Gmap AdmL3</th>
+                                    <th data-n="48">Gmap AdmL4</th>
+                                    <th data-n="49">Gmap AdmL5</th>
+                                    <th data-n="50">Gmap AdmL6</th>
+                                    <th data-n="51">Gmap AdmL7</th>
+                                    <th data-n="52">Gmap AdmL8</th>
+                                    <th data-n="53">Gmap Position</th>
+                                    <th data-n="54">Gmap Bounds</th>
+                                    <th data-n="55">Gmap Postal code</th>
 
-                                    <th>INSEE code ≠ Wiki insee code</th>
-                                    <th>INSEE name ≠ Wiki name</th>
-                                    <th>Wiki name ≠ Gmaps name</th>
-                                    <th>Wiki post ≠ Gmaps post</th>
-                                    <th>Wiki admin ≠ GMaps admin</th>
-                                    <th>Wiki position >(5km) GMaps position</th>
+
+                                    <th data-n="56">Additional #</th>
+                                    <th data-n="57">I_Code_Arrondissements</th>
+                                    <th data-n="58">I_Ar</th>
+                                    <th data-n="59">I_Cheflieu</th>
+                                    <th data-n="60">I_Code_canton</th>
+                                    <th data-n="61">I_Region</th>
+                                    <th data-n="62">I_Dep</th>
+                                    <th data-n="63">I_Canton</th>
+                                    <th data-n="64">I_Typct</th>
+                                    <th data-n="65">I_Burcentral</th>
+                                    <th data-n="66">I_Tncc</th>
+                                    <th data-n="67">I_Artmaj</th>
+                                    <th data-n="68">I_Ncc</th>
+                                    <th data-n="69">I_Armin</th>
+                                    <th data-n="70">I_Nccent</th>
+                                    <th data-n="71">I_Nccenr</th>
+                                    <th data-n="72">I_Code_departament</th>
+                                    <th data-n="73">ColResultInSnipet</th>
+
+                                    <th data-n="74">INSEE code ≠ Wiki insee code</th>
+                                    <th data-n="75">INSEE name ≠ Wiki name</th>
+                                    <th data-n="76">Wiki name ≠ Gmaps name</th>
+                                    <th data-n="77">Wiki post ≠ Gmaps post</th>
+                                    <th data-n="78">Wiki admin ≠ GMaps admin</th>
+                                    <th data-n="79">Wiki position >(5km) GMaps position</th>
 
                                 </tr>
                                 </thead>
