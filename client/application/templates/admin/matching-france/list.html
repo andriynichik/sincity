@@ -114,27 +114,60 @@
                     </div>
 
                     <div>
-                        <div class="demo-switch">
-                            <div class="switch">
-                                <label>OFF<input type="checkbox" name="insee_code_not_wiki_insee_code" data-col-index=""><span
-                                        class="lever"></span>ON</label> INSEE code ≠ Wiki insee code
-                            </div>
+
+                        <div>
+                            <label for="insee_name_not_wiki_name">INSEE name ≠ Wiki name </label>
+                            <select class="switch-for-filter" data-field="75" id="insee_name_not_wiki_name">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
                         </div>
 
-                        <div class="demo-switch">
-                            <div class="switch">
-                                <label>OFF<input type="checkbox" name="insee_name_not_wiki_name" data-col-index=""><span
-                                        class="lever"></span>ON</label> INSEE name ≠ Wiki name
-                            </div>
+                        <div>
+                            <label for="insee_code_wiki_insee_code">INSEE code ≠ Wiki insee code</label>
+                            <select class="switch-for-filter" data-field="74" id="insee_code_wiki_insee_code">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
                         </div>
 
-                        <label for="insee_name_not_wiki_name">INSEE name ≠ Wiki name </label>
-                        <select class="switch-for-filter" data-field="75" id="insee_name_not_wiki_name">
-                            <option value="">Off</option>
-                            <option value="1">Yes</option>
-                            <option value="0">No</option>
-                        </select>
+                        <div>
+                            <label for="wiki_name_gmaps_name">Wiki name ≠ Gmaps name</label>
+                            <select class="switch-for-filter" data-field="76" id="wiki_name_gmaps_name">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
 
+                        <div>
+                            <label for="wiki_post_gmaps_post">Wiki post ≠ Gmaps post</label>
+                            <select class="switch-for-filter" data-field="77" id="wiki_post_gmaps_post">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="wiki_admin_gmaps_admin">Wiki admin ≠ GMaps admin</label>
+                            <select class="switch-for-filter" data-field="78" id="wiki_admin_gmaps_admin">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label for="wiki_position_5km_gmaps_position">Wiki position >(5km) GMaps position</label>
+                            <select class="switch-for-filter" data-field="79" id="wiki_position_5km_gmaps_position">
+                                <option value="">Off</option>
+                                <option value="1">Yes</option>
+                                <option value="0">No</option>
+                            </select>
+                        </div>
                     </div>
 
                     <div class="body">
