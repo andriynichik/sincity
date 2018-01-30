@@ -662,23 +662,41 @@ $(function () {
     $.each($('[data-hide]'), function (e) {
         var column = table.column($(this).attr('data-column') );
         column.visible(false);
+        switchColor(false, $(this));
     } );
 
     $('.js-exportable').on( 'click', '#icon-delete', function () {
 
     } );
 
-    $.each($('.switch-for-filter'), function (e, v) {
-        var input = $('[data-id="' + $(this).attr('data-input') + '"]');
-        console.log(v.checked);
-        input.value = '1';
-    } );
+    $('.switch-for-filter').on('change', function (e) {
+        try {
+            table.columns(this.dataset.field).search( this.value ).draw();
+        } catch (e) {
+            console.log(e);
+        }
 
-    $('[data-id="Wiki position >(5km) GMaps position"]')
+    });
+
+    // $.each($('.switch-for-filter'), function (e, v) {
+    //     var input = $('[data-id="' + $(this).attr('data-input') + '"]');
+    //     console.log(v.checked);
+    //     input.value = '1';
+    // } );
 
     $('a.toggle-link-vis').on( 'click', function (e) {
         e.preventDefault();
         var column = table.column($(this).attr('data-column'));
-        column.visible(!column.visible());
+        let switchVisible = !column.visible();
+        column.visible(switchVisible);
+        switchColor(switchVisible, $(this));
     } );
+
+    function switchColor(isVisible, $element) {
+        if( isVisible )  {
+            $element.css('color', 'green');
+        } else {
+            $element.css('color', 'red');
+        }
+    }
 });

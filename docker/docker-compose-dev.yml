@@ -5,6 +5,8 @@ services:
       context: ./../
       dockerfile: ./docker/python3.dockerfile
     image: python3:wiki_parser
+    environment:
+      DEV_ENV: 1
     links:
       - wiki_parser_mongodb
     volumes:
