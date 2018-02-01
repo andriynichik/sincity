@@ -492,6 +492,26 @@ def reparse_by_geocode():
         return json.dumps(raw)
 
 
+
+
+@app.route('/sinoptik_db/spain',  methods=['GET', 'POST'] )
+@login_required
+def sinoptik_db():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data_db = db.spain_sql_sinoptik.find()
+    # data = list()
+    # array = dict()
+    # # for item in data_db:
+    # #     array['sinoptik_db'] = item
+    # #     print (item['title'])
+    # #     array['parser'] = db.internal.find_one({"24_SNIG_NOMBRE" : item['title']})
+    # #     data.append(array)
+
+    return render_template('admin/matching-spain/sinoptik_db.html', data=data_db)
+
 ##############################################
 # END SPAIN
 ##############################################
