@@ -32,8 +32,8 @@ for row in db.spain_sql_sinoptik.find():
     
     parce_data =  db.internal.find_one({"24_SNIG_NOMBRE": row['city_title']})
     if parce_data is not None:
-        print(row['city_title'])
-        print (parce_data)
+        # print(row['city_title'])
+        # print (parce_data)
         comparison = getDistance(row['lat'], row['lng'], parce_data['28_SNIG_LATITUD_ETRS89'], parce_data['29_SNIG_LONGITUD_ETRS89'])
         comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(parce_data['28_SNIG_LATITUD_ETRS89'])+","+str(parce_data['29_SNIG_LONGITUD_ETRS89'])+"")
         db.spain_sql_sinoptik.update_one(
