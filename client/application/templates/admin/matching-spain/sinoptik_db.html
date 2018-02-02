@@ -133,9 +133,9 @@
                                 <tr>
                                     <th>sinoptik_city_ID</th>
                                     <th>sinoptik_city_name</th>
-                                    <th>sinoptik_city_name</th>
-                                    <th>sinoptik_city_name</th>
-                                    <th>24_SNIG_NOMBRE</th>
+                                    <th>sinoptik lat,lng</th>
+                                    <th>sinoptik_region</th>
+                                    <th>SNIG_NOMBRE</th>
                                     <th>distance</th>
                                     <th>PARSER_ID</th>
 
@@ -147,12 +147,17 @@
 
                                         <tr>
                                              <td><div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>{{item['id']|int}}</td>
-                                            <td>{{item['title']}}</td>
-                                            <td>{{item['lat']}}</td>
-                                            <td>{{item['lng']}}</td>
-                                              <td>{{item['24_SNIG_NOMBRE']}}</td>
-                                              <td></td>
-                                              <td></td>
+                                            <td>{{item['city_title']}}</td>
+                                            <td>{{item['lat']}},{{item['lng']}}</td>
+                                            <td>{{item['region_name']}}</td>
+                                              <td>{{item['SNIG_NOMBRE']}}</td>
+                                               {% if 'comparison' in item and item['comparison'] <= 2 %}
+                                              <td  style="background-color: #9efb9e;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
+                                                {% else %}
+                                                        <td  style="background-color: #f0b7ab;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
+                                              
+                                                   {% endif %}
+                                              <td>{{item['parser_id']}}</td>
                                             
                                     
                                             
