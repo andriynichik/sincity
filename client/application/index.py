@@ -357,6 +357,80 @@ def matching_spain(region=None, provincia=None):
         data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
         return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], com = 0, types=types, data=data)
 
+@app.route('/sinoptik_db_confirm', methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.spain_sql_sinoptik.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/sinoptik_db_delete-confirm', methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_delete_status_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.spain_sql_sinoptik.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/sinoptik_db_reparse', methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_reparse():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+
+    # db.spain_sql_sinoptik.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    
+
+
+    row =  db.spain_sql_sinoptik.find_one({"_id" : ObjectId(request.form['sinoptik_id'])})
+    
+    parce_data =  db.internal.find_one({"_id" : ObjectId(request.form['parser_id'])})
+    if parce_data is not None:
+        # print(row['city_title'])
+        # print (parce_data)
+        comparison = getDistance(row['lat'], row['lng'], parce_data['28_SNIG_LATITUD_ETRS89'], parce_data['29_SNIG_LONGITUD_ETRS89'])
+        comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(parce_data['28_SNIG_LATITUD_ETRS89'])+","+str(parce_data['29_SNIG_LONGITUD_ETRS89'])+"")
+        db.spain_sql_sinoptik.update_one(
+                {"_id": row['_id'] },
+                    {
+                        "$set": {
+                        "parser_id": parce_data['_id'],
+                        "comparison": comparison,
+                        "SNIG_NOMBRE": parce_data['24_SNIG_NOMBRE'],
+                        "comparison_url":comparison_url,
+                        
+                    }
+               }
+        )
+    status = True
+    if comparison >= 2:
+        status = False
+
+    responce = {
+                # "parser_id": ObjectId(parce_data['_id']),
+                "comparison": comparison,
+                "SNIG_NOMBRE": parce_data['24_SNIG_NOMBRE'],
+                "comparison_url":comparison_url,
+                "comparison_status":status,
+
+    }
+    return json.dumps(responce)
+
+
+
 @app.route('/matching-spain-update', methods=['GET', 'POST'])
 @login_required
 def update_status():

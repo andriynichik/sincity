@@ -162,6 +162,7 @@
                           <a class="toggle-link-vis" data-column="30" style="color: red;" data-hide></a>
                           <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide ></a>
                            <a class="toggle-link-vis" data-column="32" style="color: red;" ></a>
+                           <a class="toggle-link-vis" data-column="33" >parser_id</a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <label>INE_Name_w_Article ≠ gmap_name :</label>
@@ -232,6 +233,7 @@
                                     <th>11_gmap_comparison</th>
                                     <th>tp</th>
                                     <th>status</th>
+                                    <th>parser_id</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -269,7 +271,7 @@
                                     <th>11_gmap_comparison</th>
                                     <th>tp</th>
                                     <th>status</th>
-
+                                    <th>parser_id</th>
 
 
                                 </tr>
@@ -347,7 +349,7 @@
                                             {% elif  item['status'] != 4 and com < 3  %}
                                               <td  id="status_{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
                                             {% endif %}
-                                           
+                                            <td>{{item['_id']}}</td>
                                             <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}
