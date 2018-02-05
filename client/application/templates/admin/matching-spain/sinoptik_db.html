@@ -156,7 +156,7 @@
                                             {{item['id']|int}}
                                             </td>
                                             <td>{{item['city_title']}}</td>
-                                            <td>{{item['lat']}},{{item['lng']}}</td>
+                                            <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
                                             <td>{{item['region_name']}}</td>
                                               <td  class="name_{{item['_id']}}">{{item['SNIG_NOMBRE']}}</td>
                                                {% if 'comparison' in item and item['comparison'] <= 2 %}
