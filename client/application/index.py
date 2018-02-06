@@ -431,6 +431,33 @@ def sinoptik_db_reparse():
 
 
 
+@app.route('/matching-spain-update_snig', methods=['GET', 'POST'])
+@login_required
+def update_status_snig():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
+    return request.form['id'] 
+
+@app.route('/matching-spain-delete-confirm_snig', methods=['GET', 'POST'])
+@login_required
+def delete_status_confirm_snig():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
+    return request.form['id'] 
+
+
+
+
 @app.route('/matching-spain-update', methods=['GET', 'POST'])
 @login_required
 def update_status():
@@ -454,6 +481,8 @@ def delete_status_confirm():
     db = connection.location
     db.internal.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status":4}})
     return request.form['id'] 
+
+
 
 
 def getDistance(lat1,lon1,lat2,lon2):

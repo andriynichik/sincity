@@ -343,11 +343,31 @@
                                                     <td style="background-color: #f0b7ab;">false</td>
                                             {% endif %}
                                             {% if com == 3 and item['status'] != 4  %}
-                                                <td id="status_{{item['_id']}}"> <label class="label label-warning">TRUSTED</label>  <button onclick="cheked('{{item['_id']}}')" name="WOFButton" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                                <td id="status_{{item['_id']}}"> <label class="label label-warning">TRUSTED</label>  <button onclick="cheked('{{item['_id']}}')" name="WOFButton" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-ok"></i></button> 
+
+                                                    <div id="snig_confirm_{{item['_id']}}" >
+                                                {% if item['status_snig'] == 1  %}
+                                                <label class="label label-success">Confirmed SNIG</label>
+                                                <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>SNIG</button> 
+                                                {% else %}
+                                                <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>SNIG</button><p> 
+                                                 {% endif %}
+                                                 </div>
+
+                                                </td>
                                             {% elif item['status'] == 4  %}
                                                 <td id="status_{{item['_id']}}">   <label class="label label-success">Confirmed</label> <button onclick="dell('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i></button>  </td>
                                             {% elif  item['status'] != 4 and com < 3  %}
-                                              <td  id="status_{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>
+                                              <td  id="status_{{item['_id']}}"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick="cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></p>  
+                                                <div id="snig_confirm_{{item['_id']}}" >
+                                                {% if item['status_snig'] == 1  %}
+                                                <label class="label label-success">Confirmed SNIG</label>
+                                                <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>SNIG</button> 
+                                                {% else %}
+                                                <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>SNIG</button><p> 
+                                                 {% endif %}
+                                                 </div>
+                                                </td>
                                             {% endif %}
                                             <td>{{item['_id']}}</td>
                                             <!-- <td></td> -->
@@ -409,6 +429,27 @@ function dell(id) {
           $.post( "/matching-spain-delete-confirm", { id: id })
             .done(function( data ) {
                  document.getElementById('status_'+id).innerHTML =      '  <td  id="status_'+id+'"><label class="label label-danger">Error</label>  <button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button> </td>';
+    
+        });
+}
+
+
+
+function cheked_snig(id) {
+       var id;
+          $.post( "/matching-spain-update_snig", { id: id })
+            .done(function( data ) {
+                 document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed SNIG</label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+    
+        });
+}
+
+function dell_snig(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-spain-delete-confirm_snig", { id: id })
+            .done(function( data ) {
+                 document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>SNIG</button> </td>';
     
         });
 }
