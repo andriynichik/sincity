@@ -30,24 +30,53 @@ def getDistance(lat1,lon1,lat2,lon2):
     
 for row in db.spain_sql_sinoptik.find():
     
-    parce_data =  db.internal.find_one({"24_SNIG_NOMBRE": row['city_title']})
-    if parce_data is not None:
-        # print(row['city_title'])
-        # print (parce_data)
-        comparison = getDistance(row['lat'], row['lng'], parce_data['28_SNIG_LATITUD_ETRS89'], parce_data['29_SNIG_LONGITUD_ETRS89'])
-        comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(parce_data['28_SNIG_LATITUD_ETRS89'])+","+str(parce_data['29_SNIG_LONGITUD_ETRS89'])+"")
-        db.spain_sql_sinoptik.update_one(
-                {"_id": row['_id'] },
-                    {
-                        "$set": {
-                        "parser_id": parce_data['_id'],
-                        "comparison": comparison,
-                        "SNIG_NOMBRE": parce_data['24_SNIG_NOMBRE'],
-                        "comparison_url":comparison_url,
-                        
-                    }
-               }
-        )
+    if 'parser_id' in row:
+        
+        mod =  db.internal.find_one({"_id": row['parser_id']})
+        # print(mod['25_SNIG_TIPO'])
+        if mod is not None and  mod['25_SNIG_TIPO'] == 'Municipio': 
+           
+            parce_data =  db.internal.find_one({"$and": [{"24_SNIG_NOMBRE": row['city_title']}, {"25_SNIG_TIPO": {"$ne": "Municipio"}}]})
+            
+            if parce_data is not None:
+                print(parce_data) 
+                # print(row['city_title'])
+                # print (parce_data)
+
+                comparison = getDistance(row['lat'], row['lng'], parce_data['28_SNIG_LATITUD_ETRS89'], parce_data['29_SNIG_LONGITUD_ETRS89'])
+                comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(parce_data['28_SNIG_LATITUD_ETRS89'])+","+str(parce_data['29_SNIG_LONGITUD_ETRS89'])+"")
+                db.spain_sql_sinoptik.update_one(
+                        {"_id": row['_id'] },
+                            {
+                                "$set": {
+                                "parser_id": parce_data['_id'],
+                                "comparison": comparison, 
+                                "SNIG_NOMBRE": parce_data['24_SNIG_NOMBRE'],
+                                "comparison_url":comparison_url,
+                                "25_SNIG_TIPO":parce_data['25_SNIG_TIPO'],
+                                "status":0,
+                                
+                            }
+                       }
+                )
+            else:
+
+                db.spain_sql_sinoptik.update_one({"_id" : row['_id'] },{"$unset" : {"status":1, 'parser_id':row['parser_id']}})
+                # db.spain_sql_sinoptik.update_one(
+                #         {"_id": row['_id'] },
+                #             {
+                #                 "$set": {
+                #                 "parser_id": '',
+                #                 "comparison": '#', 
+                #                 "SNIG_NOMBRE": '' ,
+                #                 "comparison_url": 0,
+                #                 "25_SNIG_TIPO":mod['25_SNIG_TIPO'],
+                #                 "status":0,
+                                
+                #             }
+                #        }
+                # )
+
 
     # data = {'23_SNIG_CODIGOINE': row[0],
     #         '24_SNIG_NOMBRE':row[1],

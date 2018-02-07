@@ -597,7 +597,7 @@ def reparse_by_geocode():
 
 
 
-@app.route('/sinoptik_db/spain',  methods=['GET', 'POST'] )
+@app.route('/sinoptik_db/spain',  methods=['GET', 'POST'])
 @login_required
 def sinoptik_db():
     config = Config('./config/config.yml')
@@ -607,11 +607,14 @@ def sinoptik_db():
     data_db = db.spain_sql_sinoptik.find()
     # data = list()
     # array = dict()
-    # # for item in data_db:
-    # #     array['sinoptik_db'] = item
-    # #     print (item['title'])
-    # #     array['parser'] = db.internal.find_one({"24_SNIG_NOMBRE" : item['title']})
-    # #     data.append(array)
+    # for item in data_db:
+    #     # array['sinoptik_db'] = item
+    #     # print (item['title'])
+    #     if 'parser_id' in item:
+    #         ntype = db.internal.find_one({"_id" : item['parser_id']})
+    #         data_db['type_snig'] = ntype["25_SNIG_TIPO"]
+        
+        # data.append(array)
 
     return render_template('admin/matching-spain/sinoptik_db.html', data=data_db)
 

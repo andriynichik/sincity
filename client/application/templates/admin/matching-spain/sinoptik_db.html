@@ -137,6 +137,7 @@
                                     <th>sinoptik lat,lng</th>
                                     <th>sinoptik_region</th>
                                     <th>SNIG_NOMBRE</th>
+                                     <th>SNIG_TYPE</th>
                                     <th>distance</th>
                                     <th>PARSER_ID</th>
 
@@ -158,8 +159,10 @@
                                             <td>{{item['city_title']}}</td>
                                             <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
                                             <td>{{item['region_name']}}</td>
+
                                               <td  class="name_{{item['_id']}}">{{item['SNIG_NOMBRE']}}</td>
-                                               {% if 'comparison' in item and item['comparison'] <= 2 %}
+                                              <td>{{item['25_SNIG_TIPO']}}</td>
+                                               {% if 'comparison' in item and item['comparison']|int <= 2 %}
                                               <td  class="comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
                                                 {% else %}
                                                         <td class="comp_status_{{item['_id']}}"  style="background-color: #f0b7ab;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
