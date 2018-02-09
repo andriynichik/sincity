@@ -628,14 +628,14 @@ def sinoptik_db():
 def matching_romania(region=None):
     mode = request.args.get('mode', 'none')
     Provincia = {
-                '1' : 'Region name',
-                '2' : 'Region name ',
-                '3' : 'Region name ',
-                '4' : 'Region name ',
-                '5' : 'Region name ',
-                '6' : 'Region name ',
-                '7' : 'Region name', 
-                '8' : 'Region name ',
+                '1' : 'NORD-EST',
+                '2' : 'SUD-EST',
+                '3' : 'SUD  - MUNTENIA',
+                '4' : 'SUD-VEST - OLTENIA',
+                '5' : 'VEST',
+                '6' : 'NORD-VEST',
+                '7' : 'CENTRU', 
+                '8' : 'BUCURESTI - ILFOV',
       
             }
 
