@@ -622,6 +622,125 @@ def sinoptik_db():
 # END SPAIN
 ##############################################
 
+@app.route('/matching/romania')
+@app.route('/matching/romania/<string:region>')
+@login_required
+def matching_romania(region=None):
+    mode = request.args.get('mode', 'none')
+    Provincia = {
+                '1' : 'Region name',
+                '2' : 'Region name ',
+                '3' : 'Region name ',
+                '4' : 'Region name ',
+                '5' : 'Region name ',
+                '6' : 'Region name ',
+                '7' : 'Region name', 
+                '8' : 'Region name ',
+      
+            }
+
+    if region is None:
+ 
+
+
+        return render_template('admin/romania/region-list.html', data=Provincia)
+    else:
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        data =  db.romania.find({'REGIUNE': int(region)})
+        return render_template('admin/romania/list.html', region=Provincia[str(region)], com = 0, data=data)
+    # config = Config('./config/config.yml')
+    # mongo_config = config.get('mongodb')
+    # connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    # db = connection.romania
+   
+  
+
+
+
+    # return render_template('admin/matching-spain/region-list.html', data=region)
+    
+
+    # mode = request.args.get('mode', 'none')
+    # Provincia = {
+    #             '01' : 'Araba (Álava)',
+    #             '02' : 'Abacente ',
+    #             '03' : 'Alicante ',
+    #             '04' : 'Almería ',
+    #             '05' : 'Avila ',
+    #             '06' : 'Badajoz ',
+    #             '07' : 'Balears, Illes', 
+    #             '08' : 'Barcelona ',
+    #             '09' : 'Burgos ',
+    #             '10' : 'Cáceres ',
+    #             '11' : 'Cádiz ',
+    #             '12' : 'Castellón', 
+    #             '13' : 'Ciudad Real', 
+    #             '14' : 'Córdoba ',
+    #             '15' : 'Coruña, A ',
+    #             '16' : 'Cuenca ',
+    #             '17' : 'Girona ',
+    #             '18' : 'Granada ',
+    #             '19' : 'Guadalajara ', 
+    #             '20' : 'Guipuzcoa ',
+    #             '21' : 'Huelva ',
+    #             '22' : 'Huesca ',
+    #             '23' : 'Jaén ',
+    #             '24' : 'León ',
+    #             '25' : 'Lleida ',
+    #             '26' : 'Rioja, La ',
+    #             '27' : 'Lugo ',
+    #             '28' : 'Madrid ',
+    #             '29' : 'Málaga ',
+    #             '30' : 'Murcia ',
+    #             '31' : 'Navarra ',
+    #             '32' : 'Ourense ',
+    #             '33' : 'Asturias ',
+    #             '34' : 'Palencia ',
+    #             '35' : 'Las Palmas ',
+    #             '36' : 'Pontevedra ',
+    #             '37' : 'Salamanca ',
+    #             '38' : 'Santa Cruz de Tenerife', 
+    #             '39' : 'Cantabria ',
+    #             '40' : 'Segovia ',
+    #             '41' : 'Sevilla ',
+    #             '42' : 'Soria ',
+    #             '43' : 'Tarragona ',
+    #             '44' : 'Teruel ',
+    #             '45' : 'Toledo ',
+    #             '46' : 'Valencia ',
+    #             '47' : 'Valladolid ',
+    #             '48' : 'Bizkaia ',
+    #             '49' : 'Zamora ',
+    #             '50' : 'Zaragoza ',
+    #             '51' : 'Ceuta ',
+    #             '52' : 'Melilla ',
+    #         }
+    # types = {"Municipio": ["administrative_area_level_4"],
+    #         "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
+    #         "Otras entidades": ["locality", "neighborhood"],
+    #         "Capital de municipio":["locality"],
+    #         "Entidad singular": ["locality"]}
+    # if region is None:
+ 
+
+
+    #     return render_template('admin/matching-spain/region-list.html', data=Provincia)
+    # else:
+    #     config = Config('./config/config.yml')
+    #     mongo_config = config.get('mongodb')
+    #     connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    #     db = connection.location
+    #     data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
+    #     return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], com = 0, types=types, data=data)
+
+
+
+
+
+
 
 @app.route('/users/create',  methods=['GET', 'POST'] )
 @login_required
