@@ -1,0 +1,322 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('.js-exportable').css("width", "auto").DataTable( {
+        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
+        
+        dom: 'Bflrtip',
+        buttons: [
+            'csv', 'excel', 
+        ],
+
+    } );
+
+
+     $('#dropdown1').on('change', function () {
+                    table.columns(30).search( this.value ).draw();
+                } );
+     $('#dropdown2').on('change', function () {
+                    table.columns(29).search( this.value ).draw();
+                } );
+    $('#dropdown3').on('change', function () {
+                    table.columns(31).search( this.value ).draw();
+                } ); 
+        $('#dropdown4').on('change', function () {
+                    table.columns(32).search( this.value ).draw();
+                } ); 
+
+
+
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+
+        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
+           
+            $(this).removeAttr("style");
+         
+        } 
+        else { 
+
+            $(this).css('color', 'red');
+
+        }   
+
+        
+    } );
+
+        $('#dataTable').css("width", "auto");
+        $('#edit-modal').on('show.bs.modal', function(e) {
+            
+            var $modal = $(this),
+                esseyId = e.relatedTarget.id;
+        //             $.post( "/spain-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
+        //     .done(function( data ) {
+        //         console.log(JSON.parse(data))
+        //         arr = JSON.parse(data)
+       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>'
+        //         for (var i = 0; i < arr.length; i++){
+        //             var obj = arr[i];
+        //             // for (var key in obj){
+        //             //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
+        //             //     var attrValue = obj[key];
+        //             //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
+        //             // }
+        //             console.log(obj)
+        //             var place_id =  obj['place_id']
+        //             txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
+                     
+        //         }
+        //         txt = txt+'</form>';
+
+        $modal.find('.edit-content').html(txt);
+
+               
+        //     // alert(data)
+        // });
+            
+//            $.ajax({
+//                cache: false,
+//                type: 'POST',
+//                url: 'backend.php',
+//                data: 'EID='+essay_id,
+//                success: function(data) 
+//                {
+                    
+//                }
+//            });
+            
+        })
+// $('[name="WOFButton"]').on('click', function(event) {
+//     alert("clicked");
+//     // $('.Main').load('wof.html');
+// });
+// $('[name="WOFButton"]').on('click', function(event) {
+
+
+//     $.post( "/matching-spain-update", { id: $(this).attr('id') })
+//         .done(function( data ) {
+    
+//   });
+// });
+
+} );
+
+</script>
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>Provincia list</h2>
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            Spain SINOPTIK DATABASE: 
+                        </h2>
+                    </div>
+                    <div class="text">
+        
+  
+                    </div>
+                    
+
+                    
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th>sinoptik_city_ID</th>
+                                    <th>sinoptik_city_name</th>
+                                    <th>sinoptik lat,lng</th>
+                                    <th>sinoptik_region</th>
+                                    <th>SNIG_NOMBRE</th>
+                                     <th>SNIG_TYPE</th>
+                                    <th>distance</th>
+                                    <th>PARSER_ID</th>
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for item in data %}
+
+                                        <tr>
+                                             <td   id="status_{{item['_id']}}"><div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a> </div>
+                                             {% if 'status' in item and item['status'] == 4 %}
+                                                <label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick="dell('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>
+                                                {% else %}
+                                                 <button   name="WOFButton" onclick= "cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
+                                            {% endif %}
+                                            {{item['id']|int}}
+                                            </td>
+                                            <td>{{item['city_title']}}</td>
+                                            <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
+                                            <td>{{item['region_name']}}</td>
+
+                                              <td  class="name_{{item['_id']}}">{{item['SNIG_NOMBRE']}}</td>
+                                              <td>{{item['25_SNIG_TIPO']}}</td>
+                                               {% if 'comparison' in item and item['comparison']|int <= 2 %}
+                                              <td  class="comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
+                                                {% else %}
+                                                        <td class="comp_status_{{item['_id']}}"  style="background-color: #f0b7ab;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
+                                              
+                                                   {% endif %}
+                                              <td class="parser_{{item['_id']}}">{{item['parser_id']}}</td>
+                                            
+                                    
+                                            
+                                            <!-- <td></td> -->
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+
+
+   <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Новий mongo_id">
+                   <button type="button"  class="btn btn-primary" onclick="by_my_place()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<script src="/js/pages/tables/jquery-datatable.js"></script>
+<script type="text/javascript">
+
+function cheked(id) {
+       var id;
+       // alert(id);
+           $.post( "/sinoptik_db_confirm", { id: id })
+           .done(function( data ) {
+                 document.getElementById('status_'+id).innerHTML = '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+    
+       });
+}
+
+function dell(id) {
+       var id;
+       // alert(id);
+          $.post( "/sinoptik_db_delete-confirm", { id: id })
+            .done(function( data ) {
+                 document.getElementById('status_'+id).innerHTML =      '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
+    
+        });
+}
+
+
+
+function reparse_by_geocode(id) {
+    
+    $.post( "/spain-reparse_by_geocode", { id: id, type: 'autocomplete' })
+            .done(function( data ) {
+                
+            alert(data)
+        });
+    // var id;
+    // alert(id);
+}
+
+function by_my_place() {
+    var parser_id = $('#place_id_reparse').val();
+    var sinoptik_id =  $('.mongo_pars_is').text();
+
+    // repars(mongo_id, place_id);
+    var place_id = $('#place_id_reparse').val('');
+    $('#edit-modal').modal('toggle');
+    // alert(mongo_id);
+            $.post( "/sinoptik_db_reparse", { parser_id: parser_id, sinoptik_id:sinoptik_id })
+            .done(function( data ) {
+                console.log(data)
+                arr = JSON.parse(data)
+        //         $('#edit-modal').modal('toggle');
+        //         var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gm_comp = "<a target='_blank' href='"+arr['comparison_url']+"'>"+arr['comparison']+"</a>";
+                $('.name_'+sinoptik_id).html(arr['SNIG_NOMBRE']);
+        //         $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.comp_status_'+sinoptik_id).html(gm_comp);
+                $('.parser_'+sinoptik_id).html(parser_id);
+
+        //         if (arr['gmap_type_status']) {
+        //             $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+        //         }else{
+        //             $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+        //         }
+        //         if (arr['gmap_name_status']) {
+        //             $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+        //         }else{
+        //             $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+        //         }
+
+                if (arr['comparison_status']) {
+                    $('.comp_status_'+sinoptik_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.comp_status_'+sinoptik_id).css('background-color','#f0b7ab' ); 
+                }
+        });
+}
+
+function repars(mongo_id, place_id) {
+        $.post( "/spain-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+            .done(function( data ) {
+                arr = JSON.parse(data)
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gm_comp = "<a target='_blank' href='"+arr['15_gmap_comparison_url']+"'>"+arr['15_GMap_center_SNIG_comparison']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+
+                if (arr['gmap_type_status']) {
+                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+                if (arr['gmap_name_status']) {
+                    $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+
+                if (arr['gmap_comp_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+        });
+}
+</script>
+
+{% endblock %}
