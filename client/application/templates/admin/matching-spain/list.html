@@ -89,6 +89,12 @@
 //            });
             
         })
+
+        $('.search-input-text').on( 'keyup click', function () {   // for text boxes
+    var i =$(this).attr('data-column');  // getting column index
+    var v =$(this).val();  // getting search input value
+    table.columns(i).search(v).draw();
+} );
 // $('[name="WOFButton"]').on('click', function(event) {
 //     alert("clicked");
 //     // $('.Main').load('wof.html');
@@ -200,40 +206,40 @@
                             <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>INE_Municipio_Code </th>
-                                    <th>INE_Municipio_Name</th>
-                                    <th>INE_Collective_Entity_Code</th>
-                                    <th>INE_Collective_Entity_Name</th>
-                                    <th>INE_Singular_Entity_Code</th>
-                                    <th>INE_Singular_Entity_Name</th>
-                                    <th>INE_Nuclea_Code</th>
-                                    <th>INE_Nuclea_Name</th>
-                                    <th>INE_Name_w_Article</th>
-                                    <th>INE_Población</th>
-                                    <th>gmap_name</th>
-                                    <th>GMap_type</th>
-                                    <th>GMap_requests</th>
-                                    <th>GMap_center</th>
-                                    <th>15_GMap_center_SNIG_comparison</th>
-                                    <th>16_GMap_bounds</th>
-                                     <th>17_GMap_admin_hierarchy</th>
-                                    <th>20_SNIG_COD_PROV</th>
-                                    <th>21_SNIG_PROVINCIA</th>
-                                    <th>22_SNIG_INEMUNI</th>
-                                    <th>23_SNIG_CODIGOINE</th>
-                                    <th>24_SNIG_NOMBRE</th>
-                                    <th>25_SNIG_TIPO</th>
-                                    <th>26_SNIG_POBLACION</th>
-                                    <th>27_SNIG_ALTITUD</th>
-                                    <th>28_SNIG_ETRS89</th>
-                                    <th>30_SNIG_HOJA_MTN25</th>
-                                    <th>31_SNIG_ORIGENCOOR</th>
-                                    <th>32_SNIG_ORIGENALTITUD</th>
+                                    <th><input type="text" data-column="0"  class="search-input-text">INE_Municipio_Code </th>
+                                    <th><input type="text" data-column="1"  class="search-input-text">INE_Municipio_Name</th>
+                                    <th><input type="text" data-column="2"  class="search-input-text">INE_Collective_Entity_Code</th>
+                                    <th><input type="text" data-column="3"  class="search-input-text">INE_Collective_Entity_Name</th>
+                                    <th><input type="text" data-column="4"  class="search-input-text">INE_Singular_Entity_Code</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">INE_Singular_Entity_Name</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">INE_Nuclea_Code</th>
+                                    <th><input type="text" data-column="7"  class="search-input-text">INE_Nuclea_Name</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">INE_Name_w_Article</th>
+                                    <th><input type="text" data-column="9"  class="search-input-text">INE_Población</th>
+                                    <th><input type="text" data-column="10"  class="search-input-text">gmap_name</th>
+                                    <th><input type="text" data-column="11"  class="search-input-text">GMap_type</th>
+                                    <th><input type="text" data-column="12"  class="search-input-text">GMap_requests</th>
+                                    <th><input type="text" data-column="13"  class="search-input-text">GMap_center</th>
+                                    <th><input type="text" data-column="14"  class="search-input-text">15_GMap_center_SNIG_comparison</th>
+                                    <th><input type="text" data-column="15"  class="search-input-text">16_GMap_bounds</th>
+                                     <th><input type="text" data-column="16"  class="search-input-text">17_GMap_admin_hierarchy</th>
+                                    <th><input type="text" data-column="17"  class="search-input-text">20_SNIG_COD_PROV</th>
+                                    <th><input type="text" data-column="18"  class="search-input-text">21_SNIG_PROVINCIA</th>
+                                    <th><input type="text" data-column="19"  class="search-input-text">22_SNIG_INEMUNI</th>
+                                    <th><input type="text" data-column="20"  class="search-input-text">23_SNIG_CODIGOINE</th>
+                                    <th><input type="text" data-column="21"  class="search-input-text">24_SNIG_NOMBRE</th>
+                                    <th><input type="text" data-column="22"  class="search-input-text">25_SNIG_TIPO</th>
+                                    <th><input type="text" data-column="23"  class="search-input-text">26_SNIG_POBLACION</th>
+                                    <th><input type="text" data-column="24"  class="search-input-text">27_SNIG_ALTITUD</th>
+                                    <th><input type="text" data-column="25"  class="search-input-text">28_SNIG_ETRS89</th>
+                                    <th><input type="text" data-column="26"  class="search-input-text">30_SNIG_HOJA_MTN25</th>
+                                    <th><input type="text" data-column="27"  class="search-input-text">31_SNIG_ORIGENCOOR</th>
+                                    <th><input type="text" data-column="28"  class="search-input-text">32_SNIG_ORIGENALTITUD</th>
                                     <th>distance > 1km</th>
                                     <th>11_gmap_comparison</th>
                                     <th>tp</th>
-                                    <th>status</th>
-                                    <th>parser_id</th>
+                                    <th><input type="text" data-column="32"  class="search-input-text">status</th>
+                                    <th><input type="text" data-column="33"  class="search-input-text">parser_id</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
