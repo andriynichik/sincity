@@ -295,60 +295,62 @@ def getINE(item):
 		return str(item[2])
 
 for row in db.romania.find():
-	print('========================================')
-	adress =  str(row['DENLOC']+' '+str(row['CODP'])+', România')
-	data = gmap_by_address(adress)
-	if 'name' in data:
-		print('yessss')
-		print(data)
-	else:
-
-		adress =  str(row['DENLOC']+', România')
+	if not 'gmap_name' in row:
+		
+		print('========================================')
+		adress =  str(row['DENLOC']+' '+str(row['CODP'])+', România')
 		data = gmap_by_address(adress)
-		print('Nooooooo')
-		print(data)
-	print('========================================')
-	
-	internal = {}
+		if 'name' in data:
+			print('yessss')
+			print(data)
+		else:
 
-	if 'name' in data.keys():
-		internal['gmap_name'] = data.get('name')
-	if 'admin_hierarchy' in data.keys():
-		internal['gmap_admin_hierarchy']=data.get('admin_hierarchy', {})
-	if 'center' in data.keys():
-		internal['gmap_center'] =data.get('center')
-	if 'bounds' in data.keys():
-		internal['gmap_bounds'] =data.get('bounds')
-	if 'type' in data.keys():
-		internal['type']=data.get('type')
-	if 'translate' in data.keys():
-		internal['translate']=data.get('translate')
-	if 'requests' in data.keys():
-		internal['requests']=data.get('requests')
-	if 'code' in data.keys():
-		internal['code']=data.get('code')
-	if 'postal_code' in data.keys():
-		internal['postal_code']=data.get('postal_code')
-	if 'name' in data:
-		db.romania.update_one(
-	                {"_id": row['_id'] },
-	                    {
-	                        "$set": {
-	                       	
-	                       	'gmap_name': data.get('name'),
-	                       	'gmap_admin_hierarchy': data.get('admin_hierarchy', {}),
-	                       	'gmap_center': data.get('center'),
-	                       	'gmap_bounds': data.get('bounds'),
-	                       	'gmap_type': data.get('type'),
-	                       	'gmap_translate': data.get('translate'),
-	                       	'gmap_requests': data.get('requests'),
-	                       	'gmap_code': data.get('code'),
-	                       	'gmap_postal_code': data.get('postal_code'),
-	                        
-	                    }
-	               }
-	        )
-	time.sleep(0.5) 
+			adress =  str(row['DENLOC']+', România')
+			data = gmap_by_address(adress)
+			print('Nooooooo')
+			print(data)
+		print('========================================')
+		
+		internal = {}
+
+		if 'name' in data.keys():
+			internal['gmap_name'] = data.get('name')
+		if 'admin_hierarchy' in data.keys():
+			internal['gmap_admin_hierarchy']=data.get('admin_hierarchy', {})
+		if 'center' in data.keys():
+			internal['gmap_center'] =data.get('center')
+		if 'bounds' in data.keys():
+			internal['gmap_bounds'] =data.get('bounds')
+		if 'type' in data.keys():
+			internal['type']=data.get('type')
+		if 'translate' in data.keys():
+			internal['translate']=data.get('translate')
+		if 'requests' in data.keys():
+			internal['requests']=data.get('requests')
+		if 'code' in data.keys():
+			internal['code']=data.get('code')
+		if 'postal_code' in data.keys():
+			internal['postal_code']=data.get('postal_code')
+		if 'name' in data:
+			db.romania.update_one(
+		                {"_id": row['_id'] },
+		                    {
+		                        "$set": {
+		                       	
+		                       	'gmap_name': data.get('name'),
+		                       	'gmap_admin_hierarchy': data.get('admin_hierarchy', {}),
+		                       	'gmap_center': data.get('center'),
+		                       	'gmap_bounds': data.get('bounds'),
+		                       	'gmap_type': data.get('type'),
+		                       	'gmap_translate': data.get('translate'),
+		                       	'gmap_requests': data.get('requests'),
+		                       	'gmap_code': data.get('code'),
+		                       	'gmap_postal_code': data.get('postal_code'),
+		                        
+		                    }
+		               }
+		        )
+		time.sleep(0.5) 
 	# print(internal)
 
 
