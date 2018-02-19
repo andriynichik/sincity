@@ -735,6 +735,29 @@ def matching_romania(region=None):
     #     db = connection.location
     #     data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
     #     return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], com = 0, types=types, data=data)
+@app.route('/matching-romania-confirm', methods=['GET', 'POST'])
+@login_required
+def romania_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
+    return request.form['id'] 
+
+@app.route('/matching-romania-confirm_del', methods=['GET', 'POST'])
+@login_required
+def romania_confirm_del():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
+    return request.form['id'] 
 
 
 

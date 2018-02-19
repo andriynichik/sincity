@@ -120,9 +120,49 @@
                             ROMANIA
                         </h2>
                     </div>
-                    <div class="text">
-        
-  
+                                 <div class="text">
+                        Toggle column (INE):
+                                                        <th>SIRUTA</th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                     <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th> </th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                                    <th></th>
+                        - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>SIRUTA</a>
+                        - <a class="toggle-link-vis" data-column="2">DENLOC</a>
+                        -<a class="toggle-link-vis" data-column="3" >CODP</a>
+                        -<a class="toggle-link-vis" data-column="4" style="color: red;" data-hide>JUD</a>
+                        - <a class="toggle-link-vis" data-column="5" style="color: red;" data-hide>SIRSUP</a>
+                        - <a class="toggle-link-vis" data-column="6" style="color: red;" data-hide>TIP</a>
+                        - <a class="toggle-link-vis" data-column="7" style="color: red;" data-hide>NIV</a>
+                        - <a class="toggle-link-vis" data-column="8" style="color: red;" data-hide>REGIUNE</a>
+                        - <a class="toggle-link-vis" data-column="9" style="color: red;" data-hide>FSJ</a>
+                        - <a class="toggle-link-vis" data-column="10" style="color: red;" data-hide>FS2</a>
+                        - <a class="toggle-link-vis" data-column="11" style="color: red;" data-hide>FS3</a>
+                        - <a class="toggle-link-vis" data-column="12" style="color: red;" data-hide>FSL</a>
+                        - <a class="toggle-link-vis" data-column="13" style="color: red;" data-hide>rang</a>
+                        - <a class="toggle-link-vis" data-column="14">gmap_name</a>
+                        - <a class="toggle-link-vis" data-column="15">gmap_postal_code</a>
+                        - <a class="toggle-link-vis" data-column="16" style="color: red;" data-hide>gmap_admin_hierarchy</a>
+                        - <a class="toggle-link-vis" data-column="17" style="color: red;" data-hide>gmap_center</a>
+                        - <a class="toggle-link-vis" data-column="18" style="color: red;" data-hide>gmap_bounds</a>
+                        - <a class="toggle-link-vis" data-column="19">gmap_type</a>
+                        - <a class="toggle-link-vis" data-column="20" style="color: red;" data-hide>gmap_requests</a>
+                        <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     
 
@@ -132,6 +172,7 @@
                             <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
+                                    <th>STATUS</th>
                                     <th>SIRUTA</th>
                                     <th>DENLOC</th>
                                     <th>CODP</th>
@@ -146,6 +187,13 @@
                                     <th>FSL</th>
                                     <th>rang</th>
                                     <th>gmap_name</th>
+                                    <th>gmap_postal_code</th>
+                                    <th>gmap_admin_hierarchy </th>
+                                    <th>gmap_center</th>
+                                    <th>gmap_bounds</th>
+                                    <th>gmap_type</th>
+                                    <th>gmap_requests</th>
+
 
 
                                 </tr>
@@ -154,7 +202,17 @@
 
                                     {% for item in data %}
 
-                                        <tr>
+                                        <tr>        
+                                                    <td>
+                                                        <div id="snig_confirm_{{item['_id']}}" >
+                                                        {% if item['status_snig'] == 1  %}
+                                                        <label class="label label-success">Confirmed </label>
+                                                        <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>Confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button><p> 
+                                                         {% endif %}
+                                                         </div>
+                                                    </td>
                                                     <td>{{item['SIRUTA']}}</td>
                                                     <td>{{item['DENLOC']}}</td>
                                                     <td>{{item['CODP']}}</td>
@@ -168,7 +226,31 @@
                                                     <td>{{item['FS3']}}</td>
                                                     <td>{{item['FSL']}}</td>
                                                     <td>{{item['rang']}}</td>
-                                                    <td>{{item['gmap_name']}}</td>
+
+                                                    {% if item['gmap_name'] and item['gmap_name'].lower()  ==  item['DENLOC'].lower() %}
+                                                        <td  style="background-color: #9efb9e;">{{item['gmap_name']}}</td>
+
+                                                     {% else %}
+                                                        <td style="background-color: #f0b7ab;">{{item['gmap_name']}}</td>
+                                                      {% endif %}
+
+
+                                         
+
+                                                     {% if item['gmap_postal_code']  ==  item['CODP']|string %}
+                                                        <td  style="background-color: #9efb9e;">{{item['gmap_postal_code']}}</td>
+
+                                                     {% else %}
+                                                        <td style="background-color: #f0b7ab;">{{item['gmap_postal_code']}}</td>
+                                                      {% endif %}
+
+                                                    <td>{{item['gmap_admin_hierarchy']}}</td>
+                                                    <td>{{item['gmap_center']}}</td>
+                                                    <td>{{item['gmap_bounds']}}</td>
+                                                    <td>{{item['gmap_type']}}</td>
+                                                    <td>{{item['gmap_requests']}}</td>
+
+
                                             
                                     
                                             
@@ -216,27 +298,24 @@
 <script src="/js/pages/tables/jquery-datatable.js"></script>
 <script type="text/javascript">
 
-function cheked(id) {
+function cheked_snig(id) {
        var id;
-       // alert(id);
-           $.post( "/sinoptik_db_confirm", { id: id })
-           .done(function( data ) {
-                 document.getElementById('status_'+id).innerHTML = '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
-    
-       });
-}
-
-function dell(id) {
-       var id;
-       // alert(id);
-          $.post( "/sinoptik_db_delete-confirm", { id: id })
+          $.post( "/matching-romania-confirm", { id: id })
             .done(function( data ) {
-                 document.getElementById('status_'+id).innerHTML =      '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
+                 document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed </label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
     
         });
 }
 
-
+function dell_snig(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-romania-confirm_del", { id: id })
+            .done(function( data ) {
+                 document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
+    
+        });
+}
 
 function reparse_by_geocode(id) {
     
