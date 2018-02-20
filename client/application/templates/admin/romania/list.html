@@ -53,30 +53,30 @@
             
             var $modal = $(this),
                 esseyId = e.relatedTarget.id;
-        //             $.post( "/spain-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
-        //     .done(function( data ) {
-        //         console.log(JSON.parse(data))
-        //         arr = JSON.parse(data)
-       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>'
-        //         for (var i = 0; i < arr.length; i++){
-        //             var obj = arr[i];
-        //             // for (var key in obj){
-        //             //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
-        //             //     var attrValue = obj[key];
-        //             //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
-        //             // }
-        //             console.log(obj)
-        //             var place_id =  obj['place_id']
-        //             txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
+                    $.post( "/romania-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
+            .done(function( data ) {
+                console.log(JSON.parse(data))
+                arr = JSON.parse(data)
+       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>';
+                for (var i = 0; i < arr.length; i++){
+                    var obj = arr[i];
+                    // for (var key in obj){
+                    //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
+                    //     var attrValue = obj[key];
+                    //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
+                    // }
+                    console.log(obj)
+                    var place_id =  obj['place_id'];
+                    txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
                      
-        //         }
-        //         txt = txt+'</form>';
+                }
+                txt = txt+'</form>';
 
         $modal.find('.edit-content').html(txt);
 
                
         //     // alert(data)
-        // });
+        });
             
 //            $.ajax({
 //                cache: false,
@@ -121,27 +121,8 @@
                         </h2>
                     </div>
                                  <div class="text">
-                        Toggle column (INE):
-                                                        <th>SIRUTA</th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                     <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th> </th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
-                                    <th></th>
+                        Toggle column :
+                                 
                         - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>SIRUTA</a>
                         - <a class="toggle-link-vis" data-column="2">DENLOC</a>
                         -<a class="toggle-link-vis" data-column="3" >CODP</a>
@@ -228,10 +209,10 @@
                                                     <td>{{item['rang']}}</td>
 
                                                     {% if item['gmap_name'] and item['gmap_name'].lower()  ==  item['DENLOC'].lower() %}
-                                                        <td  style="background-color: #9efb9e;">{{item['gmap_name']}}</td>
+                                                        <td  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
 
                                                      {% else %}
-                                                        <td style="background-color: #f0b7ab;">{{item['gmap_name']}}</td>
+                                                        <td style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
                                                       {% endif %}
 
 
@@ -319,10 +300,10 @@ function dell_snig(id) {
 
 function reparse_by_geocode(id) {
     
-    $.post( "/spain-reparse_by_geocode", { id: id, type: 'autocomplete' })
+    $.post( "/romania-reparse_by_geocode", { id: id, type: 'autocomplete' })
             .done(function( data ) {
                 
-            alert(data)
+            console.log(data);
         });
     // var id;
     // alert(id);
@@ -368,32 +349,33 @@ function by_my_place() {
 }
 
 function repars(mongo_id, place_id) {
-        $.post( "/spain-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+        $.post( "/romania-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
             .done(function( data ) {
                 arr = JSON.parse(data)
-                $('#edit-modal').modal('toggle');
-                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
-                var gm_comp = "<a target='_blank' href='"+arr['15_gmap_comparison_url']+"'>"+arr['15_GMap_center_SNIG_comparison']+"</a>";
-                $('.gmap_name_'+mongo_id).html(gmname);
-                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
-                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                console.log(pcs)
+                // $('#edit-modal').modal('toggle');
+                // var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                // var gm_comp = "<a target='_blank' href='"+arr['15_gmap_comparison_url']+"'>"+arr['15_GMap_center_SNIG_comparison']+"</a>";
+                // $('.gmap_name_'+mongo_id).html(gmname);
+                // $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                // $('.gmap_comp_status_'+mongo_id).html(gm_comp);
 
-                if (arr['gmap_type_status']) {
-                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
-                }else{
-                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
-                }
-                if (arr['gmap_name_status']) {
-                    $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
-                }else{
-                    $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
-                }
+                // if (arr['gmap_type_status']) {
+                //     $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+                // }else{
+                //     $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+                // }
+                // if (arr['gmap_name_status']) {
+                //     $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+                // }else{
+                //     $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+                // }
 
-                if (arr['gmap_comp_status']) {
-                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
-                }else{
-                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
-                }
+                // if (arr['gmap_comp_status']) {
+                //     $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                // }else{
+                //     $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                // }
         });
 }
 </script>

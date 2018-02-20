@@ -651,90 +651,7 @@ def matching_romania(region=None):
         db = connection.location
         data =  db.romania.find({'REGIUNE': int(region)})
         return render_template('admin/romania/list.html', region=Provincia[str(region)], com = 0, data=data)
-    # config = Config('./config/config.yml')
-    # mongo_config = config.get('mongodb')
-    # connection = MongoClient(mongo_config['host'], mongo_config['port'])
-    # db = connection.romania
-   
-  
 
-
-
-    # return render_template('admin/matching-spain/region-list.html', data=region)
-    
-
-    # mode = request.args.get('mode', 'none')
-    # Provincia = {
-    #             '01' : 'Araba (Álava)',
-    #             '02' : 'Abacente ',
-    #             '03' : 'Alicante ',
-    #             '04' : 'Almería ',
-    #             '05' : 'Avila ',
-    #             '06' : 'Badajoz ',
-    #             '07' : 'Balears, Illes', 
-    #             '08' : 'Barcelona ',
-    #             '09' : 'Burgos ',
-    #             '10' : 'Cáceres ',
-    #             '11' : 'Cádiz ',
-    #             '12' : 'Castellón', 
-    #             '13' : 'Ciudad Real', 
-    #             '14' : 'Córdoba ',
-    #             '15' : 'Coruña, A ',
-    #             '16' : 'Cuenca ',
-    #             '17' : 'Girona ',
-    #             '18' : 'Granada ',
-    #             '19' : 'Guadalajara ', 
-    #             '20' : 'Guipuzcoa ',
-    #             '21' : 'Huelva ',
-    #             '22' : 'Huesca ',
-    #             '23' : 'Jaén ',
-    #             '24' : 'León ',
-    #             '25' : 'Lleida ',
-    #             '26' : 'Rioja, La ',
-    #             '27' : 'Lugo ',
-    #             '28' : 'Madrid ',
-    #             '29' : 'Málaga ',
-    #             '30' : 'Murcia ',
-    #             '31' : 'Navarra ',
-    #             '32' : 'Ourense ',
-    #             '33' : 'Asturias ',
-    #             '34' : 'Palencia ',
-    #             '35' : 'Las Palmas ',
-    #             '36' : 'Pontevedra ',
-    #             '37' : 'Salamanca ',
-    #             '38' : 'Santa Cruz de Tenerife', 
-    #             '39' : 'Cantabria ',
-    #             '40' : 'Segovia ',
-    #             '41' : 'Sevilla ',
-    #             '42' : 'Soria ',
-    #             '43' : 'Tarragona ',
-    #             '44' : 'Teruel ',
-    #             '45' : 'Toledo ',
-    #             '46' : 'Valencia ',
-    #             '47' : 'Valladolid ',
-    #             '48' : 'Bizkaia ',
-    #             '49' : 'Zamora ',
-    #             '50' : 'Zaragoza ',
-    #             '51' : 'Ceuta ',
-    #             '52' : 'Melilla ',
-    #         }
-    # types = {"Municipio": ["administrative_area_level_4"],
-    #         "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
-    #         "Otras entidades": ["locality", "neighborhood"],
-    #         "Capital de municipio":["locality"],
-    #         "Entidad singular": ["locality"]}
-    # if region is None:
- 
-
-
-    #     return render_template('admin/matching-spain/region-list.html', data=Provincia)
-    # else:
-    #     config = Config('./config/config.yml')
-    #     mongo_config = config.get('mongodb')
-    #     connection = MongoClient(mongo_config['host'], mongo_config['port'])
-    #     db = connection.location
-    #     data =  db.internal.find({'20_SNIG_COD_PROV': int(region)})
-    #     return render_template('admin/matching-spain/list.html', region=Provincia[str(region)], com = 0, types=types, data=data)
 @app.route('/matching-romania-confirm', methods=['GET', 'POST'])
 @login_required
 def romania_confirm():
@@ -760,6 +677,106 @@ def romania_confirm_del():
     return request.form['id'] 
 
 
+@app.route('/romania-reparse_by_geocode', methods=['GET', 'POST'])
+@login_required
+def romania_reparse_by_geocode():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    # use_cache = bool(get.get('use_cache', True))
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    doc = db.romania.find_one({"_id" : ObjectId(request.form['id']) })
+    doc_factory = DocFactory(config.get('mongodb'))
+    Key = Keygen()
+    keyAPI =  Key.get_key_place()
+    if not keyAPI:
+        sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
+    gmap_config = config.get('googlemaps')
+    # gmap_config.update(language=language)
+    language = 'ro'
+
+    gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config,
+                                                            storage_config=config.get('mongodb'))
+    spider = Spider(
+            loader_factory=LoaderFactory,
+            gmap_parser=MapFactory.spain,
+            doc_factory=doc_factory,
+            language=language,
+            config=config,
+            use_cache=True
+    )
+    if request.form['type'] == "autocomplete":
+        raw = gmap_loader.by_places(doc['DENLOC'] + ', România')
+        return json.dumps(raw)
+    else:
+        objects = spider.get_gmap_place_id(request.form['place_id'])
+        gmap = {}
+        gmap = objects[0].get_document()
+        try:
+            if gmap['name'].lower().lstrip().strip() == doc['DENLOC'].lower().lstrip().strip():
+                gmap['comparison'] = True
+            else:
+                gmap['comparison'] = False
+        except Exception as e: 
+            gmap['comparison'] = False
+
+        pcs = False
+        if 'postal_code' in gmap and gmap.get('postal_code') == doc['CODP']:
+            pcs = True
+        else:
+            pcs = False
+
+        # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        # gmap['15_gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc['28_SNIG_LATITUD_ETRS89'])+","+str(doc['29_SNIG_LONGITUD_ETRS89'])+"")
+        db.romania.update_one(
+                {"_id": ObjectId(request.form['id']) },
+                    {
+                        "$set": {
+                                'gmap_name': gmap.get('name'),
+                                'gmap_admin_hierarchy': gmap.get('admin_hierarchy', {}),
+                                'gmap_center': gmap.get('center'),
+                                'gmap_bounds': gmap.get('bounds'),
+                                'gmap_type': gmap.get('type'),
+                                'gmap_translate': gmap.get('translate'),
+                                'gmap_requests': gmap.get('requests'),
+                                'gmap_code': gmap.get('code'),
+                                'gmap_postal_code': gmap.get('postal_code'),
+
+                    }
+               }
+        )
+        # gmap.pop('_id')
+        # # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        # if gmap['15_GMap_center_SNIG_comparison'] <= 1:
+        #     gm_comp_status = True
+        # else:
+        #     gm_comp_status = False
+
+        # types = {"Municipio": ["administrative_area_level_4"],
+        #     "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
+        #     "Otras entidades": ["locality", "neighborhood"],
+        #     "Capital de municipio":["locality"],
+        #     "Entidad singular": ["locality"]}
+        # if gmap.get('type') in types[doc['25_SNIG_TIPO']]:
+        #     gm_type_status = True
+        # else:
+        #     gm_type_status = False
+
+
+        raw = {
+                "gmap_name": gmap.get('name'),
+                "gmap_name_status" : gmap['comparison'],
+                "gmap_type": gmap.get('type'),
+                "gmap_postal_code": gmap.get('postal_code'),
+                "pcs":pcs,
+
+            }
+        
+        return json.dumps(raw)
 
 
 
@@ -788,6 +805,19 @@ def user_list():
     data = db.users.find()
 
     return render_template('admin/users/list.html', data=data)
+
+
+
+@app.route('/gmap/keys')
+@login_required
+def keys_google():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    data = db.keygen.find()
+
+    return render_template('admin/gmap/keys.html', data=data)
     # return render_template('admin/users/create.html')
 
 
