@@ -71,25 +71,31 @@ def getDistance(lat1,lon1,lat2,lon2):
     print (round(resp, 2))
     return round(resp, 2)
 
-for row in db.romania.find():
-	if "wiki_center" in row and "gmap_center" in row:
-		# data =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-		try:
-			print(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-			distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-			print(distance)
-			db.romania.update_one(
-		                {"_id": row['_id'] },
-		                    {
-		                        "$set": {
-		                       	
-		                       	'gmap_wiki_distance': distance,
-		                        
-		                    }
-		               }
-		        )
-		except Exception as e:
-			print(str(e))	
+try:
+	
+
+	for row in db.romania.find():
+		if "wiki_center" in row and "gmap_center" in row:
+			# data =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+			try:
+				print(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+				distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+				print(distance)
+				db.romania.update_one(
+			                {"_id": row['_id'] },
+			                    {
+			                        "$set": {
+			                       	
+			                       	'gmap_wiki_distance': distance,
+			                        
+			                    }
+			               }
+			        )
+			except Exception as e:
+				print(str(e))
+
+except Exception as e:
+	raise e	
 		# Key = Keygen()
 		# keyAPI =  Key.get_key_geocode()
 		# if not keyAPI:
