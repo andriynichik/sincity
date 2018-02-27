@@ -169,7 +169,7 @@ for row in datar:
 		#                     }
 		#                }
 		#         )
-	time.sleep(0.5) 
+
 	# print(internal)
 
 
