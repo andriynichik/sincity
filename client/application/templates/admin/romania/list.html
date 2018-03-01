@@ -141,7 +141,7 @@
                         - <a class="toggle-link-vis" data-column="16" style="color: red;" data-hide>gmap_admin_hierarchy</a>
                         - <a class="toggle-link-vis" data-column="17" style="color: red;" data-hide>gmap_center</a>
                         - <a class="toggle-link-vis" data-column="18" style="color: red;" data-hide>gmap_bounds</a>
-                        - <a class="toggle-link-vis" data-column="19" style="color: red;">distance_wiki_gmap</a>
+                        - <a class="toggle-link-vis" data-column="19">distance_wiki_gmap</a>
                          - <a class="toggle-link-vis" data-column="20">gmap_type</a>
                         - <a class="toggle-link-vis" data-column="21" style="color: red;" data-hide>gmap_requests</a>
                         
@@ -151,6 +151,12 @@
                         - <a class="toggle-link-vis" data-column="24" style="color: red;" data-hide>wiki_postal_code</a>
                         - <a class="toggle-link-vis" data-column="25" style="color: red;" data-hide>wiki_center</a>
                         - <a class="toggle-link-vis" data-column="26" style="color: red;" data-hide>wiki_admin_hierarchy</a>
+                        - <a class="toggle-link-vis" data-column="27" style="color: red;" data-hide>DENLOC_Adapted</a>
+                        - <a class="toggle-link-vis" data-column="28" style="color: red;" data-hide>gmap_name_Adapted</a>
+                        - <a class="toggle-link-vis" data-column="29" style="color: red;" data-hide>Wiki_Name_Adapted</a>
+                        
+
+
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     
@@ -188,7 +194,9 @@
                                     <th>wiki_postal_code</th>
                                     <th>wiki_center</th>
                                     <th>wiki_admin_hierarchy</th>
-                                 
+                                    <th>DENLOC_Adapted</th>
+                                    <th>gmap_name_Adapted</th>
+                                    <th>Wiki_Name_Adapted</th>
 
 
 
@@ -223,7 +231,7 @@
                                                     <td>{{item['FSL']}}</td>
                                                     <td>{{item['rang']}}</td>
 
-                                                    {% if item['gmap_name'] and item['gmap_name'].lower()  ==  item['DENLOC'].lower() %}
+                                                    {% if item['gmap_name'] and item['gmap_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')   ==  item['DENLOC'].lower().lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't') %}
                                                         <td  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
 
                                                      {% else %}
@@ -260,7 +268,21 @@
                                                     <td>{{item['wiki_postal_code']}}</td>
                                                     <td>{{item['wiki_center']}}</td>
                                                     <td>{{item['wiki_admin_hierarchy']}}</td>
+                                                    <td>{{item['DENLOC'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')}}</td>
+
+                                                    {% if item['gmap_name'] %}
+                                                    <td>{{item['gmap_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')}}</td>
+                                                    {% else %}
+                                                    <td></td>
+                                                     {% endif %}
                                                     
+                                                             {% if item['wiki_name'] %}
+                                                    <td>{{item['wiki_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')}}</td>
+                                                    {% else %}
+                                                    <td></td>
+                                                     {% endif %}
+                                                    
+
                                          
 
                                             
