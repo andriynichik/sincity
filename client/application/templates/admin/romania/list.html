@@ -102,6 +102,11 @@
     
 //   });
 // });
+        $('.search-input-text').on( 'keyup click', function () {   // for text boxes
+    var i =$(this).attr('data-column');  // getting column index
+    var v =$(this).val();  // getting search input value
+    table.columns(i).search(v).draw();
+} );
 
 } );
 
@@ -167,36 +172,36 @@
                             <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>STATUS</th>
-                                    <th>SIRUTA</th>
-                                    <th>DENLOC</th>
-                                    <th>CODP</th>
-                                    <th>JUD</th>
-                                    <th>SIRSUP</th>
-                                    <th>TIP</th>
-                                    <th>NIV</th>
-                                    <th>REGIUNE</th>
-                                    <th>FSJ</th>
-                                    <th>FS2</th>
-                                    <th>FS3</th>
-                                    <th>FSL</th>
-                                    <th>rang</th>
-                                    <th>gmap_name</th>
-                                    <th>gmap_postal_code</th>
-                                    <th>gmap_admin_hierarchy </th>
-                                    <th>gmap_center</th>
-                                    <th>gmap_bounds</th>
-                                    <th>distance_wiki_gmap</th>
-                                    <th>gmap_type</th>
-                                    <th>gmap_requests</th>
-                                    <th>wiki_name</th>
-                                    <th>wiki_siruta</th>
-                                    <th>wiki_postal_code</th>
-                                    <th>wiki_center</th>
-                                    <th>wiki_admin_hierarchy</th>
-                                    <th>DENLOC_Adapted</th>
-                                    <th>gmap_name_Adapted</th>
-                                    <th>Wiki_Name_Adapted</th>
+                                    <th><input type="text" data-column="0"  class="search-input-text">STATUS</th>
+                                    <th><input type="text" data-column="1"  class="search-input-text">SIRUTA</th>
+                                    <th><input type="text" data-column="2"  class="search-input-text">DENLOC</th>
+                                    <th><input type="text" data-column="3"  class="search-input-text">CODP</th>
+                                    <th><input type="text" data-column="4"  class="search-input-text">JUD</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">SIRSUP</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">TIP</th>
+                                    <th><input type="text" data-column="7"  class="search-input-text">NIV</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">REGIUNE</th>
+                                    <th><input type="text" data-column="9"  class="search-input-text">FSJ</th>
+                                    <th><input type="text" data-column="10"  class="search-input-text">FS2</th>
+                                    <th><input type="text" data-column="11"  class="search-input-text">FS3</th>
+                                    <th><input type="text" data-column="12"  class="search-input-text">FSL</th>
+                                    <th><input type="text" data-column="13"  class="search-input-text">rang</th>
+                                    <th><input type="text" data-column="14"  class="search-input-text">gmap_name</th>
+                                    <th><input type="text" data-column="15"  class="search-input-text">gmap_postal_code</th>
+                                    <th><input type="text" data-column="16"  class="search-input-text">gmap_admin_hierarchy </th>
+                                    <th><input type="text" data-column="17"  class="search-input-text">gmap_center</th>
+                                    <th><input type="text" data-column="18"  class="search-input-text">gmap_bounds</th>
+                                    <th><input type="text" data-column="19"  class="search-input-text">distance_wiki_gmap</th>
+                                    <th><input type="text" data-column="20"  class="search-input-text">gmap_type</th>
+                                    <th><input type="text" data-column="21"  class="search-input-text">gmap_requests</th>
+                                    <th><input type="text" data-column="22"  class="search-input-text">wiki_name</th>
+                                    <th><input type="text" data-column="23"  class="search-input-text">wiki_siruta</th>
+                                    <th><input type="text" data-column="24"  class="search-input-text">wiki_postal_code</th>
+                                    <th><input type="text" data-column="25"  class="search-input-text">wiki_center</th>
+                                    <th><input type="text" data-column="26"  class="search-input-text">wiki_admin_hierarchy</th>
+                                    <th><input type="text" data-column="27"  class="search-input-text">DENLOC_Adapted</th>
+                                    <th><input type="text" data-column="28"  class="search-input-text">gmap_name_Adapted</th>
+                                    <th><input type="text" data-column="29"  class="search-input-text">Wiki_Name_Adapted</th>
 
 
 
@@ -249,7 +254,11 @@
                                                       {% endif %}
 
                                                     <td>{{item['gmap_admin_hierarchy']}}</td>
-                                                    <td>{{item['gmap_center']}}</td>
+                                                    {% if 'gmap_center' in item %}
+                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}">{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}</a></td>
+                                                    {% else %}
+                                                    <td></td>
+                                                    {% endif %}
                                                     <td>{{item['gmap_bounds']}}</td>
                                                                {% if 'gmap_wiki_distance' in  item and  item['gmap_wiki_distance']  <  2 %}
                                                         <td style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
@@ -266,7 +275,20 @@
                                                     
                                                     <td>{{item['wiki_siruta']}}</td>
                                                     <td>{{item['wiki_postal_code']}}</td>
-                                                    <td>{{item['wiki_center']}}</td>
+                                                    
+
+
+                                                     {% if 'wiki_center' in item %}
+                                                        <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}">{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}</a></td>
+                                                    {% else %}
+                                                         <td></td>
+                                                    {% endif %}
+
+
+
+
+
+
                                                     <td>{{item['wiki_admin_hierarchy']}}</td>
                                                     <td>{{item['DENLOC'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')}}</td>
 
