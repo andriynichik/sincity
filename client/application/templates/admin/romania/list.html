@@ -17,14 +17,12 @@
                     table.columns(30).search( this.value ).draw();
                 } );
      $('#dropdown2').on('change', function () {
-                    table.columns(29).search( this.value ).draw();
+                    table.columns(31).search( this.value ).draw();
                 } );
     $('#dropdown3').on('change', function () {
-                    table.columns(31).search( this.value ).draw();
-                } ); 
-        $('#dropdown4').on('change', function () {
                     table.columns(32).search( this.value ).draw();
                 } ); 
+
 
 
 
@@ -160,12 +158,35 @@
                         - <a class="toggle-link-vis" data-column="28" style="color: red;" data-hide>gmap_name_Adapted</a>
                         - <a class="toggle-link-vis" data-column="29" style="color: red;" data-hide>Wiki_Name_Adapted</a>
                         
+                        <a class="toggle-link-vis" data-column="30" style="color: red;" data-hide></a>
+                       <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide></a>
+                       <a class="toggle-link-vis" data-column="32" style="color: red;" data-hide></a>
 
 
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     
+                                        <label>DENLOC ≠ gmap_name :</label>
+                    <select id="dropdown1">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
 
+                    <label>CODP ≠ gmap_postal_code :</label>
+                    <select id="dropdown2">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+
+
+                     <label>distance > 1km : </label>
+                    <select id="dropdown3">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
                     
                     <div class="body">
                         <div class="table-responsive">
@@ -202,6 +223,9 @@
                                     <th><input type="text" data-column="27"  class="search-input-text">DENLOC_Adapted</th>
                                     <th><input type="text" data-column="28"  class="search-input-text">gmap_name_Adapted</th>
                                     <th><input type="text" data-column="29"  class="search-input-text">Wiki_Name_Adapted</th>
+                                    <th>gmd</th>
+                                    <th>gpcs</th>
+                                    <th>dst</th>
 
 
 
@@ -237,10 +261,10 @@
                                                     <td>{{item['rang']}}</td>
 
                                                     {% if item['gmap_name'] and item['gmap_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')   ==  item['DENLOC'].lower().lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't') %}
-                                                        <td  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                        <td class="gmap_name_{{item['_id']}}"  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
 
                                                      {% else %}
-                                                        <td style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                        <td class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
                                                       {% endif %}
 
 
@@ -261,10 +285,10 @@
                                                     {% endif %}
                                                     <td>{{item['gmap_bounds']}}</td>
                                                                {% if 'gmap_wiki_distance' in  item and  item['gmap_wiki_distance']  <  2 %}
-                                                        <td style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                                                     {% elif 'gmap_center' in  item  and 'wiki_center' in item %}
 
-                                                        <td style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                                                     {% else %}
                                                                          <td style="background-color: #f0b7ab;" > </td>
                                                     {% endif %}
@@ -303,13 +327,30 @@
                                                     {% else %}
                                                     <td></td>
                                                      {% endif %}
+                                        
                                                     
+                                                      {% if item['gmap_name'] and item['gmap_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')   ==  item['DENLOC'].lower().lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't') %}
+                                                        <td>true</td>
 
-                                         
+                                                     {% else %}
+                                                       <td>false</td>
+                                                      {% endif %}
 
-                                            
+                                                     {% if item['gmap_postal_code']  ==  item['CODP']|string %}
+                                                        <td>true</td>
+
+                                                     {% else %}
+                                                       <td>false</td>
+                                                      {% endif %}
                                     
-                                            
+                                                           {% if 'gmap_wiki_distance' in  item and  item['gmap_wiki_distance']  <  2 %}
+                                                        <td>true</td>
+                                                    {% elif 'gmap_center' in  item  and 'wiki_center' in item %}
+
+                                                        <td>false</td>
+                                                    {% else %}
+                                                        <td>false</td>
+                                                    {% endif %}
                                             <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}
@@ -385,72 +426,73 @@ function reparse_by_geocode(id) {
 }
 
 function by_my_place() {
-    var parser_id = $('#place_id_reparse').val();
-    var sinoptik_id =  $('.mongo_pars_is').text();
+    var place_id = $('#place_id_reparse').val();
+    var mongo_id =  $('.mongo_pars_is').text();
+    // console.log(parser_id);
+    // console.log(sinoptik_id);
+    repars(mongo_id, place_id);
+    // var place_id = $('#place_id_reparse').val('');
+    // $('#edit-modal').modal('toggle');
+    // // alert(mongo_id);
+    //         $.post( "/sinoptik_db_reparse", { parser_id: parser_id, sinoptik_id:sinoptik_id })
+    //         .done(function( data ) {
+    //             console.log(data)
+    //             arr = JSON.parse(data)
+    //     //         $('#edit-modal').modal('toggle');
+    //     //         var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+    //             var gm_comp = "<a target='_blank' href='"+arr['comparison_url']+"'>"+arr['comparison']+"</a>";
+    //             $('.name_'+sinoptik_id).html(arr['SNIG_NOMBRE']);
+    //     //         $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+    //             $('.comp_status_'+sinoptik_id).html(gm_comp);
+    //             $('.parser_'+sinoptik_id).html(parser_id);
 
-    // repars(mongo_id, place_id);
-    var place_id = $('#place_id_reparse').val('');
-    $('#edit-modal').modal('toggle');
-    // alert(mongo_id);
-            $.post( "/sinoptik_db_reparse", { parser_id: parser_id, sinoptik_id:sinoptik_id })
-            .done(function( data ) {
-                console.log(data)
-                arr = JSON.parse(data)
-        //         $('#edit-modal').modal('toggle');
-        //         var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
-                var gm_comp = "<a target='_blank' href='"+arr['comparison_url']+"'>"+arr['comparison']+"</a>";
-                $('.name_'+sinoptik_id).html(arr['SNIG_NOMBRE']);
-        //         $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
-                $('.comp_status_'+sinoptik_id).html(gm_comp);
-                $('.parser_'+sinoptik_id).html(parser_id);
+    //     //         if (arr['gmap_type_status']) {
+    //     //             $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+    //     //         }else{
+    //     //             $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+    //     //         }
+    //     //         if (arr['gmap_name_status']) {
+    //     //             $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+    //     //         }else{
+    //     //             $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+    //     //         }
 
-        //         if (arr['gmap_type_status']) {
-        //             $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
-        //         }else{
-        //             $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
-        //         }
-        //         if (arr['gmap_name_status']) {
-        //             $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
-        //         }else{
-        //             $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
-        //         }
-
-                if (arr['comparison_status']) {
-                    $('.comp_status_'+sinoptik_id).css('background-color','#9efb9e' );
-                }else{
-                    $('.comp_status_'+sinoptik_id).css('background-color','#f0b7ab' ); 
-                }
-        });
+    //             if (arr['comparison_status']) {
+    //                 $('.comp_status_'+sinoptik_id).css('background-color','#9efb9e' );
+    //             }else{
+    //                 $('.comp_status_'+sinoptik_id).css('background-color','#f0b7ab' ); 
+    //             }
+    //     });
 }
 
 function repars(mongo_id, place_id) {
         $.post( "/romania-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
             .done(function( data ) {
                 arr = JSON.parse(data)
-                console.log(pcs)
-                // $('#edit-modal').modal('toggle');
-                // var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
-                // var gm_comp = "<a target='_blank' href='"+arr['15_gmap_comparison_url']+"'>"+arr['15_GMap_center_SNIG_comparison']+"</a>";
-                // $('.gmap_name_'+mongo_id).html(gmname);
+                // console.log(pcs)
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
                 // $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
-                // $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
 
                 // if (arr['gmap_type_status']) {
                 //     $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
                 // }else{
                 //     $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
                 // }
-                // if (arr['gmap_name_status']) {
-                //     $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
-                // }else{
-                //     $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
-                // }
+                if (arr['gmap_name_status']) {
+                    $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
 
-                // if (arr['gmap_comp_status']) {
-                //     $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
-                // }else{
-                //     $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
-                // }
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
         });
 }
 </script>

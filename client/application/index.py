@@ -717,7 +717,7 @@ def romania_reparse_by_geocode():
         gmap = {}
         gmap = objects[0].get_document()
         try:
-            if gmap['name'].lower().lstrip().strip() == doc['DENLOC'].lower().lstrip().strip():
+            if gmap['name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't') == doc['DENLOC'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't'):
                 gmap['comparison'] = True
             else:
                 gmap['comparison'] = False
@@ -730,8 +730,9 @@ def romania_reparse_by_geocode():
         else:
             pcs = False
 
+        distance =  getDistance(gmap['center']['lat'], gmap['center']['lng'], doc["wiki_center"]["lat"],doc["wiki_center"]["lng"])
         # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
-        # gmap['15_gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc['28_SNIG_LATITUD_ETRS89'])+","+str(doc['29_SNIG_LONGITUD_ETRS89'])+"")
+        gmap['gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc["wiki_center"]["lat"])+","+str(doc["wiki_center"]["lng"])+"")
         db.romania.update_one(
                 {"_id": ObjectId(request.form['id']) },
                     {
@@ -745,10 +746,16 @@ def romania_reparse_by_geocode():
                                 'gmap_requests': gmap.get('requests'),
                                 'gmap_code': gmap.get('code'),
                                 'gmap_postal_code': gmap.get('postal_code'),
+                                'gmap_wiki_distance':distance
 
                     }
                }
         )
+
+        if distance < 2:
+            distance_status = True
+        else:
+            distance_status = False
         # gmap.pop('_id')
         # # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
         # if gmap['15_GMap_center_SNIG_comparison'] <= 1:
@@ -773,6 +780,8 @@ def romania_reparse_by_geocode():
                 "gmap_type": gmap.get('type'),
                 "gmap_postal_code": gmap.get('postal_code'),
                 "pcs":pcs,
+                "distance":distance,
+                "distance_status":distance_status
 
             }
         
