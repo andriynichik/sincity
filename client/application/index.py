@@ -730,9 +730,18 @@ def romania_reparse_by_geocode():
         else:
             pcs = False
 
-        distance =  getDistance(gmap['center']['lat'], gmap['center']['lng'], doc["wiki_center"]["lat"],doc["wiki_center"]["lng"])
-        # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
-        gmap['gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc["wiki_center"]["lat"])+","+str(doc["wiki_center"]["lng"])+"")
+        if 'wiki_center' in doc:
+            
+            distance =  getDistance(gmap['center']['lat'], gmap['center']['lng'], doc["wiki_center"]["lat"],doc["wiki_center"]["lng"])
+            # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+            gmap['gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc["wiki_center"]["lat"])+","+str(doc["wiki_center"]["lng"])+"")
+        
+        else:
+            distance =  False
+            # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+            gmap['gmap_comparison_url'] = False
+      
+
         db.romania.update_one(
                 {"_id": ObjectId(request.form['id']) },
                     {
@@ -781,7 +790,9 @@ def romania_reparse_by_geocode():
                 "gmap_postal_code": gmap.get('postal_code'),
                 "pcs":pcs,
                 "distance":distance,
-                "distance_status":distance_status
+                "distance_status":distance_status,
+                "gmap_comparison_url":gmap['gmap_comparison_url'],
+                'gmap_type': gmap.get('type'),
 
             }
         

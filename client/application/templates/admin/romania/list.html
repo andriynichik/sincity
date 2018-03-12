@@ -284,7 +284,7 @@
                                                     <td></td>
                                                     {% endif %}
                                                     <td>{{item['gmap_bounds']}}</td>
-                                                               {% if 'gmap_wiki_distance' in  item and  item['gmap_wiki_distance']  <  2 %}
+                                                               {% if 'gmap_wiki_distance' in  item  and 'wiki_center' in item and  item['gmap_wiki_distance']  <  2 %}
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                                                     {% elif 'gmap_center' in  item  and 'wiki_center' in item %}
 
@@ -292,7 +292,7 @@
                                                     {% else %}
                                                                          <td style="background-color: #f0b7ab;" > </td>
                                                     {% endif %}
-                                                    <td>{{item['gmap_type']}}</td>
+                                                    <td class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
                                                       <td>{{item['gmap_requests']}}</td>
                                                     
                                                     <td><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></td>
@@ -470,12 +470,14 @@ function repars(mongo_id, place_id) {
             .done(function( data ) {
                 arr = JSON.parse(data)
                 // console.log(pcs)
+                $('#place_id_reparse').val('');
                 $('#edit-modal').modal('toggle');
                 var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
                 var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
                 $('.gmap_name_'+mongo_id).html(gmname);
-                // $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
                 $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                 // $('.gmap_type_'+mongo_id).html(gm_comp);
 
                 // if (arr['gmap_type_status']) {
                 //     $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
