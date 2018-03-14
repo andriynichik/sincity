@@ -645,12 +645,47 @@ def matching_romania(region=None):
 
         return render_template('admin/romania/region-list.html', data=Provincia)
     else:
+        TIP_Name ={
+            "40":"Judet_admin",
+            "1":"Municipiu_admin_resedinta_judet",
+            "2":"Oras_admin",
+            "3":"Comuna_admin",
+            "4":"Municipiu_admin",
+            "5":"Oras_admin_resedinta_judet",
+            "6":"Sectoarele_Bucuresti",
+            "9":"Town_resedinta_municipiu",
+            "10":"Town_municipiu",
+            "11":"Willage_municipiu",
+            "17":"Town_resedinta_orasului",
+            "18":"Town_orasului",
+            "19":"Willage_orasului",
+            "22":"Willage_resedinta_comuna",
+            "23":"Willage_comuna",
+        }
+
+        types = {
+            "40": ["administrative_area_level_1"],
+            "1":    ["administrative_area_level_2"],
+            "2":    ["administrative_area_level_2"],
+            "3":    ["administrative_area_level_2"],    
+            "4":    ["administrative_area_level_2"],    
+            "5":    ["administrative_area_level_2"],    
+            "6":    ["sublocality_level_1"],    
+            "9":    ["locality","sublocality_level_1"],
+            "10":   ["locality","sublocality_level_1"],
+            "11":   ["locality","sublocality_level_1"],
+            "17":   ["locality","sublocality_level_1"],
+            "18":   ["locality","sublocality_level_1"],
+            "19":   ["locality","sublocality_level_1"],
+            "22":   ["locality","sublocality_level_1"],
+            "23":   ["locality","sublocality_level_1"]
+        }
         config = Config('./config/config.yml')
         mongo_config = config.get('mongodb')
         connection = MongoClient(mongo_config['host'], mongo_config['port'])
         db = connection.location
         data =  db.romania.find({'REGIUNE': int(region)})
-        return render_template('admin/romania/list.html', region=Provincia[str(region)], com = 0, data=data)
+        return render_template('admin/romania/list.html', region=Provincia[str(region)], types=types, tip_name=TIP_Name,  com = 0, data=data)
 
 @app.route('/matching-romania-confirm', methods=['GET', 'POST'])
 @login_required
@@ -782,11 +817,35 @@ def romania_reparse_by_geocode():
         # else:
         #     gm_type_status = False
 
+        types = {
+            "40": ["administrative_area_level_1"],
+            "1":    ["administrative_area_level_2"],
+            "2":    ["administrative_area_level_2"],
+            "3":    ["administrative_area_level_2"],    
+            "4":    ["administrative_area_level_2"],    
+            "5":    ["administrative_area_level_2"],    
+            "6":    ["sublocality_level_1"],    
+            "9":    ["locality","sublocality_level_1"],
+            "10":   ["locality","sublocality_level_1"],
+            "11":   ["locality","sublocality_level_1"],
+            "17":   ["locality","sublocality_level_1"],
+            "18":   ["locality","sublocality_level_1"],
+            "19":   ["locality","sublocality_level_1"],
+            "22":   ["locality","sublocality_level_1"],
+            "23":   ["locality","sublocality_level_1"]
+        }
+        mytypes = types[str(doc['TIP'])]
+        if gmap.get('type') in mytypes:
+            gmap_type_status = True
+        else:
+            gmap_type_status = False
 
+            
         raw = {
                 "gmap_name": gmap.get('name'),
                 "gmap_name_status" : gmap['comparison'],
                 "gmap_type": gmap.get('type'),
+                "gmap_type_status":gmap_type_status,
                 "gmap_postal_code": gmap.get('postal_code'),
                 "pcs":pcs,
                 "distance":distance,

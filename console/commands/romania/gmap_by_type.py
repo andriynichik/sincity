@@ -73,7 +73,7 @@ def getDistance(lat1,lon1,lat2,lon2):
 
 
 	
-datar = db.romania.find()
+
 types = {
 	"40": ["administrative_area_level_1"],
 	"1":	["administrative_area_level_2"],
@@ -83,7 +83,7 @@ types = {
 	"5":	["administrative_area_level_2"],	
 	"6":	["sublocality_level_1"],	
 	"9":	["locality","sublocality_level_1"],
-	"10":	["locality","sublocality_level_1"],
+	"10":	["locality","да"],
 	"11":	["locality","sublocality_level_1"],
 	"17":	["locality","sublocality_level_1"],
 	"18":	["locality","sublocality_level_1"],
@@ -92,100 +92,103 @@ types = {
 	"23":	["locality","sublocality_level_1"],
 }
 
+try:
+	datar = db.romania.find()
+	for row in datar:
+		try:
 
-for row in datar:
-	try:
-		if not 'status_snig' in row:
-			mytypes = types[str(row['TIP'])]
-			Key = Keygen()
-			keyAPI =  Key.get_key_geocode()
-			if not keyAPI:
-				sys.exit()
+			if not 'status_snig' in row and 'wiki_center' in row:
+				mytypes = types[str(row['TIP'])]
+				Key = Keygen()
+				keyAPI =  Key.get_key_geocode()
+				if not keyAPI:
+					sys.exit()
 
-			cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
-			config.set(cnf)
-			spider = Spider(
-			    loader_factory=LoaderFactory,
-			    gmap_parser=MapFactory.spain,
-			    wiki_parser=True,
-			    doc_factory=doc_factory,
-			    language=language,
-			    config=config,
-			    use_cache=True
-			)
-			dta = spider.get_gmap_position(row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-			print(row['DENLOC'], mytypes)
-			for item in dta:
-				result = item.get_document()
-				result_type = result.get('type')
-				if result_type in mytypes:
-					print("good")
-					print(result)
-					center_gm = result.get('center')
-					distance =  getDistance(center_gm["lat"],center_gm["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-					print(distance)
-					db.romania.update_one(
-		                {"_id": row['_id'] },
-		                    {
-		                        "$set": {
-		                       	
-		                       	'gmap_name': result.get('name'),
-		                       	'gmap_admin_hierarchy': result.get('admin_hierarchy', {}),
-		                       	'gmap_center': result.get('center'),
-		                       	'gmap_bounds': result.get('bounds'),
-		                       	'gmap_type': result.get('type'),
-		                       	'gmap_wiki_distance': distance,
-		                       	# 'gmap_translate': result.get('translate'),
-		                       	'gmap_requests': result.get('requests'),
-		                       	'gmap_code': result.get('code'),
-		                       	'gmap_postal_code': result.get('postal_code'),
-		                        
-		                    }
-		               }
-		        	)
-		        			# 		distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-		# 		print(distance)
-		# 		db.romania.update_one(
-		# 			                {"_id": row['_id'] },
-		# 			                    {
-		# 			                        "$set": {
-					                       	
-		# 			                       	'gmap_wiki_distance': distance,
-					                        
-		# 			                    }
-		# 			               }
-		# 			        )
+				cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+				config.set(cnf)
+				spider = Spider(
+				    loader_factory=LoaderFactory,
+				    gmap_parser=MapFactory.spain,
+				    wiki_parser=True,
+				    doc_factory=doc_factory,
+				    language=language,
+				    config=config,
+				    use_cache=True
+				)
+				dta = spider.get_gmap_position(row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+				print(row['DENLOC'], mytypes)
+				for item in dta:
+					result = item.get_document()
+					result_type = result.get('type')
+					if result_type in mytypes:
+						print("good")
+						print(result)
+						center_gm = result.get('center')
+						distance =  getDistance(center_gm["lat"],center_gm["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+						print(distance)
+						db.romania.update_one(
+			                {"_id": row['_id'] },
+			                    {
+			                        "$set": {
+			                       	
+			                       	'gmap_name': result.get('name'),
+			                       	'gmap_admin_hierarchy': result.get('admin_hierarchy', {}),
+			                       	'gmap_center': result.get('center'),
+			                       	'gmap_bounds': result.get('bounds'),
+			                       	'gmap_type': result.get('type'),
+			                       	'gmap_wiki_distance': distance,
+			                       	# 'gmap_translate': result.get('translate'),
+			                       	'gmap_requests': result.get('requests'),
+			                       	'gmap_code': result.get('code'),
+			                       	'gmap_postal_code': result.get('postal_code'),
+			                        
+			                    }
+			               }
+			        	)
+			        			# 		distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+			# 		print(distance)
+			# 		db.romania.update_one(
+			# 			                {"_id": row['_id'] },
+			# 			                    {
+			# 			                        "$set": {
+						                       	
+			# 			                       	'gmap_wiki_distance': distance,
+						                        
+			# 			                    }
+			# 			               }
+			# 			        )
 
-				print('-----------------------------------------')
-			print("==================================")
-			# if objects:
-   #      		gmap = objects[0].get_document()
-        		# gmap.update(language=spider.gmap_loader._language)
-    # return gmap
+					print('-----------------------------------------')
+				print("==================================")
+				# if objects:
+	   		#      		gmap = objects[0].get_document()
+	        		# gmap.update(language=spider.gmap_loader._language)
+	   	 # return gmap
 
 
-		# spider.gmap_loader._language = language
-			# print(row['TIP'])
-		# if  row and "wiki_center" in row and "gmap_center" in row:
-		# 	# data =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-		# 	if not 'gmap_wiki_distance' in row:
+			# spider.gmap_loader._language = language
+				# print(row['TIP'])
+			# if  row and "wiki_center" in row and "gmap_center" in row:
+			# 	# data =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+			# 	if not 'gmap_wiki_distance' in row:
+					
+			# 	# print(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+			# 		distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
+			# 		print(distance)
+			# 		db.romania.update_one(
+			# 			                {"_id": row['_id'] },
+			# 			                    {
+			# 			                        "$set": {
+						                       	
+			# 			                       	'gmap_wiki_distance': distance,
+						                        
+			# 			                    }
+			# 			               }
+			# 			        )
 				
-		# 	# print(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-		# 		distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-		# 		print(distance)
-		# 		db.romania.update_one(
-		# 			                {"_id": row['_id'] },
-		# 			                    {
-		# 			                        "$set": {
-					                       	
-		# 			                       	'gmap_wiki_distance': distance,
-					                        
-		# 			                    }
-		# 			               }
-		# 			        )
-			
-
-	except Exception as e:
+		except Exception as e:
+			print(str(e))
+except Exception as e:
 		print(str(e))
 		# Key = Keygen()
 		# keyAPI =  Key.get_key_geocode()

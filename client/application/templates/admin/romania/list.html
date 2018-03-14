@@ -251,7 +251,7 @@
                                                     <td>{{item['CODP']}}</td>
                                                     <td>{{item['JUD']}}</td>
                                                     <td>{{item['SIRSUP']}}</td>
-                                                    <td>{{item['TIP']}}</td>
+                                                    <td>{{item['TIP']}} ({{tip_name[item['TIP']|string]}})</td>
                                                     <td>{{item['NIV']}}</td>
                                                     <td>{{item['REGIUNE']}}</td>
                                                     <td>{{item['FSJ']}}</td>
@@ -290,9 +290,16 @@
 
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                                                     {% else %}
-                                                                         <td style="background-color: #f0b7ab;" > </td>
+                                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
                                                     {% endif %}
-                                                    <td class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                                    
+                                                     {% if item['gmap_type'] in types[item['TIP']|string] %}
+                                                    <td style="background-color: #9efb9e;" class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                                    {% else %}
+                                                     <td style="background-color: #f0b7ab;" class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                                     {% endif %}
+
+
                                                       <td>{{item['gmap_requests']}}</td>
                                                     
                                                     <td><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></td>
@@ -479,11 +486,11 @@ function repars(mongo_id, place_id) {
                 $('.gmap_comp_status_'+mongo_id).html(gm_comp);
                  // $('.gmap_type_'+mongo_id).html(gm_comp);
 
-                // if (arr['gmap_type_status']) {
-                //     $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
-                // }else{
-                //     $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
-                // }
+                if (arr['gmap_type_status']) {
+                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
                 if (arr['gmap_name_status']) {
                     $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
                 }else{
