@@ -83,7 +83,7 @@ types = {
 	"5":	["administrative_area_level_2"],	
 	"6":	["sublocality_level_1"],	
 	"9":	["locality","sublocality_level_1"],
-	"10":	["locality","да"],
+	"10":	["locality","sublocality_level_1"],
 	"11":	["locality","sublocality_level_1"],
 	"17":	["locality","sublocality_level_1"],
 	"18":	["locality","sublocality_level_1"],
@@ -99,7 +99,7 @@ try:
 
 			if not 'status_snig' in row and 'wiki_center' in row:
 				mytypes = types[str(row['TIP'])]
-				if not row['gmap_type'] in mytypes:
+				if not row['gmap_type'] in mytypes or row["gmap_wiki_distance"] > 5 :
 					
 					Key = Keygen()
 					keyAPI =  Key.get_key_geocode()
@@ -118,7 +118,7 @@ try:
 					    use_cache=True
 					)
 					dta = spider.get_gmap_position(row["wiki_center"]["lat"],row["wiki_center"]["lng"])
-					print(row['DENLOC'], mytypes)
+					print(row['DENLOC'], mytypes, row["gmap_wiki_distance"])
 					for item in dta:
 						result = item.get_document()
 						result_type = result.get('type')
@@ -147,6 +147,7 @@ try:
 				                    }
 				               }
 				        	)
+							break
 			        			# 		distance =  getDistance(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
 			# 		print(distance)
 			# 		db.romania.update_one(
