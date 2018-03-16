@@ -92,7 +92,7 @@ def get_wiki(url, SIRUTA):
 for row in db.romania.find():
 	adress = '"SIRUTA+'+str(row["SIRUTA"])+'"'
 	url = 'https://ro.wikipedia.org/w/index.php?search='+str(adress)+'&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=ac9zaxa1lggzxpdhc5ukg06t6'
-	if row['wiki_name']  is not None:
+	if not 'wiki_name' in row or row['wiki_name']  is  None :
 		
 		data = get_wiki(url, str(row["SIRUTA"]))
 		print (adress, url, data)
