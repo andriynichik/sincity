@@ -687,6 +687,17 @@ def matching_romania(region=None):
         data =  db.romania.find({'REGIUNE': int(region)})
         return render_template('admin/romania/list.html', region=Provincia[str(region)], types=types, tip_name=TIP_Name,  com = 0, data=data)
 
+@app.context_processor
+def utility_processor():
+    def autocomplete(pid):
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        db.romania.update_one({"_id" : ObjectId(pid) },{"$set" : {"status_autoconfirm":1}})
+        return str('')
+    return dict(autocomplete = autocomplete)
+
 @app.route('/matching-romania-confirm', methods=['GET', 'POST'])
 @login_required
 def romania_confirm():
@@ -698,6 +709,18 @@ def romania_confirm():
     db = connection.location
     db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
     return request.form['id'] 
+
+def romania_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_autoconfirm":1}})
+    return request.form['id'] 
+
+
 
 @app.route('/matching-romania-confirm_del', methods=['GET', 'POST'])
 @login_required

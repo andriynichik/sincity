@@ -90,25 +90,28 @@ def get_wiki(url, SIRUTA):
 
 
 for row in db.romania.find():
-	adress = "SIRUTA+"+str(row["SIRUTA"])
+	adress = '"SIRUTA+'+str(row["SIRUTA"])+'"'
 	url = 'https://ro.wikipedia.org/w/index.php?search='+str(adress)+'&title=Sp%C3%A9cial:Recherche&profile=default&fulltext=1&searchengineselect=mediawiki&searchToken=ac9zaxa1lggzxpdhc5ukg06t6'
-	data = get_wiki(url, str(row["SIRUTA"]))
-	print (row["DENLOC"],row["SIRUTA"], data)
-	db.romania.update_one(
-		                {"_id": row['_id'] },
-		                    {
-		                        "$set": {
-		                       	
-		                       	'wiki_name': data.get('name'),
-		                       	'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
-		                       	'wiki_center': data.get('center'),
-		                       	'wiki_url': data.get('url'),
-		                       	'wiki_siruta': data.get('siruta'),
-		                       	'wiki_postal_code': data.get('postal_codes'),
-		                        
-		                    }
-		               }
-		        )
+	if not 'wiki_name' in row:
+		
+		data = get_wiki(url, str(row["SIRUTA"]))
+		print (adress, url, data)
+		db.romania.update_one(
+			                {"_id": row['_id'] },
+			                    {
+			                        "$set": {
+			                       	
+			                       	'wiki_name': data.get('name'),
+			                       	'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
+			                       	'wiki_center': data.get('center'),
+			                       	'wiki_url': data.get('url'),
+			                       	'wiki_siruta': data.get('siruta'),
+			                       	'wiki_postal_code': data.get('postal_codes'),
+			                        
+			                    }
+			               }
+			        )
+		time.sleep(0.5) 
 	# if not 'gmap_name' in row:
 	# 	Key = Keygen()
 	# 	keyAPI =  Key.get_key_geocode()
@@ -181,7 +184,7 @@ for row in db.romania.find():
 	# 	                    }
 	# 	               }
 	# 	        )
-	time.sleep(0.5) 
+	
 	# print(internal)
 
 

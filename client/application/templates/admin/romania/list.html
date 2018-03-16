@@ -128,10 +128,10 @@
                                  
                         - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>SIRUTA</a>
                         - <a class="toggle-link-vis" data-column="2">DENLOC</a>
-                        -<a class="toggle-link-vis" data-column="3" data-hide>CODP</a>
+                        -<a class="toggle-link-vis" data-column="3" style="color: red;" data-hide>CODP</a>
                         -<a class="toggle-link-vis" data-column="4" style="color: red;" data-hide>JUD</a>
                         - <a class="toggle-link-vis" data-column="5" style="color: red;" data-hide>SIRSUP</a>
-                        - <a class="toggle-link-vis" data-column="6" style="color: red;" >TIP</a>
+                        - <a class="toggle-link-vis" data-column="6"  >TIP</a>
                         - <a class="toggle-link-vis" data-column="7" style="color: red;" data-hide>NIV</a>
                         - <a class="toggle-link-vis" data-column="8" style="color: red;" data-hide>REGIUNE</a>
                         - <a class="toggle-link-vis" data-column="9" style="color: red;" data-hide>FSJ</a>
@@ -152,7 +152,7 @@
                         - <a class="toggle-link-vis" data-column="22" >wiki_name</a>
                         - <a class="toggle-link-vis" data-column="23" style="color: red;" data-hide>wiki_siruta</a>
                         - <a class="toggle-link-vis" data-column="24" style="color: red;" data-hide>wiki_postal_code</a>
-                        - <a class="toggle-link-vis" data-column="25" style="color: red;">wiki_center</a>
+                        - <a class="toggle-link-vis" data-column="25" >wiki_center</a>
                         - <a class="toggle-link-vis" data-column="26" style="color: red;" data-hide>wiki_admin_hierarchy</a>
                         - <a class="toggle-link-vis" data-column="27" style="color: red;" data-hide>DENLOC_Adapted</a>
                         - <a class="toggle-link-vis" data-column="28" style="color: red;" data-hide>gmap_name_Adapted</a>
@@ -234,7 +234,7 @@
                                 <tbody>
 
                                     {% for item in data %}
-
+                                        {% set com = 0 %}
                                         <tr>        
                                                     <td>
                                                         <div id="snig_confirm_{{item['_id']}}" >
@@ -244,7 +244,12 @@
                                                         {% else %}
                                                         <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button><p> 
                                                          {% endif %}
+                                                         
                                                          </div>
+                                                         {% if 'status_autoconfirm' in item  %}
+                                                         <label class="label label-success">AutoConfirmed </label>
+                                                         {% endif %}
+
                                                     </td>
                                                     <td>{{item['SIRUTA']}}</td>
                                                     <td>{{item['DENLOC']}}</td>
@@ -262,6 +267,7 @@
 
                                                     {% if item['gmap_name'] and item['gmap_name'].lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't')   ==  item['DENLOC'].lower().lower().replace('ă', 'a').replace('ã', 'a').replace('â', 'a').replace('î', 'i').replace('ș', 's').replace('ş', 's').replace('ț', 't').replace('ţ', 't') %}
                                                         <td class="gmap_name_{{item['_id']}}"  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                        {% set com = com +1 %}
 
                                                      {% else %}
                                                         <td class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
@@ -272,6 +278,7 @@
 
                                                      {% if item['gmap_postal_code']  ==  item['CODP']|string %}
                                                         <td  style="background-color: #9efb9e;">{{item['gmap_postal_code']}}</td>
+                                                        {% set com = com +1 %}
 
                                                      {% else %}
                                                         <td style="background-color: #f0b7ab;">{{item['gmap_postal_code']}}</td>
@@ -286,6 +293,7 @@
                                                     <td>{{item['gmap_bounds']}}</td>
                                                                {% if 'gmap_wiki_distance' in  item  and 'wiki_center' in item and  item['gmap_wiki_distance']  <  2 %}
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        {% set com = com +1 %}
                                                     {% elif 'gmap_center' in  item  and 'wiki_center' in item %}
 
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
@@ -295,13 +303,19 @@
                                                     
                                                      {% if item['gmap_type'] in types[item['TIP']|string] %}
                                                     <td style="background-color: #9efb9e;" class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                                    {% set com = com +1 %}
                                                     {% else %}
                                                      <td style="background-color: #f0b7ab;" class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
                                                      {% endif %}
 
 
-                                                      <td>{{item['gmap_requests']}}</td>
+                                                      <td> {{item['gmap_requests']}}</td>
                                                     
+
+                                                     {% if not 'status_autoconfirm' in item and 'status_snig' not in item   and com == 4 %}
+                                                     {{ autocomplete(item['_id']) }}
+                                                     {% endif %}
+
                                                     <td><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></td>
                                                     
                                                     <td>{{item['wiki_siruta']}}</td>
@@ -360,6 +374,7 @@
                                                     {% endif %}
                                             <!-- <td></td> -->
                                         </tr>
+                                       
                                     {% endfor %}
                                 </tbody>
                             </table>
