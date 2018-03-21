@@ -88,6 +88,14 @@
 //            });
             
         })
+
+                $('#wiki-modal').on('show.bs.modal', function(e) {
+                               var $modal = $(this),
+                    esseyId = e.relatedTarget.id;
+                     txt = '<span class="wiki_mongo">'+esseyId+'</span><form>';
+                            $modal.find('.edit-content').html(txt);
+
+                    });
 // $('[name="WOFButton"]').on('click', function(event) {
 //     alert("clicked");
 //     // $('.Main').load('wof.html');
@@ -316,7 +324,7 @@
                                                      {{ autocomplete(item['_id']) }}
                                                      {% endif %}
 
-                                                    <td><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></td>
+                                                    <td><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div> <div class="wiki_name_{{item['_id']}}" ><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></div></td>
                                                     
                                                     <td>{{item['wiki_siruta']}}</td>
                                                     <td>{{item['wiki_postal_code']}}</td>
@@ -324,7 +332,7 @@
 
 
                                                      {% if 'wiki_center' in item %}
-                                                        <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}">{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}</a></td>
+                                                        <td ><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}">{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}</a></td>
                                                     {% else %}
                                                          <td></td>
                                                     {% endif %}
@@ -412,6 +420,35 @@
             </div>
         </div>
     </div>
+
+
+
+   <div id="wiki-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="wiki_url" name="wiki_url" placeholder="wiki url">
+                   <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 </section>
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
@@ -446,6 +483,9 @@ function reparse_by_geocode(id) {
     // var id;
     // alert(id);
 }
+
+
+
 
 function by_my_place() {
     var place_id = $('#place_id_reparse').val();
@@ -518,6 +558,29 @@ function repars(mongo_id, place_id) {
                     $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
                 }
         });
+}
+
+function repars_wiki() {
+    var wiki_url = $('#wiki_url').val();
+    var wiki_mongo =  $('.wiki_mongo').text();
+    console.log(wiki_url);
+     console.log(wiki_mongo);
+         $.post( "/romania-reparse_wiki", { wiki_url: wiki_url, wiki_mongo: wiki_mongo })
+            .done(function( data ) {
+                $('#wiki-modal').modal('toggle');
+                arr = JSON.parse(data)
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+               var wiki_name = arr['wiki_name'];
+                $('.gmap_comp_status_'+wiki_mongo).html(gm_comp);
+                $('.wiki_name_'+wiki_mongo).html(wiki_name);
+            console.log(data);
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#f0b7ab' ); 
+                }
+        });
+  
 }
 </script>
 

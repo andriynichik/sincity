@@ -23,6 +23,7 @@ from application.user import User
 from flask.ext.login import login_user, logout_user, login_required
 from flask import request, redirect, render_template, url_for, flash, session, abort
 from lib.keygen.gmap_keygen import Keygen
+from lib.factory.Loader import Loader 
 import json
 import requests
 import random
@@ -687,6 +688,61 @@ def matching_romania(region=None):
         data =  db.romania.find({'REGIUNE': int(region)})
         return render_template('admin/romania/list.html', region=Provincia[str(region)], types=types, tip_name=TIP_Name,  com = 0, data=data)
 
+@login_required
+@app.route('/romania-reparse_wiki', methods=['GET', 'POST'])
+def romania_reparse_wik():
+
+    from lib.parser.wiki.romania import Romania as WikiRo
+    country = 'Romania'
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    conn =  MongoClient(mongo_config['host'], mongo_config['port'])
+    db = conn.location
+    doc_factory = DocFactory(config.get('mongodb'))
+    loader = Loader.loader_with_mongodb(config.get('mongodb'))
+    headers = {'User-Agent': 'Mozilla/5.0'}
+    language='ro'
+    doc_mongo = db.romania.find_one({"_id" : ObjectId(request.form['wiki_mongo']) })
+
+    doc = doc_factory.wiki(request.form['wiki_url'])
+    page, code = loader.load(request.form['wiki_url'], headers=headers)
+    page_parser = WikiRo(page)
+    data = page_parser.as_dictionary()
+    center_gm = doc_mongo['gmap_center']
+    center_wiki = data.get('center')
+    gmap_comparison_url =  ("https://www.google.com.ua/maps/dir/"+str(center_gm['lat'])+","+str(center_gm['lng'])+"/"+str(center_wiki["lat"])+","+str(center_wiki["lng"])+"")
+    # gmap_comparison_url = 
+    distance =  getDistance(center_gm["lat"],center_gm["lng"], center_wiki["lat"], center_wiki["lng"])
+    db.romania.update_one(
+                            {"_id": ObjectId(request.form['wiki_mongo'])},
+                                {
+                                    "$set": {
+                                    
+                                    'wiki_name': data.get('name'),
+                                    'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
+                                    'wiki_center': data.get('center'),
+                                    'wiki_url': str(request.form['wiki_url']),
+                                        'gmap_wiki_distance': distance,
+                                    'wiki_postal_code': data.get('postal_codes'),
+                                    
+                                }
+                           }
+                    )
+
+    if distance < 2:
+        distance_status = True
+    else:
+        distance_status = False
+    resp = {
+        "distance_status":distance_status,
+        "distance":distance,
+        "gmap_comparison_url":gmap_comparison_url,
+        'wiki_name': data.get('name'),
+        'wiki_center': data.get('center'),
+
+    }
+    return json.dumps(resp)
+
 @app.context_processor
 def utility_processor():
     def autocomplete(pid):
@@ -710,6 +766,7 @@ def romania_confirm():
     db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
     return request.form['id'] 
 
+@login_required
 def romania_confirm():
 
     # return render_template('admin/gmap/list.html', country=country)
