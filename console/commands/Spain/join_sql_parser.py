@@ -18,8 +18,8 @@ coll = db.SPAININE
     
 for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
     
-    if 'status' in row:
-        
+    if not 'sinoptik_db_id' in row and 'status' in row:
+
         if  row['status'] == 4 and row['25_SNIG_TIPO'] != 'Municipio'and row['25_SNIG_TIPO'] != 'Entidad colectiva':
             region = {'4':'1911',
                 '5':'1916',
@@ -220,22 +220,25 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                    "accepted":"1"
                 }
             print (row)
-            r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
-            # r.json()
-            respo = r.json()
-            print (respo['id'])
+            try:
+                r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
+                # r.json()
+                respo = r.json()
+                print (respo['id'])
 
-            db.internal.update_one(
-                        {"_id": row['_id'] },
-                            {
-                                "$set": {
-                                "sinoptik_db_id":respo['id'],
-                                # "status":0,
-                                
-                            }
-                       }
-                )
-
+                db.internal.update_one(
+                            {"_id": row['_id'] },
+                                {
+                                    "$set": {
+                                    "sinoptik_db_id":respo['id'],
+                                    # "status":0,
+                                    
+                                }
+                           }
+                    )
+            except Exception as e:
+                print (str(e))
+ 
             # delete {'event': 'Done', 'id': 303668549, 'action': 'created'} 303668559 303668554
 
         # mod =  db.internal.find_one({"_id": row['parser_id']})
