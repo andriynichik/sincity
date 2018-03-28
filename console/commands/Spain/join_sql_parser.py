@@ -219,7 +219,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                        "version_gb":"1",
                        "accepted":"1"
                     }
-                    print (row)
+                print (row)
                 
                 r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                 # r.json()
