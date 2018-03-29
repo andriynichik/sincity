@@ -754,6 +754,21 @@ def utility_processor():
         return str('')
     return dict(autocomplete = autocomplete)
 
+
+@app.context_processor
+def dublicate():
+    def isdub(lat, lng):
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        cnt = db.internal.find({"28_SNIG_LATITUD_ETRS89":lat, "29_SNIG_LONGITUD_ETRS89":lng}).count()
+        if cnt > 1:
+            return "True"
+        else:
+            return "False"
+    return dict(isdub = isdub)
+
 @app.route('/matching-romania-confirm', methods=['GET', 'POST'])
 @login_required
 def romania_confirm():

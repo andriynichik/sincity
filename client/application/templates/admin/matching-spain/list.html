@@ -26,7 +26,9 @@
                     table.columns(32).search( this.value ).draw();
                 } ); 
 
-
+                $('#dropdown5').on('change', function () {
+                    table.columns(34).search( this.value ).draw();
+                } ); 
 
 
     $('a.toggle-link-vis').on( 'click', function (e) {
@@ -169,6 +171,7 @@
                           <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide ></a>
                            <a class="toggle-link-vis" data-column="32" style="color: red;" ></a>
                            <a class="toggle-link-vis" data-column="33" >parser_id</a>
+                             <a class="toggle-link-vis" data-column="34" data-hide ></a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <label>INE_Name_w_Article ≠ gmap_name :</label>
@@ -199,6 +202,14 @@
                       <option value="TRUSTED">TRUSTED</option>
                       <option value="Confirmed">Confirmed</option>
                       <option value="Error">Error</option>
+                    </select>
+
+                    <label>duplicate : </label>
+                    <select id="dropdown5">
+                        <option value="">Всі результати</option>
+                      <option value="True">Є дублікат</option>
+                      <option value="False">Немає дублікатів</option>
+                      
                     </select>
                     
                     <div class="body">
@@ -240,6 +251,7 @@
                                     <th>tp</th>
                                     <th><input type="text" data-column="32"  class="search-input-text">status</th>
                                     <th><input type="text" data-column="33"  class="search-input-text">parser_id</th>
+                                     <th>dublicate status</th>
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -278,6 +290,7 @@
                                     <th>tp</th>
                                     <th>status</th>
                                     <th>parser_id</th>
+                                     <th>dublicate status</th>
 
 
                                 </tr>
@@ -376,7 +389,7 @@
                                                 </td>
                                             {% endif %}
                                             <td>{{item['_id']}}</td>
-                                            <!-- <td></td> -->
+                                            <td>{{isdub(item['28_SNIG_LATITUD_ETRS89'],item['29_SNIG_LONGITUD_ETRS89'])}}</td> 
                                         </tr>
                                     {% endfor %}
                                 </tbody>
