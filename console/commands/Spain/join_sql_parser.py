@@ -21,7 +21,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
     if not 'sinoptik_db_id' in row:
         try:
             
-            if  row['status'] == 4 and row['25_SNIG_TIPO'] != 'Municipio'and row['25_SNIG_TIPO'] != 'Entidad colectiva':
+            if row['25_SNIG_TIPO'] != 'Municipio'and row['25_SNIG_TIPO'] != 'Entidad colectiva':
                 region = {
                   '1':'1917',
                   '2':'1923',
