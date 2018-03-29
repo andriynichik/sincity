@@ -74,7 +74,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                 '48':'1917',
                 '49':'1916',
                 '50':'1912',
-                '51':'4734'
+                '51':'4734',
                 '52':'1925',
             }
             sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
