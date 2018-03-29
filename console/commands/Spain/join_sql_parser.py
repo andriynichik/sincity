@@ -18,11 +18,16 @@ coll = db.SPAININE
     
 for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
     
-    if not 'sinoptik_db_id' in row and 'status' in row:
+    if not 'sinoptik_db_id' in row:
         try:
             
             if  row['status'] == 4 and row['25_SNIG_TIPO'] != 'Municipio'and row['25_SNIG_TIPO'] != 'Entidad colectiva':
-                region = {'4':'1911',
+                region = {
+                  '1':'1917',
+                  '2':'1923',
+                  '3':'1910',
+
+                '4':'1911',
                 '5':'1916',
                 '6':'1924',
                 '7':'1915',
@@ -69,6 +74,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                 '48':'1917',
                 '49':'1916',
                 '50':'1912',
+                '51':'4734'
                 '52':'1925',
             }
             sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
