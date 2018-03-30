@@ -22,6 +22,7 @@ try:
 
             print('+')
             if row['25_SNIG_TIPO'] == 'Municipio' and row['25_SNIG_TIPO'] == 'Entidad colectiva':
+                print('+!!!!!!!!!!!!!', row['sinoptik_db_id'])
                 data = {
                   "event":"Delete",
                   "id": row['sinoptik_db_id'],
