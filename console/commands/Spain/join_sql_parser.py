@@ -22,7 +22,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
         try:
             
             if row['25_SNIG_TIPO'] != 'Municipio' and row['25_SNIG_TIPO'] != 'Entidad colectiva':
-                region = {
+              region = {
                   '1':'1917',
                   '2':'1923',
                   '3':'1910',
@@ -76,7 +76,7 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                 '50':'1912',
                 '51':'4734',
                 '52':'1925',
-            }
+              }
               sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
               print(sinoptok_region_id)
               data = {  
