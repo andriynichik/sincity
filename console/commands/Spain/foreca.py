@@ -25,7 +25,7 @@ try:
     with myFile:
         writer = csv.writer(myFile, dialect='myDialect')  
         for row in  db.internal.find({'31_SNIG_ORIGENCOOR': 'Mapa'}):
-            if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
+            if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades':
                 if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0':
                     if row['26_SNIG_POBLACION'] > 0:
 
