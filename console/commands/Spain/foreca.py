@@ -24,12 +24,12 @@ myFile = open('csvexample4.csv', 'w')
 try:
     with myFile:
         writer = csv.writer(myFile, dialect='myDialect')  
-        for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
+        for row in  db.internal.find({'31_SNIG_ORIGENCOOR': 'Mapa'}):
             if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
                 if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0':
                     if row['26_SNIG_POBLACION'] > 0:
 
-                        writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD']]])
+                        writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
                         # writer.writerows([[row['29_SNIG_LONGITUD_ETRS89']]])
                         # writer.writerows([[row['28_SNIG_LATITUD_ETRS89']]])
                         # writer.writerows([[row['27_SNIG_ALTITUD']]])

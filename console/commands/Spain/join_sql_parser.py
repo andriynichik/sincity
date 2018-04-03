@@ -16,7 +16,7 @@ coll = db.SPAININE
 
 
     
-for row in  db.internal.find({'25_SNIG_TIPO': 'Otras entidades'}):
+for row in  db.internal.find({'25_SNIG_TIPO': 'Capital de municipio'}):
     
     if not 'sinoptik_db_id' in row:
         try:
