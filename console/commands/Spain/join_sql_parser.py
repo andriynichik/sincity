@@ -16,13 +16,13 @@ coll = db.SPAININE
 
 
     
-for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
+for row in  db.internal.find({'25_SNIG_TIPO': 'Entidad singular'}):
     
     if not 'sinoptik_db_id' in row:
         try:
             
-            if row['25_SNIG_TIPO'] != 'Municipio' and row['25_SNIG_TIPO'] != 'Entidad colectiva':
-              region = {
+        
+            region = {
                   '1':'1917',
                   '2':'1923',
                   '3':'1910',
@@ -77,9 +77,9 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                 '51':'4734',
                 '52':'1925',
               }
-              sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
-              print(sinoptok_region_id)
-              data = {  
+            sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
+            print(sinoptok_region_id)
+            data = {  
                      "event":"Create",
                      "current_sea_id":"0",
                      "lang":"es",
@@ -97,8 +97,8 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                      "forecast_id_title":"",
                      "forecast_id":"",
                      "forecast_id_type":"",
-                     "lat":row['gmap_center']['lat'],
-                     "lng":row['gmap_center']['lng'],
+                     "lat":row['28_SNIG_LATITUD_ETRS89'],
+                     "lng":row['29_SNIG_LONGITUD_ETRS89'],
                      "altitude":"66",
                      "population":row['09_INE_Población'],
                      "gmt_offset":"",
@@ -226,13 +226,13 @@ for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'Esp
                      "version_gb":"1",
                      "accepted":"1"
                   }
-              print (row)
-              r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
+            print (row)
+            r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                   # r.json()
-              respo = r.json()
-              print (respo['id'])
+            respo = r.json()
+            print (respo['id'])
 
-              db.internal.update_one(
+            db.internal.update_one(
                               {"_id": row['_id'] },
                                   {
                                       "$set": {
