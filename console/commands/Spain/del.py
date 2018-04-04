@@ -16,7 +16,7 @@ coll = db.SPAININE
 
 
 try:
-    for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
+    for row in  db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
     
         if  'sinoptik_db_id' in row:
 
