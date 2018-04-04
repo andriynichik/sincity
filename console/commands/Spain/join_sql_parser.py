@@ -13,8 +13,8 @@ mongo_config = config.get('mongodb')
 conn =  MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
-
-for row in db.internal.find( { '01_INE_Municipio_Name': { '$exists': True } } ):
+print (db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ).count())
+for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
     
     if not 'sinoptik_db_id' in row :
 
