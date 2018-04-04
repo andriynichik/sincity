@@ -14,7 +14,7 @@ conn =  MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
 
-for row in db.internal.find( { '01_INE_Municipio_Name': { '$exists': true } } ):
+for row in db.internal.find( { '01_INE_Municipio_Name': { '$exists': True } } ):
     
     if not 'sinoptik_db_id' in row :
 
