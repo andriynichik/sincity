@@ -20,17 +20,12 @@ coll = db.SPAININE
 
 csv.register_dialect('myDialect', delimiter=',', quoting=csv.QUOTE_NONE)
 myFile = open('foreca.csv', 'w')  
-
+print(db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ).count())
 with myFile:
-    writer = csv.writer(myFile, dialect='myDialect')  
-    for row in  db.internal.find({'31_SNIG_ORIGENCOOR': 'Mapa'}):
-        if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
-            if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0':
+    writer = csv.writer(myFile, dialect='myDialect')
 
-                try:
-                    writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
-                except Exception as e:
-                    print (str(e))
+    for row in  db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
+        writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
                         # writer.writerows([[row['29_SNIG_LONGITUD_ETRS89']]])
                         # writer.writerows([[row['28_SNIG_LATITUD_ETRS89']]])
                         # writer.writerows([[row['27_SNIG_ALTITUD']]])
