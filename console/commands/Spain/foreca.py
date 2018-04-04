@@ -60,10 +60,7 @@ with myFile:
         #                      }
        #               )
 
- 'sinoptik_db_id'
-'sinoptik_db_id'
-'sinoptik_db_id'
-'sinoptik_db_id'
+
 
             # delete {'event': 'Done', 'id': 303668549, 'action': 'created'} 303668559 303668554
 
