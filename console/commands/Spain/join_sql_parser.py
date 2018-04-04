@@ -18,8 +18,8 @@ coll = db.SPAININE
     
 for row in db.internal.find({'31_SNIG_ORIGENCOOR': 'Mapa'}):
     
-    if not 'sinoptik_db_id' in row and:
-        
+    if not 'sinoptik_db_id' in row :
+
         try:
             if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
         
