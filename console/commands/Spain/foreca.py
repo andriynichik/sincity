@@ -26,11 +26,11 @@ with myFile:
     for row in  db.internal.find({'31_SNIG_ORIGENCOOR': 'Mapa'}):
         if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades':
             if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0':
-                if row['26_SNIG_POBLACION'] > 0:
-                    try:
-                        writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
-                    except Exception as e:
-                        print (str(e))
+
+                try:
+                    writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
+                except Exception as e:
+                    print (str(e))
                         # writer.writerows([[row['29_SNIG_LONGITUD_ETRS89']]])
                         # writer.writerows([[row['28_SNIG_LATITUD_ETRS89']]])
                         # writer.writerows([[row['27_SNIG_ALTITUD']]])
@@ -60,7 +60,11 @@ with myFile:
         #                      }
        #               )
 
- 
+ 'sinoptik_db_id'
+'sinoptik_db_id'
+'sinoptik_db_id'
+'sinoptik_db_id'
+
             # delete {'event': 'Done', 'id': 303668549, 'action': 'created'} 303668559 303668554
 
         # mod =  db.internal.find_one({"_id": row['parser_id']})
