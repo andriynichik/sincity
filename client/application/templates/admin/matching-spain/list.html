@@ -26,9 +26,7 @@
                     table.columns(32).search( this.value ).draw();
                 } ); 
 
-                $('#dropdown5').on('change', function () {
-                    table.columns(34).search( this.value ).draw();
-                } ); 
+
 
 
     $('a.toggle-link-vis').on( 'click', function (e) {
@@ -128,7 +126,7 @@
                         </h2>
                     </div>
                     <div class="text">
-                        Toggle column (INE):
+                        Toggle column (INE): 
                         <a class="toggle-link-vis" data-column="0" style="color: red;" data-hide>INE_Municipio_Code</a>
                         - <a class="toggle-link-vis" data-column="1">INE_Municipio_Name</a>
                         - <a class="toggle-link-vis" data-column="2" style="color: red;" data-hide>INE_Collective_Entity_Code</a>
@@ -171,7 +169,7 @@
                           <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide ></a>
                            <a class="toggle-link-vis" data-column="32" style="color: red;" ></a>
                            <a class="toggle-link-vis" data-column="33" >parser_id</a>
-                             <a class="toggle-link-vis" data-column="34" data-hide ></a>
+                           <a class="toggle-link-vis" data-column="34" >sinoptik_db_id</a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <label>INE_Name_w_Article ≠ gmap_name :</label>
@@ -202,14 +200,6 @@
                       <option value="TRUSTED">TRUSTED</option>
                       <option value="Confirmed">Confirmed</option>
                       <option value="Error">Error</option>
-                    </select>
-
-                    <label>duplicate : </label>
-                    <select id="dropdown5">
-                        <option value="">Всі результати</option>
-                      <option value="True">Є дублікат</option>
-                      <option value="False">Немає дублікатів</option>
-                      
                     </select>
                     
                     <div class="body">
@@ -251,7 +241,8 @@
                                     <th>tp</th>
                                     <th><input type="text" data-column="32"  class="search-input-text">status</th>
                                     <th><input type="text" data-column="33"  class="search-input-text">parser_id</th>
-                                     <th>dublicate status</th>
+                                    <th><input type="text" data-column="34"  class="search-input-text">sinoptik_db_id</th>
+                                    
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -290,7 +281,7 @@
                                     <th>tp</th>
                                     <th>status</th>
                                     <th>parser_id</th>
-                                     <th>dublicate status</th>
+                                    <th>sinoptik_db_id</th>
 
 
                                 </tr>
@@ -389,7 +380,9 @@
                                                 </td>
                                             {% endif %}
                                             <td>{{item['_id']}}</td>
-                                            <td></td> 
+                                            <td>{{item['sinoptik_db_id']}}</td>
+                                            
+                                            <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}
                                 </tbody>
