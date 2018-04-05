@@ -781,6 +781,19 @@ def romania_confirm():
     db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
     return request.form['id'] 
 
+@app.route('/matching-romania-confirm_ins', methods=['GET', 'POST'])
+@login_required
+def romania_confirm_ins():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_ins":1}})
+    return request.form['id'] 
+
+
 @login_required
 def romania_confirm():
 
@@ -794,7 +807,7 @@ def romania_confirm():
 
 
 
-@app.route('/matching-romania-confirm_del', methods=['GET', 'POST'])
+@app.route('/matching-romania-confirm_del_ins', methods=['GET', 'POST'])
 @login_required
 def romania_confirm_del():
 

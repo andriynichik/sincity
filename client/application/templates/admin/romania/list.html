@@ -245,6 +245,7 @@
                                         {% set com = 0 %}
                                         <tr>        
                                                     <td>
+
                                                         <div id="snig_confirm_{{item['_id']}}" >
                                                         {% if item['status_snig'] == 1  %}
                                                         <label class="label label-success">Confirmed </label>
@@ -257,6 +258,17 @@
                                                          {% if 'status_autoconfirm' in item  %}
                                                          <label class="label label-success">AutoConfirmed </label>
                                                          {% endif %}
+
+                                                        <div id="ins_confirm_{{item['_id']}}" >
+                                                        {% if item['status_ins'] == 1  %}
+                                                        <label class="label label-success">INS-Confirmed  </label>
+                                                        <button onclick="dell_ins('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>INS-Confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_ins('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>INS-Confirm</button><p> 
+                                                         {% endif %}
+                                                         
+                                         
+
 
                                                     </td>
                                                     <td>{{item['SIRUTA']}}</td>
@@ -469,6 +481,25 @@ function dell_snig(id) {
           $.post( "/matching-romania-confirm_del", { id: id })
             .done(function( data ) {
                  document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
+    
+        });
+}
+
+function cheked_ins(id) {
+       var id;
+          $.post( "/matching-romania-confirm_ins", { id: id })
+            .done(function( data ) {
+                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed INS</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>INS</button>';
+    
+        });
+}
+
+function dell_ins(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-romania-confirm_del_ins", { id: id })
+            .done(function( data ) {
+                 document.getElementById('ins_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm INS</button> </td>';
     
         });
 }
