@@ -22,11 +22,13 @@
     $('#dropdown3').on('change', function () {
                     table.columns(31).search( this.value ).draw();
                 } ); 
-        $('#dropdown4').on('change', function () {
+    $('#dropdown4').on('change', function () {
                     table.columns(32).search( this.value ).draw();
                 } ); 
 
-
+    $('#dropdown5').on('change', function () {
+                    table.columns(35).search( this.value ).draw();
+                } ); 
 
 
     $('a.toggle-link-vis').on( 'click', function (e) {
@@ -170,6 +172,7 @@
                            <a class="toggle-link-vis" data-column="32" style="color: red;" ></a>
                            <a class="toggle-link-vis" data-column="33" >parser_id</a>
                            <a class="toggle-link-vis" data-column="34" >sinoptik_db_id</a>
+                                   <a class="toggle-link-vis" data-column="35" data-hide ></a>
                          <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     <label>INE_Name_w_Article ≠ gmap_name :</label>
@@ -200,6 +203,13 @@
                       <option value="TRUSTED">TRUSTED</option>
                       <option value="Confirmed">Confirmed</option>
                       <option value="Error">Error</option>
+                    </select>
+
+                 <label>duplicate : </label>
+                    <select id="dropdown5">
+                        <option value="">Всі результати</option>
+                      <option value="true">Дублікати</option>
+                      <option value="false">Без дублікатів</option>
                     </select>
                     
                     <div class="body">
@@ -242,6 +252,7 @@
                                     <th><input type="text" data-column="32"  class="search-input-text">status</th>
                                     <th><input type="text" data-column="33"  class="search-input-text">parser_id</th>
                                     <th><input type="text" data-column="34"  class="search-input-text">sinoptik_db_id</th>
+                                    <th>is_ dub</th>
                                     
                                 </tr>
                                 </thead>
@@ -282,6 +293,7 @@
                                     <th>status</th>
                                     <th>parser_id</th>
                                     <th>sinoptik_db_id</th>
+                                    <th>is_ dub</th>
 
 
                                 </tr>
@@ -381,8 +393,8 @@
                                             {% endif %}
                                             <td>{{item['_id']}}</td>
                                             <td>{{item['sinoptik_db_id']}}</td>
+                                            <td>{{item['is_duplicate']}}</td>
                                             
-                                            <!-- <td></td> -->
                                         </tr>
                                     {% endfor %}
                                 </tbody>

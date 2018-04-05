@@ -15,12 +15,31 @@ db = conn.location
 
 
 
+def is_dub(lon,lat):
+    count  =  db.internal.find({'29_SNIG_LONGITUD_ETRS89': lon,'28_SNIG_LATITUD_ETRS89': lat }).count()
+    return count
+
     
-for row in  db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
-    data =  db.internal.find({'29_SNIG_LONGITUD_ETRS89.ADMIN_LEVEL_1.name': row['29_SNIG_LONGITUD_ETRS89']})
-    print (row)
-    for dub in data:
-      print(dub)
+for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
+    if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
+        status = True
+    else:
+        status = False
+
+    db.internal.update_one(
+                                  {"_id": row['_id'] },
+                                      {
+                                          "$set": {
+                                          "is_duplicate":status,
+                                          # "status":0,
+                                          
+                                      }
+                                 }
+                          )
+    # data =  db.internal.find({'29_SNIG_LONGITUD_ETRS89.ADMIN_LEVEL_1.name': row['29_SNIG_LONGITUD_ETRS89']})
+    # print (row)
+    # for dub in data:
+    #   print(dub)
     # print(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89'])
     # if not 'sinoptik_db_id' in row and 'status' in row:
     #     try:
