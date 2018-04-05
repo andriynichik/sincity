@@ -246,10 +246,11 @@
                                         <tr>        
                                                     <td>
 
+                                              
                                                         <div id="snig_confirm_{{item['_id']}}" >
                                                         {% if item['status_snig'] == 1  %}
                                                         <label class="label label-success">Confirmed </label>
-                                                        <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>Confirm</button> 
+                                                        <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>delete-confirm</button> 
                                                         {% else %}
                                                         <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button><p> 
                                                          {% endif %}
@@ -262,7 +263,7 @@
                                                         <div id="ins_confirm_{{item['_id']}}" >
                                                         {% if item['status_ins'] == 1  %}
                                                         <label class="label label-success">INS-Confirmed  </label>
-                                                        <button onclick="dell_ins('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>INS-Confirm</button> 
+                                                        <button onclick="dell_ins('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>INS-delete-confirm</button> 
                                                         {% else %}
                                                         <button   name="WOFButton" onclick="cheked_ins('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>INS-Confirm</button><p> 
                                                          {% endif %}
@@ -470,7 +471,7 @@ function cheked_snig(id) {
        var id;
           $.post( "/matching-romania-confirm", { id: id })
             .done(function( data ) {
-                 document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed </label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+                 document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed </label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>delete-confirm</button>';
     
         });
 }
@@ -478,7 +479,7 @@ function cheked_snig(id) {
 function dell_snig(id) {
        var id;
        // alert(id);
-          $.post( "/matching-romania-confirm_del", { id: id })
+          $.post( "/matching-romania-confirm", { id: id })
             .done(function( data ) {
                  document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
     
@@ -489,7 +490,7 @@ function cheked_ins(id) {
        var id;
           $.post( "/matching-romania-confirm_ins", { id: id })
             .done(function( data ) {
-                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed INS</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>INS</button>';
+                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed INS</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>INS-delete-confirm</button>';
     
         });
 }
