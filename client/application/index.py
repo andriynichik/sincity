@@ -702,37 +702,64 @@ def romania_reparse_wik():
     loader = Loader.loader_with_mongodb(config.get('mongodb'))
     headers = {'User-Agent': 'Mozilla/5.0'}
     language='ro'
-    doc_mongo = db.romania.find_one({"_id" : ObjectId(request.form['wiki_mongo']) })
+    
 
     doc = doc_factory.wiki(request.form['wiki_url'])
     page, code = loader.load(request.form['wiki_url'], headers=headers)
     page_parser = WikiRo(page)
     data = page_parser.as_dictionary()
-    center_gm = doc_mongo['gmap_center']
-    center_wiki = data.get('center')
-    gmap_comparison_url =  ("https://www.google.com.ua/maps/dir/"+str(center_gm['lat'])+","+str(center_gm['lng'])+"/"+str(center_wiki["lat"])+","+str(center_wiki["lng"])+"")
-    # gmap_comparison_url = 
-    distance =  getDistance(center_gm["lat"],center_gm["lng"], center_wiki["lat"], center_wiki["lng"])
-    db.romania.update_one(
-                            {"_id": ObjectId(request.form['wiki_mongo'])},
-                                {
-                                    "$set": {
-                                    
-                                    'wiki_name': data.get('name'),
-                                    'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
-                                    'wiki_center': data.get('center'),
-                                    'wiki_url': str(request.form['wiki_url']),
-                                        'gmap_wiki_distance': distance,
-                                    'wiki_postal_code': data.get('postal_codes'),
-                                    
-                                }
-                           }
-                    )
 
-    if distance < 2:
-        distance_status = True
+    doc_mongo = db.romania.find_one({"_id" : ObjectId(request.form['wiki_mongo']) })
+    if 'gmap_center' in doc_mongo:
+        
+        center_gm = doc_mongo['gmap_center']
+        center_wiki = data.get('center')
+        gmap_comparison_url =  ("https://www.google.com.ua/maps/dir/"+str(center_gm['lat'])+","+str(center_gm['lng'])+"/"+str(center_wiki["lat"])+","+str(center_wiki["lng"])+"")
+        # gmap_comparison_url = 
+        distance =  getDistance(center_gm["lat"],center_gm["lng"], center_wiki["lat"], center_wiki["lng"])
+        db.romania.update_one(
+                                {"_id": ObjectId(request.form['wiki_mongo'])},
+                                    {
+                                        "$set": {
+                                        
+                                        'wiki_name': data.get('name'),
+                                        'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
+                                        'wiki_center': data.get('center'),
+                                        'wiki_url': str(request.form['wiki_url']),
+                                            'gmap_wiki_distance': distance,
+                                        'wiki_postal_code': data.get('postal_codes'),
+                                        
+                                    }
+                               }
+                        )
+
+        if distance < 2:
+            distance_status = True
+        else:
+            distance_status = False
+    
     else:
         distance_status = False
+        distance = False
+        gmap_comparison_url = '#'
+        db.romania.update_one(
+                                {"_id": ObjectId(request.form['wiki_mongo'])},
+                                    {
+                                        "$set": {
+                                        
+                                        'wiki_name': data.get('name'),
+                                        'wiki_admin_hierarchy': data.get('admin_hierarchy', {}),
+                                        'wiki_center': data.get('center'),
+                                        'wiki_url': str(request.form['wiki_url']),
+                                        'wiki_postal_code': data.get('postal_codes'),
+                                        
+                                    }
+                               }
+                        )
+
+
+
+
     resp = {
         "distance_status":distance_status,
         "distance":distance,

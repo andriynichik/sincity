@@ -345,9 +345,9 @@
 
 
                                                      {% if 'wiki_center' in item %}
-                                                        <td ><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}">{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}</a></td>
+                                                        <td  class="wiki_center_{{item['_id']}}" ><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}">{{item['wiki_center']['lat']}},{{item['wiki_center']['lng']}}</a></td>
                                                     {% else %}
-                                                         <td></td>
+                                                         <td class="wiki_center_{{item['_id']}}" ></td>
                                                     {% endif %}
 
 
@@ -567,8 +567,10 @@ function repars(mongo_id, place_id) {
                 $('#place_id_reparse').val('');
                 $('#edit-modal').modal('toggle');
                 var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+
                 var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
                 $('.gmap_name_'+mongo_id).html(gmname);
+
                 $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
                 $('.gmap_comp_status_'+mongo_id).html(gm_comp);
                  // $('.gmap_type_'+mongo_id).html(gm_comp);
@@ -597,14 +599,18 @@ function repars_wiki() {
     var wiki_mongo =  $('.wiki_mongo').text();
     console.log(wiki_url);
      console.log(wiki_mongo);
+     $('#wiki_url').val('');
          $.post( "/romania-reparse_wiki", { wiki_url: wiki_url, wiki_mongo: wiki_mongo })
             .done(function( data ) {
                 $('#wiki-modal').modal('toggle');
-                arr = JSON.parse(data)
+                arr = JSON.parse(data);
+                // var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+,arr['wiki_center']['lng']+"</a>";
+                var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"</a>";
                 var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
-               var wiki_name = arr['wiki_name'];
+               var wiki_name = "<a target='_blank' href='"+wiki_url+"'>"+arr['wiki_name']+"</a>";
                 $('.gmap_comp_status_'+wiki_mongo).html(gm_comp);
                 $('.wiki_name_'+wiki_mongo).html(wiki_name);
+                $('.wiki_center_'+wiki_mongo).html(wikicenret);
             console.log(data);
                 if (arr['distance_status']) {
                     $('.gmap_comp_status_'+wiki_mongo).css('background-color','#9efb9e' );
