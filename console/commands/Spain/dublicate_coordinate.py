@@ -23,6 +23,7 @@ def is_dub(lon,lat):
 for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
     if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
         status = True
+        print(row['_id'])
     else:
         status = False
 
