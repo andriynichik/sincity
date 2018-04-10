@@ -17,6 +17,7 @@ db = conn.location
 
 def is_dub(lon,lat):
     count  =  db.internal.find({'29_SNIG_LONGITUD_ETRS89': lon,'28_SNIG_LATITUD_ETRS89': lat }).count()
+    print(count)
     return count
 
     
@@ -47,7 +48,7 @@ for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
             
     #         if  row['status'] == 4 and row['25_SNIG_TIPO'] != 'Municipio'and row['25_SNIG_TIPO'] != 'Entidad colectiva':
     #             region = {'4':'1911',
-    #             '5':'1916',
+    #             '5':'1916',qw
     #             '6':'1924',
     #             '7':'1915',
     #             '8':'1909',
