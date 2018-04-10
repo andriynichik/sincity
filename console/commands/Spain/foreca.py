@@ -29,7 +29,7 @@ with myFile:
             if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0' and str(row['28_SNIG_LATITUD_ETRS89']) != '0.0':
 
                 try:
-                    writer.writerows([[row['sinoptik_db_id'],row['29_SNIG_LONGITUD_ETRS89'], row['28_SNIG_LATITUD_ETRS89'], row['27_SNIG_ALTITUD'], row['25_SNIG_TIPO']]])
+                    writer.writerows([[row['sinoptik_db_id'], row['28_SNIG_LATITUD_ETRS89'], row['29_SNIG_LONGITUD_ETRS89'], row['27_SNIG_ALTITUD'], 1, 2, 13]])
                 except Exception as e:
                     print (str(e))
                         # writer.writerows([[row['29_SNIG_LONGITUD_ETRS89']]])
