@@ -20,24 +20,40 @@ def is_dub(lon,lat):
     print(count)
     return count
 
-    
-for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
-    if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
-        status = True
-        print(row['_id'])
-    else:
-        status = False
+try:
+        
+   
+    for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
+        
+        if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
+            status = True
+            print(row['_id'])
+        else:
+            status = False
 
-    db.internal.update_one(
-                                  {"_id": row['_id'] },
-                                      {
-                                          "$set": {
-                                          "is_duplicate":status,
-                                          # "status":0,
-                                          
-                                      }
-                                 }
-                          )
+        db.internal.update_one(
+                                      {"_id": row['_id'] },
+                                          {
+                                              "$set": {
+                                              "is_duplicate":status,
+                                              # "status":0,
+                                              
+                                          }
+                                     }
+                              )
+
+except Exception as e:
+    print(str(e)) 
+#     mongodb:
+#     host: 10.60.20.59
+#     port: 27017
+
+# googlemaps:
+#     geocoding:
+#         key: AIzaSyB6Djz_LeWGIj334pb8A6glyAK4RdhQdAY
+#         limit: 50000
+
+
     # data =  db.internal.find({'29_SNIG_LONGITUD_ETRS89.ADMIN_LEVEL_1.name': row['29_SNIG_LONGITUD_ETRS89']})
     # print (row)
     # for dub in data:
