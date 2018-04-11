@@ -21,26 +21,28 @@ def is_dub(lon,lat):
     return count
 
 try:
-        
-   
-    for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
-        
-        if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
-            status = True
-            print(row['_id'])
-        else:
-            status = False
+    
+    
+               
+    data = db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } )   
+    for row in data :
+        if not 'is_duplicate' in row:
+            if is_dub(row['29_SNIG_LONGITUD_ETRS89'] , row['28_SNIG_LATITUD_ETRS89']) > 1 :
+                status = True
+                print(row['_id'])
+            else:
+                status = False
 
-        db.internal.update_one(
-                                      {"_id": row['_id'] },
-                                          {
-                                              "$set": {
-                                              "is_duplicate":status,
-                                              # "status":0,
-                                              
-                                          }
-                                     }
-                              )
+            db.internal.update_one(
+                                          {"_id": row['_id'] },
+                                              {
+                                                  "$set": {
+                                                  "is_duplicate":status,
+                                                  # "status":0,
+                                                  
+                                              }
+                                         }
+                                  )
 
 except Exception as e:
     print(str(e)) 
