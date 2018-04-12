@@ -278,6 +278,31 @@ def data_provider(provider_type, country=None):
     objects = data.find(document_filter)
     return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
+
+@app.route('/matching/belarus')
+@app.route('/matching/belarus/<string:region>')
+@login_required
+def matching_belarus(region=None, provincia=None):
+    mode = request.args.get('mode', 'none')
+    Provincia = {
+            '1':'Брестская', 
+            '2':'Витебская', 
+            '3':'Гомельская', 
+            '4':'Гродненская',
+            '5':'Минская', 
+            '6':'Могилевская', 
+            '7':'Минск',
+            }
+    if region is None:
+        return render_template('admin/belarus/region-list.html', data=Provincia)
+    else:
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        data =  db.belarus.find({'NAMEDISTR': str(region)})
+        return render_template('admin/belarus/list.html', com = 0,  data=data)
+
 ##############################################
 # SPAIN
 ##############################################

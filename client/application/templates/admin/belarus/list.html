@@ -1,0 +1,453 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('.js-exportable').css("width", "auto").DataTable( {
+        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
+        
+        dom: 'Bflrtip',
+        buttons: [
+            'csv', 'excel', 
+        ],
+
+    } );
+
+
+     $('#dropdown1').on('change', function () {
+                    table.columns(30).search( this.value ).draw();
+                } );
+     $('#dropdown2').on('change', function () {
+                    table.columns(31).search( this.value ).draw();
+                } );
+    $('#dropdown3').on('change', function () {
+                    table.columns(32).search( this.value ).draw();
+                } ); 
+
+
+
+
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+
+        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
+           
+            $(this).removeAttr("style");
+         
+        } 
+        else { 
+
+            $(this).css('color', 'red');
+
+        }   
+
+        
+    } );
+
+        $('#dataTable').css("width", "auto");
+        $('#edit-modal').on('show.bs.modal', function(e) {
+            
+            var $modal = $(this),
+                esseyId = e.relatedTarget.id;
+                    $.post( "/romania-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
+            .done(function( data ) {
+                console.log(JSON.parse(data))
+                arr = JSON.parse(data)
+       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>';
+                for (var i = 0; i < arr.length; i++){
+                    var obj = arr[i];
+                    // for (var key in obj){
+                    //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
+                    //     var attrValue = obj[key];
+                    //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
+                    // }
+                    console.log(obj)
+                    var place_id =  obj['place_id'];
+                    txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
+                     
+                }
+                txt = txt+'</form>';
+
+        $modal.find('.edit-content').html(txt);
+
+               
+        //     // alert(data)
+        });
+            
+//            $.ajax({
+//                cache: false,
+//                type: 'POST',
+//                url: 'backend.php',
+//                data: 'EID='+essay_id,
+//                success: function(data) 
+//                {
+                    
+//                }
+//            });
+            
+        })
+
+                $('#wiki-modal').on('show.bs.modal', function(e) {
+                               var $modal = $(this),
+                    esseyId = e.relatedTarget.id;
+                     txt = '<span class="wiki_mongo">'+esseyId+'</span><form>';
+                            $modal.find('.edit-content').html(txt);
+
+                    });
+// $('[name="WOFButton"]').on('click', function(event) {
+//     alert("clicked");
+//     // $('.Main').load('wof.html');
+// });
+// $('[name="WOFButton"]').on('click', function(event) {
+
+
+//     $.post( "/matching-spain-update", { id: $(this).attr('id') })
+//         .done(function( data ) {
+    
+//   });
+// });
+        $('.search-input-text').on( 'keyup click', function () {   // for text boxes
+    var i =$(this).attr('data-column');  // getting column index
+    var v =$(this).val();  // getting search input value
+    table.columns(i).search(v).draw();
+} );
+
+} );
+
+</script>
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+            <h2>Provincia list</h2>
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            ROMANIA
+                        </h2>
+                    </div>
+                                 <div class="text">
+                        Toggle column :
+                                 
+                        - <a class="toggle-link-vis" data-column="1">OBJECTNUMBER</a>
+                        - <a class="toggle-link-vis" data-column="2">SOATO</a>
+                        - <a class="toggle-link-vis" data-column="3">NAMEOBJECT</a>
+                        - <a class="toggle-link-vis" data-column="4">NAMEOBJBELRUS</a>
+                        - <a class="toggle-link-vis" data-column="5">NAMEREGION</a>
+                        - <a class="toggle-link-vis" data-column="5">NAMEDISTR</a>
+                        - <a class="toggle-link-vis" data-column="7">NAMESELSOVET</a>
+                        - <a class="toggle-link-vis" data-column="7">REGIUNE</a>
+                        - <a class="toggle-link-vis" data-column="7">CENTERATE</a>
+                  
+              
+
+                        <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
+                    </div>
+                    
+                                        <label>DENLOC ≠ gmap_name :</label>
+                    <select id="dropdown1">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+
+                    <label>CODP ≠ gmap_postal_code :</label>
+                    <select id="dropdown2">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+
+
+                     <label>distance > 1km : </label>
+                    <select id="dropdown3">
+                        <option value="">Всі результати</option>
+                      <option value="true">true</option>
+                      <option value="false">false</option>
+                    </select>
+                    
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th><input type="text" data-column="0"  class="search-input-text">STATUS</th>
+                                    <th><input type="text" data-column="1"  class="search-input-text">OBJECTNUMBER</th>
+                                    <th><input type="text" data-column="2"  class="search-input-text">SOATO</th>
+                                    <th><input type="text" data-column="3"  class="search-input-text">NAMEOBJECT</th>
+                                    <th><input type="text" data-column="4"  class="search-input-text">NAMEOBJBELRUS</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">NAMEREGION</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">NAMEDISTR</th>
+                                    <th><input type="text" data-column="7"  class="search-input-text">NAMESELSOVET</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">REGIUNE</th>
+                                    <th><input type="text" data-column="9"  class="search-input-text">CENTERATE</th>
+                            
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for item in data %}
+                                        {% set com = 0 %}
+                                        <tr>        
+                  
+
+
+
+
+                                         
+
+
+                                                 
+                                                    <td></td>
+                                                    <td>{{item['OBJECTNUMBER']}}</td>
+                                                    <td>{{item['SOATO']}}</td>
+                                                    <td>{{item['NAMEOBJECT']}}</td>
+                                                    <td>{{item['NAMEOBJBELRUS']}}</td>
+                                                    <td>{{item['NAMEREGION']}}</td>
+                                                    <td>{{item['NAMEDISTR']}}</td>
+                                                    <td>{{item['NAMESELSOVET']}}</td>
+                                                    <td>{{item['REGIUNE']}}</td>
+                                                    <td>{{item['CENTERATE']}}</td>
+                                 
+
+                                          
+                                            <!-- <td></td> -->
+                                        </tr>
+                                       
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+
+
+   <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Новий mongo_id">
+                   <button type="button"  class="btn btn-primary" onclick="by_my_place()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+   <div id="wiki-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="wiki_url" name="wiki_url" placeholder="wiki url">
+                   <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</section>
+
+<script src="/js/pages/tables/jquery-datatable.js"></script>
+<script type="text/javascript">
+
+function cheked_snig(id) {
+       var id;
+          $.post( "/matching-romania-confirm", { id: id })
+            .done(function( data ) {
+                 document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed </label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>delete-confirm</button>';
+                 $( "#ins_confirm_"+id ).hide();
+                 console.log($( "#ins_confirm_"+id ));
+            
+        });
+}
+
+function dell_snig(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-romania-confirm", { id: id })
+            .done(function( data ) {
+                 document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
+                $( "#ins_confirm_"+id ).show();
+        });
+}
+
+function cheked_ins(id) {
+       var id;
+          $.post( "/matching-romania-confirm_ins", { id: id })
+            .done(function( data ) {
+                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed INS</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>INS-delete-confirm</button>';
+                
+                 $( "#snig_confirm_"+id ).hide();
+        });
+}
+
+function dell_ins(id) {
+       var id;
+       // alert(id);
+          $.post( "/matching-romania-confirm_del_ins", { id: id })
+            .done(function( data ) {
+                 document.getElementById('ins_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm INS</button> </td>';
+               $( "#snig_confirm_"+id ).show();
+        });
+}
+
+function reparse_by_geocode(id) {
+    
+    $.post( "/romania-reparse_by_geocode", { id: id, type: 'autocomplete' })
+            .done(function( data ) {
+                
+            console.log(data);
+        });
+    // var id;
+    // alert(id);
+}
+
+
+
+
+function by_my_place() {
+    var place_id = $('#place_id_reparse').val();
+    var mongo_id =  $('.mongo_pars_is').text();
+    // console.log(parser_id);
+    // console.log(sinoptik_id);
+    repars(mongo_id, place_id);
+    // var place_id = $('#place_id_reparse').val('');
+    // $('#edit-modal').modal('toggle');
+    // // alert(mongo_id);
+    //         $.post( "/sinoptik_db_reparse", { parser_id: parser_id, sinoptik_id:sinoptik_id })
+    //         .done(function( data ) {
+    //             console.log(data)
+    //             arr = JSON.parse(data)
+    //     //         $('#edit-modal').modal('toggle');
+    //     //         var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+    //             var gm_comp = "<a target='_blank' href='"+arr['comparison_url']+"'>"+arr['comparison']+"</a>";
+    //             $('.name_'+sinoptik_id).html(arr['SNIG_NOMBRE']);
+    //     //         $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+    //             $('.comp_status_'+sinoptik_id).html(gm_comp);
+    //             $('.parser_'+sinoptik_id).html(parser_id);
+
+    //     //         if (arr['gmap_type_status']) {
+    //     //             $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+    //     //         }else{
+    //     //             $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+    //     //         }
+    //     //         if (arr['gmap_name_status']) {
+    //     //             $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+    //     //         }else{
+    //     //             $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+    //     //         }
+
+    //             if (arr['comparison_status']) {
+    //                 $('.comp_status_'+sinoptik_id).css('background-color','#9efb9e' );
+    //             }else{
+    //                 $('.comp_status_'+sinoptik_id).css('background-color','#f0b7ab' ); 
+    //             }
+    //     });
+}
+
+function repars(mongo_id, place_id) {
+        $.post( "/romania-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+            .done(function( data ) {
+                arr = JSON.parse(data)
+                // console.log(pcs)
+                $('#place_id_reparse').val('');
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
+
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                 // $('.gmap_type_'+mongo_id).html(gm_comp);
+
+                if (arr['gmap_type_status']) {
+                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+                if (arr['gmap_name_status']) {
+                    $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+        });
+}
+
+function repars_wiki() {
+    var wiki_url = $('#wiki_url').val();
+    var wiki_mongo =  $('.wiki_mongo').text();
+    console.log(wiki_url);
+     console.log(wiki_mongo);
+     $('#wiki_url').val('');
+         $.post( "/romania-reparse_wiki", { wiki_url: wiki_url, wiki_mongo: wiki_mongo })
+            .done(function( data ) {
+                $('#wiki-modal').modal('toggle');
+                arr = JSON.parse(data);
+                // var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+,arr['wiki_center']['lng']+"</a>";
+                var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"</a>";
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+               var wiki_name = "<a target='_blank' href='"+wiki_url+"'>"+arr['wiki_name']+"</a>";
+                $('.gmap_comp_status_'+wiki_mongo).html(gm_comp);
+                $('.wiki_name_'+wiki_mongo).html(wiki_name);
+                $('.wiki_center_'+wiki_mongo).html(wikicenret);
+            console.log(data);
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#f0b7ab' ); 
+                }
+        });
+  
+}
+</script>
+
+{% endblock %}
