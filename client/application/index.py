@@ -28,6 +28,9 @@ import json
 import requests
 import random
 import os
+import urllib.parse
+
+
 
 def escape(val):
     return re.escape(str(val))
@@ -727,10 +730,11 @@ def romania_reparse_wik():
     loader = Loader.loader_with_mongodb(config.get('mongodb'))
     headers = {'User-Agent': 'Mozilla/5.0'}
     language='ro'
-    
+    wiki_url_r = urllib.parse.quote(request.form['wiki_url'], safe=":/")
+ 
 
-    doc = doc_factory.wiki(request.form['wiki_url'])
-    page, code = loader.load(request.form['wiki_url'], headers=headers)
+    doc = doc_factory.wiki(wiki_url_r)
+    page, code = loader.load(wiki_url_r, headers=headers)
     page_parser = WikiRo(page)
     data = page_parser.as_dictionary()
 
