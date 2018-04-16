@@ -22,7 +22,9 @@
     $('#dropdown3').on('change', function () {
                     table.columns(32).search( this.value ).draw();
                 } ); 
-
+    $('#dropdown4').on('change', function () {
+                    table.columns(33).search( this.value ).draw();
+                } ); 
 
 
 
@@ -169,7 +171,8 @@
                         <a class="toggle-link-vis" data-column="30" style="color: red;" data-hide></a>
                        <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide></a>
                        <a class="toggle-link-vis" data-column="32" style="color: red;" data-hide></a>
-
+                        <a class="toggle-link-vis" data-column="33" data-hide ></a>
+                  
 
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
@@ -194,6 +197,12 @@
                         <option value="">Всі результати</option>
                       <option value="true">true</option>
                       <option value="false">false</option>
+                    </select>
+                                         <label>Siruta</label>
+                    <select id="dropdown4">
+                        <option value="">Всі результати</option>
+                      <option value="True">true</option>
+                      <option value="False">false</option>
                     </select>
                     
                     <div class="body">
@@ -234,6 +243,8 @@
                                     <th>gmd</th>
                                     <th>gpcs</th>
                                     <th>dst</th>
+                                    <th>siruta_status</th>
+                               
 
 
 
@@ -298,7 +309,15 @@
 
 
                                                     </td>
+
+
+
                                                     <td>{{item['SIRUTA']}}</td>
+
+
+
+
+
                                                     <td>{{item['DENLOC']}}</td>
                                                     <td>{{item['CODP']}}</td>
                                                     <td>{{item['JUD']}}</td>
@@ -365,7 +384,16 @@
 
                                                     <td><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div> <div class="wiki_name_{{item['_id']}}" ><a target="_blank" href="{{item['wiki_url']}}"> {{item['wiki_name']}}</a></div></td>
                                                     
-                                                    <td>{{item['wiki_siruta']}}</td>
+                                                    
+                                                    {% if 'wiki_siruta' in item and item['wiki_siruta']|string == item['SIRUTA']|string %}
+
+                                                     <td style="background-color: #9efb9e;">{{item['wiki_siruta']}}</td>
+                                                     {% set sir = True %}
+                                                      {% else %}
+                                                      <td style="background-color: #f0b7ab;">{{item['wiki_siruta']}}</td>
+                                                      {% set sir = false %}
+                                                      {% endif %}
+
                                                     <td>{{item['wiki_postal_code']}}</td>
                                                     
 
@@ -419,7 +447,7 @@
                                                     {% else %}
                                                         <td>false</td>
                                                     {% endif %}
-                                            <!-- <td></td> -->
+                                                     <td>{{sir}}</td>
                                         </tr>
                                        
                                     {% endfor %}
