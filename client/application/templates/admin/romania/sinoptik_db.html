@@ -108,16 +108,14 @@
 </script>
 <section class="content">
     <div class="container-fluid">
-        <div class="block-header">
-            <h2>Provincia list</h2>
-        </div>
+
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
                         <h2>
-                            Spain SINOPTIK DATABASE: 
+                            ROMANIA SINOPTIK DATABASE: 
                         </h2>
                     </div>
                     <div class="text">
@@ -137,7 +135,7 @@
                                     <th>sinoptik lat,lng</th>
                                     <th>sinoptik_region</th>
                                     <th>SNIG_NOMBRE</th>
-                                     <th>SNIG_TYPE</th>
+                                  
                                     <th>distance</th>
                                     <th>PARSER_ID</th>
 
@@ -154,14 +152,14 @@
                                                 {% else %}
                                                  <button   name="WOFButton" onclick= "cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
                                             {% endif %}
-                                            {{item['id']|int}}
+                                            {{item['sinoptik_id']|int}}
                                             </td>
-                                            <td>{{item['city_title']}}</td>
+                                            <td>{{item['title']}}</td>
                                             <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
-                                            <td>{{item['region_name']}}</td>
+                                            <td>{{item['region_id']}}</td>
 
-                                              <td  class="name_{{item['_id']}}">{{item['SNIG_NOMBRE']}}</td>
-                                              <td>{{item['25_SNIG_TIPO']}}</td>
+                                              <td  class="name_{{item['_id']}}">{{item['DENLOC']}}</td>
+                                            
                                                {% if 'comparison' in item and item['comparison']|int <= 2 %}
                                               <td  class="comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="{{item['comparison_url']}}">{{item['comparison']}}</a></td>
                                                 {% else %}
@@ -219,7 +217,7 @@
 function cheked(id) {
        var id;
        // alert(id);
-           $.post( "/sinoptik_db_confirm", { id: id })
+           $.post( "/sinoptik_db_confirm_romania", { id: id })
            .done(function( data ) {
                  document.getElementById('status_'+id).innerHTML = '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
     
@@ -229,7 +227,7 @@ function cheked(id) {
 function dell(id) {
        var id;
        // alert(id);
-          $.post( "/sinoptik_db_delete-confirm", { id: id })
+          $.post( "/sinoptik_db_delete-confirm_romania", { id: id })
             .done(function( data ) {
                  document.getElementById('status_'+id).innerHTML =      '<div><a href="#myModal" data-toggle="modal" id="'+id+'" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
     
@@ -257,7 +255,7 @@ function by_my_place() {
     var place_id = $('#place_id_reparse').val('');
     $('#edit-modal').modal('toggle');
     // alert(mongo_id);
-            $.post( "/sinoptik_db_reparse", { parser_id: parser_id, sinoptik_id:sinoptik_id })
+            $.post( "/sinoptik_db_reparse_romania", { parser_id: parser_id, sinoptik_id:sinoptik_id })
             .done(function( data ) {
                 console.log(data)
                 arr = JSON.parse(data)

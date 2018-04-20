@@ -18,7 +18,7 @@ import requests
 import pymongo
 from bson.json_util import dumps
 from lib.keygen.gmap_keygen import Keygen
-
+from lib.parser.map.google.GMapFactory import GMapFactory as MapFactory
 
 
 # from lib.parser.wiki.Spain import Spain as ParserSpain

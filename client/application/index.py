@@ -650,6 +650,108 @@ def sinoptik_db():
 ##############################################
 # END SPAIN
 ##############################################
+@app.route('/sinoptik_db/romania',  methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_romania():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data_db = db.sinoplik_romania.find()
+    # data = list()
+    # array = dict()
+    # for item in data_db:
+    #     # array['sinoptik_db'] = item
+    #     # print (item['title'])
+    #     if 'parser_id' in item:
+    #         ntype = db.internal.find_one({"_id" : item['parser_id']})
+    #         data_db['type_snig'] = ntype["25_SNIG_TIPO"]
+        
+        # data.append(array)
+
+    return render_template('admin/romania/sinoptik_db.html', data=data_db)
+
+
+@app.route('/sinoptik_db_confirm_romania', methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_confirm_romania():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.sinoplik_romania.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/sinoptik_db_delete-confirm_romania', methods=['GET', 'POST'])
+@login_required
+def sinoptik_db_delete_status_confirm_romania():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.sinoplik_romania.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/sinoptik_db_reparse_romania', methods=['GET', 'POST'])
+def sinoptik_db_reparse_romania():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+
+    # db.spain_sql_sinoptik.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    
+
+
+    row =  db.sinoplik_romania.find_one({"_id" : ObjectId(request.form['sinoptik_id'])})
+    
+    parce_data =  db.romania.find_one({"_id" : ObjectId(request.form['parser_id'])})
+    if parce_data is not None:
+        # print(row['city_title'])
+        # print (parce_data)
+        
+        if 'wiki_center' in parce_data:
+            comparison = getDistance(row['lat'], row['lng'], parce_data["wiki_center"]["lat"], parce_data["wiki_center"]["lng"])
+            comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(parce_data["wiki_center"]["lat"])+","+str(parce_data["wiki_center"]["lng"])+"")
+
+        else:
+            comparison = False
+            comparison_url = '#'
+
+        db.sinoplik_romania.update_one(
+                    {"_id": row['_id'] },
+                        {
+                            "$set": {
+                            "parser_id": parce_data['_id'],
+                            "comparison": comparison,
+                            "SNIG_NOMBRE": parce_data['DENLOC'],
+                            "comparison_url":comparison_url,
+                            
+                        }
+                   }
+            )
+
+    status = True
+    if comparison >= 2:
+        status = False
+
+    responce = {
+                # "parser_id": ObjectId(parce_data['_id']),
+                "comparison": comparison,
+                "SNIG_NOMBRE": parce_data['DENLOC'],
+                "comparison_url":comparison_url,
+                "comparison_status":status,
+
+    }
+    return json.dumps(responce)
+
+
 
 @app.route('/matching/romania')
 @app.route('/matching/romania/<string:region>')
