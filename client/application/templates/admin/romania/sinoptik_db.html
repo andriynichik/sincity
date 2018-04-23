@@ -102,7 +102,11 @@
     
 //   });
 // });
-
+        $('.search-input-text').on( 'keyup click', function () {   // for text boxes
+    var i =$(this).attr('data-column');  // getting column index
+    var v =$(this).val();  // getting search input value
+    table.columns(i).search(v).draw();
+} )
 } );
 
 </script>
@@ -130,14 +134,14 @@
                             <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
                                 <thead>
                                 <tr>
-                                    <th>sinoptik_city_ID</th>
-                                    <th>sinoptik_city_name</th>
-                                    <th>sinoptik lat,lng</th>
-                                    <th>sinoptik_region</th>
-                                    <th>SNIG_NOMBRE</th>
+                                    <th><input type="text" data-column="0"  class="search-input-text">sinoptik_city_ID</th>
+                                    <th><input type="text" data-column="1"  class="search-input-text">sinoptik_city_name</th>
+                                    <th><input type="text" data-column="2"  class="search-input-text">sinoptik lat,lng</th>
+                                    <th><input type="text" data-column="3"  class="search-input-text">sinoptik_region</th>
+                                    <th><input type="text" data-column="4"  class="search-input-text">SNIG_NOMBRE</th>
                                   
-                                    <th>distance</th>
-                                    <th>PARSER_ID</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">distance</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">PARSER_ID</th>
 
                                 </tr>
                                 </thead>

@@ -172,7 +172,7 @@
                        <a class="toggle-link-vis" data-column="31" style="color: red;" data-hide></a>
                        <a class="toggle-link-vis" data-column="32" style="color: red;" data-hide></a>
                         <a class="toggle-link-vis" data-column="33" data-hide ></a>
-                  
+                   <a class="toggle-link-vis" data-column="34" </a>
 
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
@@ -244,6 +244,7 @@
                                     <th>gpcs</th>
                                     <th>dst</th>
                                     <th>siruta_status</th>
+                                    <th><input type="text" data-column="34"  class="search-input-text">Parser_id</th>
                                
 
 
@@ -448,6 +449,7 @@
                                                         <td>false</td>
                                                     {% endif %}
                                                      <td>{{sir}}</td>
+                                                     <td>{{item['_id']}}</td>
                                         </tr>
                                        
                                     {% endfor %}
