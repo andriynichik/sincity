@@ -1,3 +1,4 @@
+
 from application import app
 from application import lm
 from flask import render_template
@@ -730,7 +731,7 @@ def sinoptik_db_reparse_romania():
                             "$set": {
                             "parser_id": parce_data['_id'],
                             "comparison": comparison,
-                            "SNIG_NOMBRE": parce_data['DENLOC'],
+                            "DENLOC": parce_data['DENLOC'],
                             "comparison_url":comparison_url,
                             
                         }
