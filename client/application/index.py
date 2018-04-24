@@ -78,6 +78,8 @@ def confirm():
     return render_template('admin/login/confirm.html')
 
 
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -672,6 +674,26 @@ def sinoptik_db_romania():
 
     return render_template('admin/romania/sinoptik_db.html', data=data_db)
 
+
+
+@app.route('/romania_sindb_other', methods=['GET', 'POST'])
+@login_required
+def romania_sindb_other():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    parce_data =  db.romania.find({"DENLOC" : request.form['sinoptik_name'], "gmap_type":"locality"})
+    responce = dict()
+    rezult =  list()
+    for x in parce_data:
+        print( x['_id'])
+        responce.update({"id":str(x['_id']), "name": x['DENLOC']})
+        rezult.append(responce)
+        # responce[x['DENLOC']] =  ObjectId(x['_id'])
+    # result = db.romania.find({"DENLOC" : str(parce_data['DENLOC'])}).count()
+    # data = {'DENLOC':}
+    return json.dumps(rezult)
 
 @app.route('/sinoptik_db_confirm_romania', methods=['GET', 'POST'])
 @login_required

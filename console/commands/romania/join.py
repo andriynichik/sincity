@@ -20,7 +20,7 @@ import requests
 import pymongo
 from bson.json_util import dumps
 from lib.keygen.gmap_keygen import Keygen
-
+from bson.objectid import ObjectId
 
 
 # from lib.parser.wiki.Spain import Spain as ParserSpain

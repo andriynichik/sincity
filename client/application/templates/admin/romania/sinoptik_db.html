@@ -53,26 +53,30 @@
             
             var $modal = $(this),
                 esseyId = e.relatedTarget.id;
-        //             $.post( "/spain-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
-        //     .done(function( data ) {
-        //         console.log(JSON.parse(data))
-        //         arr = JSON.parse(data)
-       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>'
-        //         for (var i = 0; i < arr.length; i++){
-        //             var obj = arr[i];
-        //             // for (var key in obj){
-        //             //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
-        //             //     var attrValue = obj[key];
-        //             //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
-        //             // }
-        //             console.log(obj)
-        //             var place_id =  obj['place_id']
-        //             txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
+                
+                var sinoptik_name =  $('.name_'+esseyId).text();
+                console.log(sinoptik_name)
+                    $.post( "/romania_sindb_other", { id: esseyId, sinoptik_name: sinoptik_name })
+            .done(function( data ) {
+                console.log(data)
+                arr = JSON.parse(data)
+                txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>'
+                for (var i = 0; i < arr.length; i++){
+                    var obj = arr[i];
+                    // for (var key in obj){
+                    //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
+                    //     var attrValue = obj[key];
+                    //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
+                    // }
+                    console.log(obj)
+             
+            
+                    txt = txt + "<div><p><i onclick='repars_modal(\""+esseyId+"\",\""+obj['id']+"\")'  class='glyphicon glyphicon-ok' > </i> "+obj['name']+"<p></div><br>";
                      
-        //         }
-        //         txt = txt+'</form>';
+                }
+                txt = txt+'</form>';
 
-        $modal.find('.edit-content').html(txt);
+      $modal.find('.edit-content').html(txt);
 
                
         //     // alert(data)
@@ -89,6 +93,7 @@
 //                }
 //            });
             
+        })
         })
 // $('[name="WOFButton"]').on('click', function(event) {
 //     alert("clicked");
@@ -249,6 +254,46 @@ function reparse_by_geocode(id) {
         });
     // var id;
     // alert(id);
+}
+
+
+function repars_modal(sinoptik_id,parser_id) {
+    // var parser_id = $('#place_id_reparse').val();
+    // var sinoptik_id =  $('.mongo_pars_is').text();
+
+    // repars(mongo_id, place_id);
+    // var place_id = $('#place_id_reparse').val('');
+    $('#edit-modal').modal('toggle');
+    // alert(mongo_id);
+            $.post( "/sinoptik_db_reparse_romania", { parser_id: parser_id, sinoptik_id:sinoptik_id })
+            .done(function( data ) {
+                console.log(data)
+                arr = JSON.parse(data)
+        //         $('#edit-modal').modal('toggle');
+        //         var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gm_comp = "<a target='_blank' href='"+arr['comparison_url']+"'>"+arr['comparison']+"</a>";
+                $('.name_'+sinoptik_id).html(arr['SNIG_NOMBRE']);
+        //         $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.comp_status_'+sinoptik_id).html(gm_comp);
+                $('.parser_'+sinoptik_id).html(parser_id);
+
+        //         if (arr['gmap_type_status']) {
+        //             $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
+        //         }else{
+        //             $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
+        //         }
+        //         if (arr['gmap_name_status']) {
+        //             $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
+        //         }else{
+        //             $('.gmap_name_'+mongo_id).css('background-color','#f0b7ab' ); 
+        //         }
+
+                if (arr['comparison_status']) {
+                    $('.comp_status_'+sinoptik_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.comp_status_'+sinoptik_id).css('background-color','#f0b7ab' ); 
+                }
+        });
 }
 
 function by_my_place() {
