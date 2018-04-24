@@ -165,7 +165,7 @@
                                             </td>
                                             <td>{{item['title']}}</td>
                                             <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
-                                            <td>{{item['region_id']}}</td>
+                                            <td><a href="/matching/romania/{{region[item['region_id']|string]}}">{{item['region_id']}}</a></td>
 
                                               <td  class="name_{{item['_id']}}">{{item['DENLOC']}}</td>
                                             

@@ -661,6 +661,51 @@ def sinoptik_db_romania():
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
     data_db = db.sinoplik_romania.find()
+    region = {
+                    "2502":"8",
+                    "2460":"8",
+                    "2495":"7",
+                    "2466":"7",
+                    "2497":"7",
+                    "2475":"7",
+                    "2474":"7",
+                    "2501":"7",
+                    "2471":"1",
+                    "2478":"1",
+                    "2491":"1",
+                    "2483":"1",
+                    "2481":"1",
+                    "2467":"1",
+                    "2488":"6",
+                    "2470":"6",
+                    "2461":"6",
+                    "2476":"6",
+                    "2479":"6",
+                    "2496":"6",
+                    "2473":"3",
+                    "2494":"3",
+                    "2487":"3",
+                    "2492":"3",
+                    "2468":"3",
+                    "2500":"3",
+                    "2499":"3",
+                    "2469":"2",
+                    "2477":"2",
+                    "2482":"2",
+                    "2465":"2",
+                    "2498":"2",
+                    "2464":"2",
+                    "2486":"2",
+                    "2480":"4",
+                    "2485":"4",
+                    "2463":"4",
+                    "2484":"4",
+                    "2490":"4",
+                    "2472":"5",
+                    "2489":"5",
+                    "2462":"5",
+                    "2493":"5",
+                }
     # data = list()
     # array = dict()
     # for item in data_db:
@@ -672,7 +717,7 @@ def sinoptik_db_romania():
         
         # data.append(array)
 
-    return render_template('admin/romania/sinoptik_db.html', data=data_db)
+    return render_template('admin/romania/sinoptik_db.html', data=data_db, region=region)
 
 
 
