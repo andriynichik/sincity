@@ -77,13 +77,16 @@ def by_place_id(list_places, city_id):
     for loc in list_places:
         objects = spider.get_gmap_place_id(loc)
         gmap = {}
-        gmap = objects[0].get_document()
-        gmap["city_id"] = city_id
-        exixts = db.ukraine_city_sublocal.find({"city_id": city_id, "code":gmap['code']}).count()
-        if exixts < 1:
-            db.ukraine_city_sublocal.save(gmap)
-            print (gmap)
+        try:
+            gmap = objects[0].get_document()
+            gmap["city_id"] = city_id
+            exixts = db.ukraine_city_sublocal.find({"city_id": city_id, "code":gmap['code']}).count()
+            if exixts < 1:
+                db.ukraine_city_sublocal.save(gmap)
+                print (gmap)
 
+        except Exception as e:
+            print (str(e))
 
 for index, row in df.iterrows():
     print (row[2], row[3], row[4])
