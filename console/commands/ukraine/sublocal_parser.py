@@ -82,6 +82,7 @@ def by_place_id(list_places, city_id):
             gmap["city_id"] = city_id
             exixts = db.ukraine_city_sublocal.find({"city_id": city_id, "code":gmap['code']}).count()
             if exixts < 1:
+                gmap.pop('_id', None)
                 db.ukraine_city_sublocal.save(gmap)
                 print (gmap)
 
