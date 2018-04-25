@@ -284,6 +284,71 @@ def data_provider(provider_type, country=None):
     objects = data.find(document_filter)
     return render_template('admin/{}/list.js'.format(provider_type), e=escape, items=objects)
 
+##############################################
+#  UKRAINE
+##############################################
+
+@app.route('/sublocal/ukraine')
+@login_required
+def ukraine_city(region=None, provincia=None):
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data =  db.ukraine_city.find()
+    return render_template('admin/ukraine/region-list.html', com = 0,  data=data)
+
+@app.route('/ukraine/<int:city_id>/<string:city_type>')
+@login_required
+def ukraine_city_sub(city_id=None, city_type=None):
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data =  db.ukraine_city_sublocal.find({"city_id": city_id, "type":city_type})
+    city_name = db.ukraine_city.find_one({"city_id": city_id})
+    c_n = city_name["title"]
+    return render_template('admin/ukraine/list.html', city_name = c_n, com = 0,  data=data)
+
+@app.context_processor
+def utility_processor():
+     def counter(type_city, city_id):
+        config = Config('./config/config.yml')
+        mongo_config = config.get('mongodb')
+        connection = MongoClient(mongo_config['host'], mongo_config['port'])
+        db = connection.location
+        cnt = db.ukraine_city_sublocal.find({"city_id": city_id, "type":type_city}).count()
+        return cnt
+     return dict(counter=counter)
+
+@app.route('/urk_sub_confirm', methods=['GET', 'POST'])
+@login_required
+def urk_sub_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.ukraine_city_sublocal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
+    return request.form['id'] 
+
+@app.route('/urk_sub_confirm_delete', methods=['GET', 'POST'])
+@login_required
+def urk_sub_confirm_delete():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.ukraine_city_sublocal.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status":4}})
+    return request.form['id'] 
+
+
+##############################################
+# END UKRAINE
+##############################################
 
 @app.route('/matching/belarus')
 @app.route('/matching/belarus/<string:region>')
@@ -994,6 +1059,8 @@ def dublicate():
         else:
             return "False"
     return dict(isdub = isdub)
+
+
 
 @app.route('/matching-romania-confirm', methods=['GET', 'POST'])
 @login_required

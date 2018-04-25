@@ -17,7 +17,7 @@ mongo_config = config.get('mongodb')
 df = pd.read_csv('./data/ukraine/city_UA.csv',  skiprows=0, low_memory=False) 
 conn =  MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
-coll = db.ukraine
+coll = db.ukraine_city
 
 
 
@@ -25,7 +25,12 @@ coll = db.ukraine
 
 def get_place(lat, lng):
     datalist = list()
-    url =  'https://maps.googleapis.com/maps/api/place/radarsearch/json?location='+str(lat)+','+str(lng)+'&radius=20000&type=neighborhood&key=AIzaSyAHnEv4kRzWG252YiU9UYIeuqaZrBe_x8M' 
+    
+    Key = Keygen()
+    keyAPI =  Key.get_key_place()
+    if not keyAPI:
+       sys.exit()
+    url =  'https://maps.googleapis.com/maps/api/place/radarsearch/json?location='+str(lat)+','+str(lng)+'&radius=20000&type=neighborhood&key='+str(keyAPI)+'' 
     response = requests.get(url)
     data = response.json()
     result  = data['results']
@@ -36,7 +41,7 @@ def get_place(lat, lng):
         datalist.append(x['place_id'])
         # print ("====================")
 
-    url =  'https://maps.googleapis.com/maps/api/place/radarsearch/json?location='+str(lat)+','+str(lng)+'&radius=20000&type=sublocality&key=AIzaSyAHnEv4kRzWG252YiU9UYIeuqaZrBe_x8M' 
+    url =  'https://maps.googleapis.com/maps/api/place/radarsearch/json?location='+str(lat)+','+str(lng)+'&radius=20000&type=sublocality&key='+str(keyAPI)+''
     response = requests.get(url)
     data = response.json()
     result  = data['results']
@@ -49,7 +54,7 @@ def get_place(lat, lng):
         
     return datalist
 
-def by_place_id(list_places):
+def by_place_id(list_places, city_id):
     config = Config('./config/config.yml')
     Key = Keygen()
     keyAPI =  Key.get_key_geocode()
@@ -73,18 +78,33 @@ def by_place_id(list_places):
         objects = spider.get_gmap_place_id(loc)
         gmap = {}
         gmap = objects[0].get_document()
-        if :
-            pass
-        print (gmap)
+        gmap["city_id"] = city_id
+        exixts = db.ukraine_city_sublocal.find({"city_id": city_id, "code":gmap['code']}).count()
+        if exixts < 1:
+            db.ukraine_city_sublocal.save(gmap)
+            print (gmap)
 
 
 for index, row in df.iterrows():
     print (row[2], row[3], row[4])
     places = get_place(row[2], row[3])
     print (places)
-    by_place_id(places)
+    by_place_id(places, row[0])
+    data =  {
+        "city_id":row[0],
+        "region_id":row[1],
+        "lat":row[2],
+        "lng":row[3],
+        "title":row[4],
+        "geotype_id":row[5]
 
-    sys.exit()
+    }
+    exixts = db.ukraine_city.find({"city_id": data["city_id"]}).count()
+    if exixts < 1:
+        db.ukraine_city.save(data)
+        print ('created',data)
+    print(row[0])
+  
     # data = {'lat': row[1],
     #         'lng':row[0],
             
