@@ -321,6 +321,19 @@ def utility_processor():
         return cnt
      return dict(counter=counter)
 
+# sinoptik_db_ro
+# @app.context_processor
+# def utility_processor():
+#      def counter(type_city, city_id):
+#         config = Config('./config/config.yml')
+#         mongo_config = config.get('mongodb')
+#         connection = MongoClient(mongo_config['host'], mongo_config['port'])
+#         db = connection.location
+#         cnt = db.ukraine_city_sublocal.find({"city_id": city_id, "type":type_city}).count()
+#         return cnt
+#      return dict(counter=counter)
+
+
 @app.route('/urk_sub_confirm', methods=['GET', 'POST'])
 @login_required
 def urk_sub_confirm():
