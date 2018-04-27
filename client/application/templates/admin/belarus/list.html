@@ -14,15 +14,11 @@
 
 
      $('#dropdown1').on('change', function () {
-                    table.columns(30).search( this.value ).draw();
+                    table.columns(20).search( this.value ).draw();
                 } );
      $('#dropdown2').on('change', function () {
-                    table.columns(31).search( this.value ).draw();
+                    table.columns(19).search( this.value ).draw();
                 } );
-    $('#dropdown3').on('change', function () {
-                    table.columns(32).search( this.value ).draw();
-                } ); 
-
 
 
 
@@ -51,7 +47,7 @@
             
             var $modal = $(this),
                 esseyId = e.relatedTarget.id;
-                    $.post( "/romania-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
+                    $.post( "/belarus-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
             .done(function( data ) {
                 console.log(JSON.parse(data))
                 arr = JSON.parse(data)
@@ -132,12 +128,12 @@
                                  <div class="text">
                         Toggle column :
                                  
-                        - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>OBJECTNUMBER</a>
-                        - <a class="toggle-link-vis" data-column="2" style="color: red;" data-hide>SOATO</a>
+                        - <a class="toggle-link-vis" data-column="1" >OBJECTNUMBER</a>
+                        - <a class="toggle-link-vis" data-column="2" >SOATO</a>
                         - <a class="toggle-link-vis" data-column="3">NAMEOBJECT</a>
-                        - <a class="toggle-link-vis" data-column="4" style="color: red;" data-hide>NAMEOBJBELRUS</a>
+                        - <a class="toggle-link-vis" data-column="4" >NAMEOBJBELRUS</a>
                         - <a class="toggle-link-vis" data-column="5">Name_Type</a>
-                        - <a class="toggle-link-vis" data-column="6">Name_Region</a>
+                        - <a class="toggle-link-vis" data-column="6" style="color: red;" data-hide>Name_Region</a>
                         - <a class="toggle-link-vis" data-column="7">Name_Distr</a>
                         - <a class="toggle-link-vis" data-column="8">distance_KAB_gmap</a>
                          - <a class="toggle-link-vis" data-column="9">name_KAB_gmap</a>
@@ -146,10 +142,12 @@
                         - <a class="toggle-link-vis" data-column="12">gmap_name</a>
                          - <a class="toggle-link-vis" data-column="13">"gmap_type"</a>
                         - <a class="toggle-link-vis" data-column="14" style="color: red;" data-hide>"gmap_admin_hierarchy"</a>
-                        - <a class="toggle-link-vis" data-column="15">"gmap_center"</a>
+                        - <a class="toggle-link-vis" data-column="15" style="color: red;" data-hide>"gmap_center"</a>
                         - <a class="toggle-link-vis" data-column="16" style="color: red;" data-hide>"gmap_bounds"</a>
-                      - <a class="toggle-link-vis" data-column="17">"gmap_postal_code"</a>
+                      - <a class="toggle-link-vis" data-column="17" style="color: red;" data-hide>"gmap_postal_code"</a>
                         - <a class="toggle-link-vis" data-column="18" style="color: red;" data-hide>"gmap_requests"</a>
+                         <a class="toggle-link-vis" data-column="19" style="color: red;" data-hide></a>
+                          <a class="toggle-link-vis" data-column="20" style="color: red;" data-hide></a>
                         
              
                   <!-- MAYQPROMO -->
@@ -158,15 +156,8 @@
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
                     
-                                        <label>DENLOC ≠ gmap_name :</label>
+                                        <label>KAB ≠ gmap_name :</label>
                     <select id="dropdown1">
-                        <option value="">Всі результати</option>
-                      <option value="true">true</option>
-                      <option value="false">false</option>
-                    </select>
-
-                    <label>CODP ≠ gmap_postal_code :</label>
-                    <select id="dropdown2">
                         <option value="">Всі результати</option>
                       <option value="true">true</option>
                       <option value="false">false</option>
@@ -174,7 +165,7 @@
 
 
                      <label>distance > 1km : </label>
-                    <select id="dropdown3">
+                    <select id="dropdown2">
                         <option value="">Всі результати</option>
                       <option value="true">true</option>
                       <option value="false">false</option>
@@ -193,7 +184,7 @@
                                     <th><input type="text" data-column="5"  class="search-input-text">Name_Type</th>
                                     <th><input type="text" data-column="6"  class="search-input-text">Name_Region</th>
                                     <th><input type="text" data-column="7"  class="search-input-text">Name_Distr</th>
-                                    <th><input type="text" data-column="8"  class="search-input-text">distance</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">distance_KAB_gmap</th>
                                      <th><input type="text" data-column="9"  class="search-input-text">name_KAB_gmap</th>
                                     
                                     <th><input type="text" data-column="10"  class="search-input-text">Name_Selsovet</th>
@@ -205,6 +196,8 @@
                                    <th><input type="text" data-column="16"  class="search-input-text">gmap_bounds</th>
                                    <th><input type="text" data-column="17"  class="search-input-text">gmap_postal_code</th>
                                    <th><input type="text" data-column="18"  class="search-input-text">gmap_requests</th>
+                                                        <th>dist_st</th>
+                                   <th>name_st</th>
 
 
                         
@@ -285,21 +278,23 @@
 
                    {% if 'gmap_wiki_distance' in  item  and 'lat' in item and  item['gmap_wiki_distance']  <  2 %}
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{item['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
-                                                        {% set com = com +1 %}
+                                                        {% set dist = true %}
                                                     {% elif 'gmap_center' in  item  and 'lat' in item %}
 
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                     {% else %}
+                    {% set dist = false %}
                                                                          <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
                                                     {% endif %}
 
 
                                                     {% if item['gmap_name'] and item['gmap_name']  ==  item['NAMEOBJECT'] %}
                                                         <td class="gmap_name_{{item['_id']}}"  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
-                                                        {% set com = com +1 %}
+                                                        {% set st_n = true %}
 
                                                      {% else %}
                                                         <td class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                         {% set st_n = flase %}
                                                       {% endif %}
 
 
@@ -307,7 +302,14 @@
 
                                                     <td>{{item['CENTERATE']}}</td>
 
-                                   <td>{{item['lat']}} , {{item['lng']}}</td>
+                                
+                                        {% if 'lat' in item %}
+                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a></td>
+                                                    {% else %}
+                                                    <td></td>
+
+                                                    {% endif %}
+
                                    <td>{{item['gmap_name']}}</td>
                                    <td>{{item['gmap_type']}}</td>
                                    <td>{{item['gmap_admin_hierarchy']}}</td>
@@ -324,7 +326,8 @@
                                    <td>{{item['gmap_bounds']}}</td>
                                    <td>{{item['gmap_postal_code']}}</td>
                                    <td>{{item['gmap_requests']}}</td>
-
+                                    <td>{{dist}}</td>
+                                   <td>{{st_n}}</td>
                                  
 
                                           
@@ -358,7 +361,7 @@
                     ...
 
                     </div>
-                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Новий mongo_id">
+                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Новий place_id">
                    <button type="button"  class="btn btn-primary" onclick="by_my_place()">Save changes</button>
                 </form>
                 <div class="modal-footer">
@@ -498,7 +501,7 @@ function by_my_place() {
 }
 
 function repars(mongo_id, place_id) {
-        $.post( "/romania-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+        $.post( "/belarus-reparse_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
             .done(function( data ) {
                 arr = JSON.parse(data)
                 // console.log(pcs)
@@ -509,15 +512,11 @@ function repars(mongo_id, place_id) {
                 var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
                 $('.gmap_name_'+mongo_id).html(gmname);
 
-                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+               
                 $('.gmap_comp_status_'+mongo_id).html(gm_comp);
                  // $('.gmap_type_'+mongo_id).html(gm_comp);
 
-                if (arr['gmap_type_status']) {
-                    $('.gmap_type_'+mongo_id).css('background-color','#9efb9e' );
-                }else{
-                    $('.gmap_type_'+mongo_id).css('background-color','#f0b7ab' ); 
-                }
+     
                 if (arr['gmap_name_status']) {
                     $('.gmap_name_'+mongo_id).css('background-color','#9efb9e' );
                 }else{
