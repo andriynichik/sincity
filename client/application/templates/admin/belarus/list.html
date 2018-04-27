@@ -119,31 +119,40 @@
 </script>
 <section class="content">
     <div class="container-fluid">
-        <div class="block-header">
-            <h2>Provincia list</h2>
-        </div>
+     
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                 <div class="card">
                     <div class="header">
                         <h2>
-                            ROMANIA
+                            Belasrus
                         </h2>
                     </div>
                                  <div class="text">
                         Toggle column :
                                  
-                        - <a class="toggle-link-vis" data-column="1">OBJECTNUMBER</a>
-                        - <a class="toggle-link-vis" data-column="2">SOATO</a>
+                        - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>OBJECTNUMBER</a>
+                        - <a class="toggle-link-vis" data-column="2" style="color: red;" data-hide>SOATO</a>
                         - <a class="toggle-link-vis" data-column="3">NAMEOBJECT</a>
-                        - <a class="toggle-link-vis" data-column="4">NAMEOBJBELRUS</a>
-                        - <a class="toggle-link-vis" data-column="5">NAMEREGION</a>
-                        - <a class="toggle-link-vis" data-column="5">NAMEDISTR</a>
-                        - <a class="toggle-link-vis" data-column="7">NAMESELSOVET</a>
-                        - <a class="toggle-link-vis" data-column="7">REGIUNE</a>
-                        - <a class="toggle-link-vis" data-column="7">CENTERATE</a>
-                  
+                        - <a class="toggle-link-vis" data-column="4" style="color: red;" data-hide>NAMEOBJBELRUS</a>
+                        - <a class="toggle-link-vis" data-column="5">Name_Type</a>
+                        - <a class="toggle-link-vis" data-column="6">Name_Region</a>
+                        - <a class="toggle-link-vis" data-column="7">Name_Distr</a>
+                        - <a class="toggle-link-vis" data-column="8">distance_KAB_gmap</a>
+                         - <a class="toggle-link-vis" data-column="9">name_KAB_gmap</a>
+                        - <a class="toggle-link-vis" data-column="10">Name_Selsovet</a>
+                        - <a class="toggle-link-vis" data-column="11">center_poligone</a>
+                        - <a class="toggle-link-vis" data-column="12">gmap_name</a>
+                         - <a class="toggle-link-vis" data-column="13">"gmap_type"</a>
+                        - <a class="toggle-link-vis" data-column="14" style="color: red;" data-hide>"gmap_admin_hierarchy"</a>
+                        - <a class="toggle-link-vis" data-column="15">"gmap_center"</a>
+                        - <a class="toggle-link-vis" data-column="16" style="color: red;" data-hide>"gmap_bounds"</a>
+                      - <a class="toggle-link-vis" data-column="17">"gmap_postal_code"</a>
+                        - <a class="toggle-link-vis" data-column="18" style="color: red;" data-hide>"gmap_requests"</a>
+                        
+             
+                  <!-- MAYQPROMO -->
               
 
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
@@ -181,11 +190,25 @@
                                     <th><input type="text" data-column="2"  class="search-input-text">SOATO</th>
                                     <th><input type="text" data-column="3"  class="search-input-text">NAMEOBJECT</th>
                                     <th><input type="text" data-column="4"  class="search-input-text">NAMEOBJBELRUS</th>
-                                    <th><input type="text" data-column="5"  class="search-input-text">NAMEREGION</th>
-                                    <th><input type="text" data-column="6"  class="search-input-text">NAMEDISTR</th>
-                                    <th><input type="text" data-column="7"  class="search-input-text">NAMESELSOVET</th>
-                                    <th><input type="text" data-column="8"  class="search-input-text">REGIUNE</th>
-                                    <th><input type="text" data-column="9"  class="search-input-text">CENTERATE</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">Name_Type</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">Name_Region</th>
+                                    <th><input type="text" data-column="7"  class="search-input-text">Name_Distr</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">distance</th>
+                                     <th><input type="text" data-column="9"  class="search-input-text">name_KAB_gmap</th>
+                                    
+                                    <th><input type="text" data-column="10"  class="search-input-text">Name_Selsovet</th>
+                                    <th><input type="text" data-column="11"  class="search-input-text">center_poligone</th>
+                                   <th><input type="text" data-column="12"  class="search-input-text">gmap_name</th>
+                                   <th><input type="text" data-column="13"  class="search-input-text">gmap_type</th>
+                                   <th><input type="text" data-column="14"  class="search-input-text">gmap_admin_hierarchy</th>
+                                   <th><input type="text" data-column="15"  class="search-input-text">gmap_center</th>
+                                   <th><input type="text" data-column="16"  class="search-input-text">gmap_bounds</th>
+                                   <th><input type="text" data-column="17"  class="search-input-text">gmap_postal_code</th>
+                                   <th><input type="text" data-column="18"  class="search-input-text">gmap_requests</th>
+
+
+                        
+
                             
 
 
@@ -201,11 +224,56 @@
 
 
 
-                                         
+                                                <td>
+
+                                                    {% if 'status_snig' in item  %}
+                                                        <div id="snig_confirm_{{item['_id']}}" >
+                                                        {% if item['status_snig'] == 1  %}
+                                                        <label class="label label-success">Confirmed </label>
+                                                        <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>delete-confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button><p> 
+                                                         {% endif %}
+                                                         
+                                                         </div>
+                                                         {% if 'status_autoconfirm' in item  %}
+                                                         <label class="label label-success">AutoConfirmed </label>
+                                                         {% endif %}
+                                                    {% elif 'status_ins' in  item  %}
+                                                        <div id="ins_confirm_{{item['_id']}}" >
+                                                        {% if item['status_ins'] == 1  %}
+                                                        <label class="label label-success">KAB-Confirmed  </label>
+                                                        <button onclick="dell_ins('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>KAB-delete-confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_ins('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>KAB-Confirm</button><p> 
+                                                         {% endif %}
+                                                     {% else %}
+                                                        <div id="snig_confirm_{{item['_id']}}" >
+                                                        {% if item['status_snig'] == 1  %}
+                                                        <label class="label label-success">Confirmed </label>
+                                                        <button onclick="dell_snig('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>delete-confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_snig('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button><p> 
+                                                         {% endif %}
+                                                         
+                                                         </div>
+                                                         {% if 'status_autoconfirm' in item  %}
+                                                         <label class="label label-success">AutoConfirmed </label>
+                                                         {% endif %}
+                                                          <div id="ins_confirm_{{item['_id']}}" >
+                                                        {% if item['status_ins'] == 1  %}
+                                                        <label class="label label-success">KAB-Confirmed  </label>
+                                                        <button onclick="dell_ins('{{item['_id']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-off"></i>KAB-delete-confirm</button> 
+                                                        {% else %}
+                                                        <button   name="WOFButton" onclick="cheked_ins('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>KAB-Confirm</button><p> 
+                                                         {% endif %}
+                                                    {% endif %}
+
+                                                   </td>
 
 
-                                                 
-                                                    <td></td>
+
+
                                                     <td>{{item['OBJECTNUMBER']}}</td>
                                                     <td>{{item['SOATO']}}</td>
                                                     <td>{{item['NAMEOBJECT']}}</td>
@@ -213,8 +281,50 @@
                                                     <td>{{item['NAMEREGION']}}</td>
                                                     <td>{{item['NAMEDISTR']}}</td>
                                                     <td>{{item['NAMESELSOVET']}}</td>
-                                                    <td>{{item['REGIUNE']}}</td>
+                                                    
+
+                   {% if 'gmap_wiki_distance' in  item  and 'lat' in item and  item['gmap_wiki_distance']  <  2 %}
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{item['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        {% set com = com +1 %}
+                                                    {% elif 'gmap_center' in  item  and 'lat' in item %}
+
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                    {% else %}
+                                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
+                                                    {% endif %}
+
+
+                                                    {% if item['gmap_name'] and item['gmap_name']  ==  item['NAMEOBJECT'] %}
+                                                        <td class="gmap_name_{{item['_id']}}"  style="background-color: #9efb9e;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                        {% set com = com +1 %}
+
+                                                     {% else %}
+                                                        <td class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
+                                                      {% endif %}
+
+
+
+
                                                     <td>{{item['CENTERATE']}}</td>
+
+                                   <td>{{item['lat']}} , {{item['lng']}}</td>
+                                   <td>{{item['gmap_name']}}</td>
+                                   <td>{{item['gmap_type']}}</td>
+                                   <td>{{item['gmap_admin_hierarchy']}}</td>
+                                 
+              {% if 'gmap_center' in item %}
+                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}">{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}</a></td>
+                                                    {% else %}
+                                                    <td></td>
+                                                    {% endif %}
+
+
+
+
+                                   <td>{{item['gmap_bounds']}}</td>
+                                   <td>{{item['gmap_postal_code']}}</td>
+                                   <td>{{item['gmap_requests']}}</td>
+
                                  
 
                                           
@@ -294,7 +404,7 @@
 
 function cheked_snig(id) {
        var id;
-          $.post( "/matching-romania-confirm", { id: id })
+          $.post( "/matching-belarus-confirm", { id: id })
             .done(function( data ) {
                  document.getElementById('snig_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed </label> <button   name="WOFButton" onclick=dell_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>delete-confirm</button>';
                  $( "#ins_confirm_"+id ).hide();
@@ -306,7 +416,7 @@ function cheked_snig(id) {
 function dell_snig(id) {
        var id;
        // alert(id);
-          $.post( "/matching-romania-confirm", { id: id })
+          $.post( "/matching-belarus-confirm", { id: id })
             .done(function( data ) {
                  document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
                 $( "#ins_confirm_"+id ).show();
@@ -315,9 +425,9 @@ function dell_snig(id) {
 
 function cheked_ins(id) {
        var id;
-          $.post( "/matching-romania-confirm_ins", { id: id })
+          $.post( "/matching-belarus-confirm_ins", { id: id })
             .done(function( data ) {
-                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed INS</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>INS-delete-confirm</button>';
+                 document.getElementById('ins_confirm_'+id).innerHTML = '<label class="label label-success">Confirmed KAB</label> <button   name="WOFButton" onclick=dell_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i>KAB-delete-confirm</button>';
                 
                  $( "#snig_confirm_"+id ).hide();
         });
@@ -326,7 +436,7 @@ function cheked_ins(id) {
 function dell_ins(id) {
        var id;
        // alert(id);
-          $.post( "/matching-romania-confirm_del_ins", { id: id })
+          $.post( "/matching-belarus-confirm_del_ins", { id: id })
             .done(function( data ) {
                  document.getElementById('ins_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_ins("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm INS</button> </td>';
                $( "#snig_confirm_"+id ).show();

@@ -1126,6 +1126,59 @@ def romania_confirm_del():
     return request.form['id'] 
 
 
+@app.route('/matching-belarus-confirm', methods=['GET', 'POST'])
+@login_required
+def belarus_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
+    return request.form['id'] 
+
+@app.route('/matching-belarus-confirm_ins', methods=['GET', 'POST'])
+@login_required
+def belarus_confirm_ins():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_ins":1}})
+    return request.form['id'] 
+
+
+@login_required
+def belarus_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_autoconfirm":1}})
+    return request.form['id'] 
+
+
+
+@app.route('/matching-belarus-confirm_del_ins', methods=['GET', 'POST'])
+@login_required
+def belarus_confirm_del():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
+    return request.form['id'] 
+
+
+
+
 @app.route('/romania-reparse_by_geocode', methods=['GET', 'POST'])
 @login_required
 def romania_reparse_by_geocode():
