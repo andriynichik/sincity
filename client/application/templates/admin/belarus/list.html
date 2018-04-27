@@ -128,8 +128,8 @@
                                  <div class="text">
                         Toggle column :
                                  
-                        - <a class="toggle-link-vis" data-column="1" >OBJECTNUMBER</a>
-                        - <a class="toggle-link-vis" data-column="2" >SOATO</a>
+                        - <a class="toggle-link-vis" data-column="1" style="color: red;" data-hide>OBJECTNUMBER</a>
+                        - <a class="toggle-link-vis" data-column="2" style="color: red;" data-hide>SOATO</a>
                         - <a class="toggle-link-vis" data-column="3">NAMEOBJECT</a>
                         - <a class="toggle-link-vis" data-column="4" >NAMEOBJBELRUS</a>
                         - <a class="toggle-link-vis" data-column="5">Name_Type</a>
@@ -282,6 +282,7 @@
                                                     {% elif 'gmap_center' in  item  and 'lat' in item %}
 
                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        {% set dist = false %}
                     {% else %}
                     {% set dist = false %}
                                                                          <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
@@ -294,7 +295,7 @@
 
                                                      {% else %}
                                                         <td class="gmap_name_{{item['_id']}}" style="background-color: #f0b7ab;">  <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>  {{item['gmap_name']}}</td>
-                                                         {% set st_n = flase %}
+                                                         {% set st_n = false %}
                                                       {% endif %}
 
 
