@@ -1387,7 +1387,7 @@ def belarusreparse_by_geocode():
             gmap['gmap_comparison_url'] = False
       
 
-        db.romania.update_one(
+        db.belarus.update_one(
                 {"_id": ObjectId(request.form['id']) },
                     {
                         "$set": {
