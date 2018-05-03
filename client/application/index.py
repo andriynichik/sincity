@@ -1126,6 +1126,8 @@ def romania_confirm_del():
     return request.form['id'] 
 
 
+#######################################################
+
 @app.route('/matching-belarus-confirm', methods=['GET', 'POST'])
 @login_required
 def belarus_confirm():
@@ -1136,6 +1138,18 @@ def belarus_confirm():
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
     db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
+    return request.form['id'] 
+
+@app.route('/matching-belarus-confirm_del', methods=['GET', 'POST'])
+@login_required
+def belarus_confirm_del():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
     return request.form['id'] 
 
 @app.route('/matching-belarus-confirm_ins', methods=['GET', 'POST'])
@@ -1151,32 +1165,23 @@ def belarus_confirm_ins():
     return request.form['id'] 
 
 
-@login_required
-def belarus_confirm():
-
-    # return render_template('admin/gmap/list.html', country=country)
-    config = Config('./config/config.yml')
-    mongo_config = config.get('mongodb')
-    connection = MongoClient(mongo_config['host'], mongo_config['port'])
-    db = connection.location
-    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_autoconfirm":1}})
-    return request.form['id'] 
-
-
-
 @app.route('/matching-belarus-confirm_del_ins', methods=['GET', 'POST'])
 @login_required
-def belarus_confirm_del():
+def belarus_confirm_ins_del():
 
     # return render_template('admin/gmap/list.html', country=country)
     config = Config('./config/config.yml')
     mongo_config = config.get('mongodb')
     connection = MongoClient(mongo_config['host'], mongo_config['port'])
     db = connection.location
-    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_ins":1}})
     return request.form['id'] 
 
 
+
+
+
+####################################################################################################
 
 
 @app.route('/romania-reparse_by_geocode', methods=['GET', 'POST'])
@@ -1359,7 +1364,10 @@ def belarusreparse_by_geocode():
             use_cache=True
     )
     if request.form['type'] == "autocomplete":
-        raw = gmap_loader.by_places(doc['NAMEOBJECT'] + ', '+doc['NAMESELSOVET'])
+        if 'NAMESELSOVET' in doc:
+            raw = gmap_loader.by_places(doc['NAMEOBJECT'] + ', '+str(doc['NAMESELSOVET']))
+        else:
+            raw = gmap_loader.by_places(str(doc['NAMEOBJECT']))
         return json.dumps(raw)
     else:
         objects = spider.get_gmap_place_id(request.form['place_id'])

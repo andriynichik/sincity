@@ -281,7 +281,7 @@
                                                         {% set dist = true %}
                                                     {% elif 'gmap_center' in  item  and 'lat' in item %}
 
-                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['lat']}},{{item['lng']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_wiki_distance']}}</a> </td>
                                                         {% set dist = false %}
                     {% else %}
                     {% set dist = false %}
@@ -420,7 +420,7 @@ function cheked_snig(id) {
 function dell_snig(id) {
        var id;
        // alert(id);
-          $.post( "/matching-belarus-confirm", { id: id })
+          $.post( "/matching-belarus-confirm_del", { id: id })
             .done(function( data ) {
                  document.getElementById('snig_confirm_'+id).innerHTML =      '  <td  id="status_'+id+'"> <button   name="WOFButton" onclick=cheked_snig("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i>Confirm</button> </td>';
                 $( "#ins_confirm_"+id ).show();
