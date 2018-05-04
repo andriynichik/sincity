@@ -247,7 +247,7 @@ for row in db.romania.find():
                                           }
                                      }
                               )
-                    sys.exit()
+             
             except Exception as e:
                     print (str(e))
  
