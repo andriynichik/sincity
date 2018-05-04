@@ -102,8 +102,8 @@ for row in db.romania.find():
                              "forecast_id_title":"",
                              "forecast_id":"",
                              "forecast_id_type":"",
-                             "lat":row['wiki_center'],
-                             "lng":row['wiki_center'],
+                             "lat":str(row['wiki_center']['lat']),
+                             "lng":str(row['wiki_center']['lng']),
                              "altitude":"",
                              "population":"",
                              "gmt_offset":"",
@@ -226,9 +226,9 @@ for row in db.romania.find():
                              "old_titleIn_hr":"",
                              "slug_hr":"",
                              "slug_301_hr":"",
-                             "version_ua":"1",
-                             "version_ru":"1",
-                             "version_gb":"1",
+                             "version_ua":"0",
+                             "version_ru":"0",
+                             "version_gb":"0",
                              "accepted":"1"
                           }
                     print (row)
