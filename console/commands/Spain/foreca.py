@@ -9,6 +9,7 @@ from pymongo import MongoClient
 from lib.keygen.gmap_keygen import Keygen
 import requests
 import sys
+from bson.objectid import ObjectId
 # from pymongo import Connection
 config = Config('./config/config.yml')
 mongo_config = config.get('mongodb')
@@ -19,19 +20,21 @@ coll = db.SPAININE
 
 
 csv.register_dialect('myDialect', delimiter=',', quoting=csv.QUOTE_NONE)
-myFile = open('foreca_spain.csv', 'w')  
-print(db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ).count())
+myFile = open('foreca_romania.csv', 'w')  
+
+listing_type = [9, 10, 11,17,18,19,22,23,]
 with myFile:
     writer = csv.writer(myFile, dialect='myDialect')
 
-    for row in  db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
-        if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
-            if str(row['29_SNIG_LONGITUD_ETRS89']) != '0.0' and str(row['28_SNIG_LATITUD_ETRS89']) != '0.0':
-
-                try:
-                    writer.writerows([[row['sinoptik_db_id'], row['28_SNIG_LATITUD_ETRS89'], row['29_SNIG_LONGITUD_ETRS89'], row['27_SNIG_ALTITUD'], 1, 2, 13]])
-                except Exception as e:
-                    print (str(e))
+    for row in  db.romania.find():
+        if 'sinoptik_db_id' in row :
+             if row['TIP'] in listing_type:
+                count  =  db.sinoplik_romania.find({'parser_id':  ObjectId(row['_id'])}).count()
+                if count == 0:
+                    try:
+                        writer.writerows([[row['sinoptik_db_id'], str(row['wiki_center']['lat']), str(row['wiki_center']['lng']), row['TIP'], 2, 3, 14]])
+                    except Exception as e:
+                        print (str(e))
                         # writer.writerows([[row['29_SNIG_LONGITUD_ETRS89']]])
                         # writer.writerows([[row['28_SNIG_LATITUD_ETRS89']]])
                         # writer.writerows([[row['27_SNIG_ALTITUD']]])
