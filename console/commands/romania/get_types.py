@@ -75,41 +75,24 @@ def getDistance(lat1,lon1,lat2,lon2):
 	
 datar = db.sinoplik_romania.find()
 for row in datar:
-	obj = db.romania.find_one({"DENLOC":row['title'].upper()})
-	print (obj, row['title'].upper())
+	
+	
 	try:
 		
 
-		if  'wiki_center' in obj:
-			distance =  getDistance(row["lat"],row["lng"], obj["wiki_center"]["lat"],obj["wiki_center"]["lng"])
-			comparison_url =("https://www.google.com.ua/maps/dir/"+str(row['lat'])+","+str(row['lng'])+"/"+str(obj["wiki_center"]["lat"])+","+str(obj["wiki_center"]["lng"])+"")
-
+		if  'parser_id' in row:
+			obj = db.romania.find_one({"_id": row['parser_id']})
+			
 			db.sinoplik_romania.update_one(
 						                {"_id": row['_id'] },
 						                    {
 						                        "$set": {
-						                       	'parser_id': obj['_id'],
-						                       	'DENLOC':obj['DENLOC'],
-						                       	'comparison': distance,
-						                       	'comparison_url':comparison_url
+						                        'parser_type':obj['TIP']
 						                        
 						                    }
 						               }
 						        )
-		elif '_id' in obj:
-			db.sinoplik_romania.update_one(
-						                {"_id": row['_id'] },
-						                    {
-						                        "$set": {
-						                       	'parser_id': obj['_id'],
-						                       	'DENLOC':obj['DENLOC'],
-						                       	
-						                        
-						                    }
-						               }
-						        )
-	except Exception as e:
-		print(str(e))
+			print (obj['TIP'])
 	# try:
 	# 	print(row)
 	# 	if  row and "wiki_center" in row and "gmap_center" in row:
@@ -131,8 +114,8 @@ for row in datar:
 				# 	        )
 			
 
-	# except Exception as e:
-	# 	print(str(e))
+	except Exception as e:
+		print(str(e))
 
 
 

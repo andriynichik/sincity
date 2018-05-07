@@ -147,6 +147,7 @@
                                   
                                     <th><input type="text" data-column="5"  class="search-input-text">distance</th>
                                     <th><input type="text" data-column="6"  class="search-input-text">PARSER_ID</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">parser_type</th> 
 
                                 </tr>
                                 </thead>
@@ -177,7 +178,7 @@
                                                    {% endif %}
                                               <td class="parser_{{item['_id']}}">{{item['parser_id']}}</td>
                                             
-                                    
+                                     <td>{{item['parser_type']}} ({{tip_name[item['parser_type']|string]}})</td>
                                             
                                             <!-- <td></td> -->
                                         </tr>

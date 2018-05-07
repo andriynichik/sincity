@@ -794,8 +794,24 @@ def sinoptik_db_romania():
     #         data_db['type_snig'] = ntype["25_SNIG_TIPO"]
         
         # data.append(array)
-
-    return render_template('admin/romania/sinoptik_db.html', data=data_db, region=region)
+    TIP_Name ={
+            "40":"Judet_admin",
+            "1":"Municipiu_admin_resedinta_judet",
+            "2":"Oras_admin",
+            "3":"Comuna_admin",
+            "4":"Municipiu_admin",
+            "5":"Oras_admin_resedinta_judet",
+            "6":"Sectoarele_Bucuresti",
+            "9":"Town_resedinta_municipiu",
+            "10":"Town_municipiu",
+            "11":"Willage_municipiu",
+            "17":"Town_resedinta_orasului",
+            "18":"Town_orasului",
+            "19":"Willage_orasului",
+            "22":"Willage_resedinta_comuna",
+            "23":"Willage_comuna",
+        }
+    return render_template('admin/romania/sinoptik_db.html', data=data_db, tip_name=TIP_Name, region=region)
 
 
 
