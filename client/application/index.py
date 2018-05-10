@@ -334,6 +334,19 @@ def utility_processor():
 #      return dict(counter=counter)
 
 
+
+@app.route('/urk_delete', methods=['GET', 'POST'])
+@login_required
+def urk_delete():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.ukraine_city_sublocal.remove({"_id" : ObjectId(request.form['id']) })
+    return request.form['id'] 
+
 @app.route('/urk_sub_confirm', methods=['GET', 'POST'])
 @login_required
 def urk_sub_confirm():
@@ -833,6 +846,9 @@ def romania_sindb_other():
     # result = db.romania.find({"DENLOC" : str(parce_data['DENLOC'])}).count()
     # data = {'DENLOC':}
     return json.dumps(rezult)
+
+
+
 
 @app.route('/sinoptik_db_confirm_romania', methods=['GET', 'POST'])
 @login_required

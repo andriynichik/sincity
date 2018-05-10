@@ -193,7 +193,7 @@
 
                                     {% for item in data %}
                                         {% set com = 0 %}
-                                        <tr>        
+                                        <tr id="field_{{item['_id']}}">        
                   
 
 
@@ -209,6 +209,11 @@
                                                 {% else %}
                                                  <button   name="WOFButton" onclick= "cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
                                             {% endif %}
+
+                                                    <button   name="del" onclick= "deleting('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-trash"></i></button></i>
+
+
+                                        </td>
                                                     <td>{{item['name']}}</td>
                                                     <td>{{item['short_name']}}</td>
                                                     <td>{{item['type']}}</td>
@@ -296,6 +301,19 @@
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
 <script type="text/javascript">
+
+
+function deleting(id){
+     var id;
+           $.post( "/urk_delete", { id: id })
+           .done(function( data ) {
+                $('#field_'+id).remove();
+    
+       });
+    
+   
+
+}
 
 function cheked(id) {
        var id;
