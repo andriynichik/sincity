@@ -74,6 +74,9 @@ for csv_file in files:
 
             except KeyboardInterrupt:
                 raise KeyboardInterrupt
-            except:
+            except Exception as e:
                 print('Error')
-                print(line)
+                print(str(e))
+
+
+           

@@ -1160,6 +1160,44 @@ def romania_confirm_del():
 
 #######################################################
 
+@app.route('/belarus_st')
+@login_required
+def belarus_st(region=None, provincia=None):
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data =  db.belarus_st.find()
+    return render_template('admin/belarus/list_st.html', com = 0,  data=data)
+
+
+
+@app.route('/bl_st_confirm', methods=['GET', 'POST'])
+@login_required
+def belarus_st_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
+    return request.form['id'] 
+
+
+
+@app.route('/bl_st_confirm_delete', methods=['GET', 'POST'])
+@login_required
+def belarus_ST_confirm_del():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
+    return request.form['id'] 
+
 @app.route('/matching-belarus-confirm', methods=['GET', 'POST'])
 @login_required
 def belarus_confirm():
