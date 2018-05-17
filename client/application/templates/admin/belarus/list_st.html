@@ -51,30 +51,8 @@
             
             var $modal = $(this),
                 esseyId = e.relatedTarget.id;
-                    $.post( "/romania-reparse_by_geocode", { id: esseyId, type: 'autocomplete' })
-            .done(function( data ) {
-                console.log(JSON.parse(data))
-                arr = JSON.parse(data)
-       txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>';
-                for (var i = 0; i < arr.length; i++){
-                    var obj = arr[i];
-                    // for (var key in obj){
-                    //     var  = key; <input type="radio" name="gender" value="male" checked> Male<br>
-                    //     var attrValue = obj[key];
-                    //      // $modal.find('.edit-content').html(data); onclick='repars("+esseyId+"', '"+obj['place_id']+"')'
-                    // }
-                    console.log(obj)
-                    var place_id =  obj['place_id'];
-                    txt = txt + "<div><p><i onclick='repars(\""+esseyId+"\",\""+place_id+"\")'  class='glyphicon glyphicon-ok' > </i> <a href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/#place_id%3D"+obj['place_id']+"'  target='_blank'>"+obj['description']+"</a></p><p>types - "+ obj['types'] +"</p></p><br>";
-                     
-                }
-                txt = txt+'</form>';
-
-        $modal.find('.edit-content').html(txt);
-
-               
-        //     // alert(data)
-        });
+                 txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>';
+                 $modal.find('.edit-content').html(txt);
             
 //            $.ajax({
 //                cache: false,
@@ -143,8 +121,18 @@
                         - <a class="toggle-link-vis" data-column="7">NAMESELSOVET</a>
                         - <a class="toggle-link-vis" data-column="7">coordinate</a>
                 
-                 
-              
+                          - <a class="toggle-link-vis" data-column="8">gmap_name</a>
+                         - <a class="toggle-link-vis" data-column="9">"gmap_type"</a>
+                        - <a class="toggle-link-vis" data-column="10" style="color: red;" data-hide>"gmap_admin_hierarchy"</a>
+                        - <a class="toggle-link-vis" data-column="11" style="color: red;" data-hide>"gmap_center"</a>
+                        - <a class="toggle-link-vis" data-column="12" style="color: red;" data-hide>"gmap_bounds"</a>
+                      - <a class="toggle-link-vis" data-column="13" style="color: red;" data-hide>"gmap_postal_code"</a>
+                        - <a class="toggle-link-vis" data-column="14" style="color: red;" data-hide>"gmap_requests"</a>
+              - <a class="toggle-link-vis" data-column="15">"distance"</a>
+                      - <a class="toggle-link-vis" data-column="16">NameOblect_C50"</a>
+
+        - <a class="toggle-link-vis" data-column="17">NameSettle_C50"</a>
+
 
                         <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
                     </div>
@@ -163,7 +151,18 @@
                                     <th><input type="text" data-column="5"  class="search-input-text">NAMEDISTR</th>
                                     <th><input type="text" data-column="6"  class="search-input-text">NAMESELSOVET</th>
                                     <th><input type="text" data-column="7"  class="search-input-text">coordinate</th>
-      
+                                    
+                                    <th><input type="text" data-column="8"  class="search-input-text">gmap_name</th>
+                                   <th><input type="text" data-column="9"  class="search-input-text">gmap_type</th>
+                                   <th><input type="text" data-column="10"  class="search-input-text">gmap_admin_hierarchy</th>
+                                   <th><input type="text" data-column="11"  class="search-input-text">gmap_center</th>
+                                   <th><input type="text" data-column="12"  class="search-input-text">gmap_bounds</th>
+                                   <th><input type="text" data-column="13"  class="search-input-text">gmap_postal_code</th>
+                                   <th><input type="text" data-column="14"  class="search-input-text">gmap_requests</th>
+                                    <th><input type="text" data-column="15"  class="search-input-text">distance</th>
+                                     <th><input type="text" data-column="16"  class="search-input-text">NameOblect_C50</th>
+                                      <th><input type="text" data-column="17"  class="search-input-text">NameSettle_C50</th>
+                                                      
                             
 
 
@@ -194,8 +193,8 @@
 
 
                                         </td>
-                                                    <td>{{item['OBJECTNUMBER']}}</td>
-                                                    <td>{{item['NAMEOBJECT']}}</td>
+                                                    <td>{{item['OBJECTNUMBER']}} </td>
+                                                    <td>{{item['NAMEOBJECT']}} <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div></td>
                                                     <td>{{item['Name_Type']}}</td>
                                                     <td>{{item['NAMEREGION']}}</td>
 
@@ -207,8 +206,36 @@
                                                      <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['XCoord']}},{{item['YCoord']}}">{{item['XCoord']}},{{item['YCoord']}}</a> </td>
                            
                                  
+                                   <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}</td>
+                                   <td class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                   <td>{{item['gmap_admin_hierarchy']}}</td>
+                                 
+              {% if 'gmap_center' in item %}
+                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}">{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}</a></td>
+                                                    {% else %}
+                                                    <td></td>
+                                                    {% endif %}
 
-                                          
+
+
+
+                                   <td>{{item['gmap_bounds']}}</td>
+                                   <td>{{item['gmap_postal_code']}}</td>
+                                   <td>{{item['gmap_requests']}}</td>
+
+                                           {% if 'gmap_st_distance' in  item   and  item['gmap_st_distance']  <  2 %}
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['XCoord']}},{{item['YCoord']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_st_distance']}}</a> </td>
+                                                        
+                                                    {% elif 'gmap_st_distance' in  item  %}
+
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['XCoord']}},{{item['YCoord']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_st_distance']}}</a> </td>
+                                                        {% set dist = false %}
+                    {% else %}
+                    
+                                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
+                                                    {% endif %}
+                                   <td>{{item['NameOblect_C50']}}</td>
+                                   <td>{{item['NameSettle_C50']}}</td>
                                             <!-- <td></td> -->
                                         </tr>
                                        
@@ -252,36 +279,47 @@
 
 
 
-   <div id="wiki-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
-                </div>
-   
-                <form>
-                   
-                    <div class="modal-body edit-content">
-                    ...
-
-                    </div>
-                   <input type="text" id="wiki_url" name="wiki_url" placeholder="wiki url">
-                   <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
-                </form>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    
-                </div>
-            </div>
-        </div>
-    </div>
 
 
 </section>
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
 <script type="text/javascript">
+
+
+function by_my_place() {
+    var place_id = $('#place_id_reparse').val();
+    var mongo_id =  $('.mongo_pars_is').text();
+
+    repars(mongo_id, place_id);
+
+}
+
+function repars(mongo_id, place_id) {
+        $.post( "/belarus-st_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+            .done(function( data ) {
+                arr = JSON.parse(data)
+                // console.log(pcs)
+                $('#place_id_reparse').val('');
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
+
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                 // $('.gmap_type_'+mongo_id).html(gm_comp);
+
+             
+
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+        });
+}
 
 function cheked(id) {
        var id;

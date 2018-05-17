@@ -1401,6 +1401,129 @@ def romania_reparse_by_geocode():
 
 
 
+@app.route('/belarus-st_by_geocode', methods=['GET', 'POST'])
+@login_required
+def belarus_st_by_geocode():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    # use_cache = bool(get.get('use_cache', True))
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    doc = db.belarus_st.find_one({"_id" : ObjectId(request.form['id']) })
+    doc_factory = DocFactory(config.get('mongodb'))
+    Key = Keygen()
+    keyAPI =  Key.get_key_place()
+    if not keyAPI:
+        sys.exit()
+    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    config.set(cnf)
+    gmap_config = config.get('googlemaps')
+    # gmap_config.update(language=language)
+    language = 'ru' 
+
+    gmap_loader = LoaderFactory.loader_gmaps_with_cache(gmaps_config=gmap_config,
+                                                            storage_config=config.get('mongodb'))
+    spider = Spider(
+            loader_factory=LoaderFactory,
+            gmap_parser=MapFactory.spain,
+            doc_factory=doc_factory,
+            language=language,
+            config=config,
+            use_cache=True
+    )
+    if request.form['type'] == "autocomplete":
+        if 'NAMESELSOVET' in doc:
+            raw = gmap_loader.by_places(doc['NAMEOBJECT'] + ', '+str(doc['NAMESELSOVET']))
+        else:
+            raw = gmap_loader.by_places(str(doc['NAMEOBJECT']))
+        return json.dumps(raw)
+    else:
+        objects = spider.get_gmap_place_id(request.form['place_id'])
+        gmap = {}
+        gmap = objects[0].get_document()
+        try:
+            if gmap['name'] == doc['NAMEOBJECT']:
+                gmap['comparison'] = True
+            else:
+                gmap['comparison'] = False
+        except Exception as e: 
+            gmap['comparison'] = False
+
+
+
+        if 'XCoord' in doc:
+            
+            distance =  getDistance(gmap['center']['lat'], gmap['center']['lng'], doc["XCoord"],doc["YCoord"])
+            # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+            gmap['gmap_comparison_url'] =("https://www.google.com.ua/maps/dir/"+str(gmap['center']['lat'])+","+str(gmap['center']['lng'])+"/"+str(doc["XCoord"])+","+str(doc["YCoord"])+"")
+        
+        else:
+            distance =  False
+            # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+            gmap['gmap_comparison_url'] = False
+      
+
+        db.belarus_st.update_one(
+                {"_id": ObjectId(request.form['id']) },
+                    {
+                        "$set": {
+                                'gmap_name': gmap.get('name'),
+                                'gmap_admin_hierarchy': gmap.get('admin_hierarchy', {}),
+                                'gmap_center': gmap.get('center'),
+                                'gmap_bounds': gmap.get('bounds'),
+                                'gmap_type': gmap.get('type'),
+                                'gmap_translate': gmap.get('translate'),
+                                'gmap_requests': gmap.get('requests'),
+                                'gmap_code': gmap.get('code'),
+                                'gmap_postal_code': gmap.get('postal_code'),
+                                'gmap_st_distance':distance
+
+                    }
+               }
+        )
+
+        if distance < 2:
+            distance_status = True
+        else:
+            distance_status = False
+        # gmap.pop('_id')
+        # # gmap['15_GMap_center_SNIG_comparison'] = getDistance(gmap['center']['lat'], gmap['center']['lng'],doc['28_SNIG_LATITUD_ETRS89'],doc['29_SNIG_LONGITUD_ETRS89'])
+        # if gmap['15_GMap_center_SNIG_comparison'] <= 1:
+        #     gm_comp_status = True
+        # else:
+        #     gm_comp_status = False
+
+        # types = {"Municipio": ["administrative_area_level_4"],
+        #     "Entidad colectiva" :  ["administrative_area_level_5", "neighborhood"],
+        #     "Otras entidades": ["locality", "neighborhood"],
+        #     "Capital de municipio":["locality"],
+        #     "Entidad singular": ["locality"]}
+        # if gmap.get('type') in types[doc['25_SNIG_TIPO']]:
+        #     gm_type_status = True
+        # else:
+        #     gm_type_status = False
+
+
+
+
+            
+        raw = {
+                "gmap_name": gmap.get('name'),
+                "gmap_name_status" : gmap['comparison'],
+                "gmap_type": gmap.get('type'),
+      
+ 
+                "distance":distance,
+                "distance_status":distance_status,
+                "gmap_comparison_url":gmap['gmap_comparison_url'],
+                'gmap_type': gmap.get('type'),
+
+            }
+        
+        return json.dumps(raw)
+
 @app.route('/belarus-reparse_by_geocode', methods=['GET', 'POST'])
 @login_required
 def belarusreparse_by_geocode():
