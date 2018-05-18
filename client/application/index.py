@@ -1210,6 +1210,20 @@ def belarus_confirm():
     db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_snig":1}})
     return request.form['id'] 
 
+
+
+@app.route('/belarus_st_my_coordinate', methods=['GET', 'POST'])
+@login_required
+def belarus_st_my_coordinate():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"my_lat":request.form['my_lat'], "my_lng":request.form['my_lng'] }})
+    return  json.dumps({'id':request.form['id']})
+
 @app.route('/matching-belarus-confirm_del', methods=['GET', 'POST'])
 @login_required
 def belarus_confirm_del():
