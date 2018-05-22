@@ -1550,12 +1550,13 @@ def belarusreparse_by_geocode():
     db = connection.location
     doc = db.belarus.find_one({"_id" : ObjectId(request.form['id']) })
     doc_factory = DocFactory(config.get('mongodb'))
-    Key = Keygen()
-    keyAPI =  Key.get_key_place()
-    if not keyAPI:
-        sys.exit()
-    cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
-    config.set(cnf)
+    # Key = Keygen()
+    # keyAPI =  Key.get_key_place()
+    # if not keyAPI:
+    #     sys.exit()
+    # cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+    # print (keyAPI)
+    # config.set(cnf)
     gmap_config = config.get('googlemaps')
     # gmap_config.update(language=language)
     language = 'ru' 

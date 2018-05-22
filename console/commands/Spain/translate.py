@@ -40,24 +40,7 @@ df = pd.read_csv('./data/spain/Spain_notDublicate.csv',  skiprows=int(skiprows),
 loader = Loader.loader_with_mongodb(config.get('mongodb'))
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-
-language='es'
-
-def getTranslate(place_id):
-
-
-	Key = Keygen()
-	translate = {}
-	languages = ["uk","ru","ca", "lv",  "en" ,"pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
-	for lang in languages:
-		keyAPI = Key.get_key_geocode()
-		if not keyAPI:
-			sys.exit()	
-	
-
-		cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
-		config.set(cnf)
-		spider = Spider(
+spider = Spider(
 		    loader_factory=LoaderFactory,
 		    gmap_parser=MapFactory.spain,
 		    wiki_parser=True,
@@ -66,6 +49,23 @@ def getTranslate(place_id):
 		    config=config,
 		    use_cache=True
 		)
+language='es'
+
+def getTranslate(place_id):
+
+
+	Key = Keygen()
+	translate = {}
+	languages = ["uk","ru","ca", "lv","en","pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
+	for lang in languages:
+		keyAPI = Key.get_key_geocode()
+		if not keyAPI:
+			sys.exit()	
+	
+
+		cnf = {'googlemaps':{'geocoding':{'key': keyAPI}}}
+		config.set(cnf)
+
 		
 		objects = spider.get_gmap_place_id(place_id)
 		gmap = {}
