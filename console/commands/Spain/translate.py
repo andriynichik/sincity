@@ -48,7 +48,7 @@ def getTranslate(place_id):
 
 	Key = Keygen()
 	translate = {}
-	languages = ["uk","ru","ca", "lv",  "en" ,"pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
+	languages = ["uk","ru","ca", "lv",  "en" ,"pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
 	for lang in languages:
 		keyAPI = Key.get_key_geocode()
 		if not keyAPI:
@@ -102,20 +102,22 @@ try:
 	for doc in db.internal.find({'17_gmap_admin_hierarchy.ADMIN_LEVEL_1.name': 'España'}):
 		try:
 			if 'status' in doc and  doc['status'] == 4:
+				if  not 'translate' in doc:
+					
 				
-				place_id = getPlace_id(doc['gmap_center']['lat'], doc['gmap_center']['lng'], doc['10_gmap_name'], doc['12_gmap_type'])
-				translate_data = getTranslate(place_id)
-				print (translate_data)
-				db.internal.update_one(
-			                {"_id": doc['_id']},
-			                    {
-			                        "$set": {
-			                        "translate": translate_data
-			
-			                        
-			                    }
-			               }
-			        )
+					place_id = getPlace_id(doc['gmap_center']['lat'], doc['gmap_center']['lng'], doc['10_gmap_name'], doc['12_gmap_type'])
+					translate_data = getTranslate(place_id)
+					print (translate_data)
+					db.internal.update_one(
+				                {"_id": doc['_id']},
+				                    {
+				                        "$set": {
+				                        "translate": translate_data
+				
+				                        
+				                    }
+				               }
+				        )
 			# print (doc['12_gmap_type'])
 			# types = {"Municipio": "administrative_area_level_4",
 			# 		"Entidad colectiva" :  "administrative_area_level_5",
