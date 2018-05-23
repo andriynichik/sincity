@@ -307,7 +307,7 @@
                                         {% if 'lat' in item %}
                                                     <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a></td>
                                                     {% else %}
-                                                    <td></td>
+                                                    <td class="wiki_center_{{item['_id']}}"><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div</td>
 
                                                     {% endif %}
 
@@ -389,7 +389,7 @@
                     ...
 
                     </div>
-                   <input type="text" id="wiki_url" name="wiki_url" placeholder="wiki url">
+                   <input type="text" id="wiki_url" name="wiki_url" placeholder="format 00.00,00.00">
                    <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
                 </form>
                 <div class="modal-footer">
@@ -533,28 +533,21 @@ function repars(mongo_id, place_id) {
 }
 
 function repars_wiki() {
-    var wiki_url = $('#wiki_url').val();
+    var coordinate = $('#wiki_url').val();
     var wiki_mongo =  $('.wiki_mongo').text();
-    console.log(wiki_url);
+    console.log(coordinate);
      console.log(wiki_mongo);
      $('#wiki_url').val('');
-         $.post( "/romania-reparse_wiki", { wiki_url: wiki_url, wiki_mongo: wiki_mongo })
+         $.post( "/belarus_my_coordinate", { coordinate: coordinate, id: wiki_mongo })
             .done(function( data ) {
                 $('#wiki-modal').modal('toggle');
                 arr = JSON.parse(data);
                 // var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+,arr['wiki_center']['lng']+"</a>";
-                var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"</a>";
-                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
-               var wiki_name = "<a target='_blank' href='"+wiki_url+"'>"+arr['wiki_name']+"</a>";
-                $('.gmap_comp_status_'+wiki_mongo).html(gm_comp);
-                $('.wiki_name_'+wiki_mongo).html(wiki_name);
+                var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['XCoord']+","+arr['YCoord']+"'>"+arr['XCoord']+","+arr['YCoord']+"</a>";
+     
                 $('.wiki_center_'+wiki_mongo).html(wikicenret);
-            console.log(data);
-                if (arr['distance_status']) {
-                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#9efb9e' );
-                }else{
-                    $('.gmap_comp_status_'+wiki_mongo).css('background-color','#f0b7ab' ); 
-                }
+           
+             
         });
   
 }

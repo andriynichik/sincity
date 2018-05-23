@@ -1211,6 +1211,19 @@ def belarus_confirm():
     return request.form['id'] 
 
 
+@app.route('/belarus_my_coordinate', methods=['GET', 'POST'])
+@login_required
+def belarus_my_coordinate():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    coord =  request.form['coordinate'].split(",")
+
+    db.belarus.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"lat":str(coord[0]), "lng":str(coord[1]) }})
+    return  json.dumps({'id':request.form['id'], "XCoord":coord[0], "YCoord":coord[1] })
 
 @app.route('/belarus_st_my_coordinate', methods=['GET', 'POST'])
 @login_required
