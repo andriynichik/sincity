@@ -305,9 +305,9 @@
 
                                 
                                         {% if 'lat' in item %}
-                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a></td>
+                                                    <td class="wiki_center_{{item['_id']}}"><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a></td>
                                                     {% else %}
-                                                    <td class="wiki_center_{{item['_id']}}"><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div</td>
+                                                    <td class="wiki_center_{{item['_id']}}"><div ><a href="#wikiModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div></td>
 
                                                     {% endif %}
 
