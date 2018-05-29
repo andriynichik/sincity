@@ -73,7 +73,7 @@ def getDistance(adress):
     data = response.json()
     return data
     
-    # try:VqW27511
+    # try:
     #     resp = data['rows'][0]['elements'][0]['distance']['value'] / 1000
     # except Exception as e:
     # VqW27511     resp = 0
@@ -83,7 +83,7 @@ def getDistance(adress):
 
 
 	
-datar = db.belarus.find()
+datar = db.belarus.find({},no_cursor_timeout=True)
 for row in datar:
 	try:
 		
