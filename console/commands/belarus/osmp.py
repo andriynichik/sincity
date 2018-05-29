@@ -66,7 +66,7 @@ def getDistance(adress):
 
     url = 'https://nominatim.openstreetmap.org/search?q='+adress+'&format=json&polygon=1&addressdetails=1'
     print(url)
-    proxy = {'http':'http://200.89.98.38'}
+    proxy = {'http':'http://200.89.98.38:42619'}
     
     response = requests.get(url,  headers=headers, proxies=proxy)
     print (response)
