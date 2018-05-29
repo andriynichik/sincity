@@ -20,7 +20,7 @@ import requests
 import pymongo
 from bson.json_util import dumps
 from lib.keygen.gmap_keygen import Keygen
-
+import random
 
 
 # from lib.parser.wiki.Spain import Spain as ParserSpain
@@ -59,9 +59,17 @@ language='ro'
 
 def getDistance(adress):
     Key = Keygen()
+    headers = {
+    'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0 Mozilla/5.0 (Macintosh; Intel Mac OS X x.y; rv:42.0) Gecko/20100101 Firefox/42.0.',
+    'From': 'youremail@domain.com'  # This is another valid field
+	}
+
     url = 'https://nominatim.openstreetmap.org/search?q='+adress+'&format=json&polygon=1&addressdetails=1'
     print(url)
-    response = requests.get(url)
+    proxy = {'http':'http://135.227.54.242', 'http':'http://91.205.239.120'}
+    
+    response = requests.get(url,  headers=headers, proxies=proxy)
+    print (response)
     data = response.json()
     return data
     
@@ -83,7 +91,7 @@ for row in datar:
 			# print(row)
 			adress = str(''+row['NAMEOBJECT']+','+row['NAMESELSOVET']+' район,'+row['NAMEDISTR']+' область')
 			data =  getDistance(adress)
-			print(data[0]['lat'], data[0]['lon'])
+			print(data)
 			# if not 'gmap_wiki_distance' in row:
 				
 			# # print(row["gmap_center"]["lat"],row["gmap_center"]["lng"], row["wiki_center"]["lat"],row["wiki_center"]["lng"])
