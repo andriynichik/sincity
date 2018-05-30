@@ -308,7 +308,13 @@ def ukraine_city_sub(city_id=None, city_type=None):
     data =  db.ukraine_city_sublocal.find({"city_id": city_id, "type":city_type})
     city_name = db.ukraine_city.find_one({"city_id": city_id})
     c_n = city_name["title"]
-    return render_template('admin/ukraine/list.html', city_name = c_n, com = 0,  data=data)
+    languages = ["uk","ru","ca", "lv","en","pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
+    languages_tr = ["uk","ru","ca", "lv","en","pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
+    languages_td = ["uk","ru","ca", "lv","en","pl" ,"de",  "fr" , "it", "es", "ro", "nl", "el" , "cs", "pt", "hu" , "sv", "bg", "sr", "da", "fi", "sk", "sl", "hr", "lt"]
+    land_defoult = ["uk","ru", "en","pl","de", "fr" , "it", "es", "ro"]
+    return render_template('admin/ukraine/list.html',  start_index=8 ,languages_td = languages_td, languages= enumerate(languages),languages_tr =  enumerate(languages_tr), land_defoult=land_defoult,  city_name = c_n, com = 0,  data=data)
+
+
 
 @app.context_processor
 def utility_processor():

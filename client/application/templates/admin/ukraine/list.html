@@ -119,9 +119,7 @@
 </script>
 <section class="content">
     <div class="container-fluid">
-        <div class="block-header">
-            <h2>Provincia list</h2>
-        </div>
+       
         <!-- Exportable Table -->
         <div class="row clearfix">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -141,7 +139,16 @@
                         - <a class="toggle-link-vis" data-column="5">center</a>
                         - <a class="toggle-link-vis" data-column="6">bounds</a>
                         - <a class="toggle-link-vis" data-column="7">postal_code</a>
-                
+                  
+                    {% for indx , attribut in languages %}
+                    {% set indx = indx + 8 %}
+                         {% if attribut in land_defoult  %}
+                        <a class="toggle-link-vis" data-column="{{indx}}">{{attribut}}</a>
+                        
+                        {% else %}             
+                         <a class="toggle-link-vis" data-column="{{indx}}" style="color: red;" data-hide>{{attribut}}</a>
+                         {% endif %}  
+                    {% endfor %}
                   
               
 
@@ -183,10 +190,15 @@
                                     <th><input type="text" data-column="5"  class="search-input-text">center</th>
                                     <th><input type="text" data-column="6"  class="search-input-text">bounds</th>
                                     <th><input type="text" data-column="7"  class="search-input-text">postal_code</th>
+                                    
       
-                            
-
-
+                                        
+                     {% for indx , attribut in languages_tr %}
+                    {% set indx = indx + 8 %}
+                         <th><input type="text" data-column="{{indx}}"  class="search-input-text">{{attribut}}</th>
+                                        
+                 
+                    {% endfor %}
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -225,7 +237,15 @@
                                                     <td>{{item['bounds']}}</td>
                                                     <td>{{item['postal_code']}}</td>
                            
-                                 
+                                                   
+                                     {% for  attribut in languages_td %}
+                                       
+                                        {% if 'translate' in item  %}
+                                          <td>{{item['translate'][attribut]['name']}}</td>
+                                          {% else %}
+                                          <td></td>
+                                           {% endif %}
+                                        {% endfor %}
 
                                           
                                             <!-- <td></td> -->
