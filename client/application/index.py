@@ -365,6 +365,32 @@ def urk_sub_confirm():
     db.ukraine_city_sublocal.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status":4}})
     return request.form['id'] 
 
+
+@app.route('/urk_translate_update', methods=['GET', 'POST'])
+@login_required
+def urk_translate_update():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.ukraine_city_sublocal.update_one({"_id" : ObjectId(request.form['mongo_id']) },{"$set" : {"translate."+request.form['lang']+".name":request.form['value']}})
+    return request.form['mongo_id']     
+
+@app.route('/urk_translate_confirm', methods=['GET', 'POST'])
+@login_required
+def urk_translate_confirm():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.ukraine_city_sublocal.update_one({"_id" : ObjectId(request.form['mongo_id']) },{"$set" : {"translate."+request.form['lang']+".status":1}})
+    return request.form['mongo_id']   
+
+
 @app.route('/urk_sub_confirm_delete', methods=['GET', 'POST'])
 @login_required
 def urk_sub_confirm_delete():

@@ -237,13 +237,29 @@
                                                     <td>{{item['bounds']}}</td>
                                                     <td>{{item['postal_code']}}</td>
                            
-                                                   
+                                                   {% set id_mongo = item['_id'] %}
                                      {% for  attribut in languages_td %}
                                        
                                         {% if 'translate' in item  %}
-                                          <td>{{item['translate'][attribut]['name']}}</td>
+                                            {% if 'status' in item['translate'][attribut]  %}
+                                                <td style="background-color: rgb(158, 251, 158);" class="translate_{{item['_id']}}_{{attribut}}"> 
+                                                 {% else %}
+                                                  <td class="translate_{{item['_id']}}_{{attribut}}"> 
+                                                     <button type="button" id="{{item['id']}}"  onclick="translate_confirm('{{attribut}}', '{{id_mongo}}')"><i class="glyphicon glyphicon-eye-open"></i></button>
+                                            {% endif %}
+                                           
+                                                  <input type="text" id="{{item['_id']}}_{{attribut}}"  value="{{item['translate'][attribut]['name']}}">
+                   <button type="button" id="{{item['id']}}"  onclick="translate_update('{{attribut}}', '{{id_mongo}}')"><i class="glyphicon glyphicon-pencil"></i></button></td>
                                           {% else %}
-                                          <td></td>
+
+
+                                          <td class="translate_{{item['_id']}}_{{attribut}}">
+
+                                                  <input type="text" id="{{item['_id']}}_{{attribut}}"  value="">
+                   <button type="button" id="{{item['id']}}"  onclick="translate_update('{{attribut}}', '{{id_mongo}}')"><i class="glyphicon glyphicon-pencil"></i></button>
+
+                                          </td>
+
                                            {% endif %}
                                         {% endfor %}
 
@@ -322,6 +338,27 @@
 <script src="/js/pages/tables/jquery-datatable.js"></script>
 <script type="text/javascript">
 
+
+function translate_update(lang, mongo_id) {
+    console.log(lang);
+     console.log(mongo_id);
+     var data_text =  $('#'+mongo_id+'_'+lang).val();
+     console.log(data_text);
+         $.post( "/urk_translate_update", { lang: lang , mongo_id:mongo_id , value: data_text })
+           .done(function( data ) {
+              
+       });
+}
+
+function translate_confirm(lang, mongo_id) {
+    console.log(lang);
+     console.log(mongo_id);
+      
+      $.post( "/urk_translate_confirm", { lang: lang, mongo_id:mongo_id })
+           .done(function( data ) {
+              $('.translate_'+mongo_id+'_'+lang).css('background-color','#9efb9e' );   
+       });
+}
 
 function deleting(id){
      var id;
