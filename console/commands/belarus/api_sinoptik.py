@@ -94,7 +94,7 @@ for row in db.belarus.find({}, no_cursor_timeout=True):
                                   {"_id": row['_id'] },
                                       {
                                           "$set": {
-                                          "sinoptik_db_id":md['sinoptik_id'],
+                                          "sinoptik_db_id":data_isset[str(row['SOATO'])],
                                           
                                           
                                       }
