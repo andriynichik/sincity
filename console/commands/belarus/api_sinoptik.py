@@ -147,7 +147,7 @@ for row in db.belarus.find({}, no_cursor_timeout=True):
                                  "population":"",
                                  "gmt_offset":"",
                                  "dst_offset":"",
-                                 "timezone_id":"2",
+                                 "timezone_id":"339",
                                  "is_resort":"0",
                                  "mountain_id":"0",
                                  "sea_id":"0",
