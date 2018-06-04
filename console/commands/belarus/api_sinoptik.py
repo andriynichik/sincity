@@ -132,7 +132,7 @@ for row in db.belarus.find({}, no_cursor_timeout=True):
                                  "mod_operation":"1",
                                  "district_id":"",
                                  "mod_status":"1",
-                                 "country_id":"40",
+                                 "country_id":"18",
                                  "region_id":sinoptok_region_id,
                                  "geotype_id":"",
                                  "parent_id_title":"",
