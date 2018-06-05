@@ -6,3 +6,4 @@ log
 __pycache__/
 *.py[cod]
 foreca_romania.csv
+foreca.csv
