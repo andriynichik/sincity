@@ -1230,6 +1230,32 @@ def belarus_ST_confirm_del():
     db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_snig":1}})
     return request.form['id'] 
 
+@app.route('/bl_st_confirm_center', methods=['GET', 'POST'])
+@login_required
+def belarus_st_confirm_center():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$set" : {"status_center":1}})
+    return request.form['id'] 
+
+
+
+@app.route('/bl_st_confirm_delete_center', methods=['GET', 'POST'])
+@login_required
+def belarus_ST_confirm_del_center():
+
+    # return render_template('admin/gmap/list.html', country=country)
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    db.belarus_st.update_one({"_id" : ObjectId(request.form['id']) },{"$unset" : {"status_center":1}})
+    return request.form['id'] 
+
 @app.route('/matching-belarus-confirm', methods=['GET', 'POST'])
 @login_required
 def belarus_confirm():

@@ -210,8 +210,17 @@
                                                     <td>{{item['NAMESELSOVET']}}</td>
                                                      <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['XCoord']}},{{item['YCoord']}}">{{item['XCoord']}},{{item['YCoord']}}</a> </td>
                            
+                                        {% if 'status_center' in item and item['status_center'] == 1 %}
+                                               
+                                                 <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}  <div id="status_center_{{item['_id']}}">  <label class="label label-success">Center</label> <button   name="WOFButton" onclick="dell_center('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button></div></td>
+                                                {% else %}
+                                                  <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}<div id="status_center_{{item['_id']}}"> <button   name="WOFButton" onclick= "cheked_center('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i></div></td>
+                                                
+                                            {% endif %}
+
                                  
-                                   <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}</td>
+
+                                   
                                    <td class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
                                    <td>{{item['gmap_admin_hierarchy']}}</td>
                                  
@@ -349,6 +358,25 @@ function repars(mongo_id, place_id) {
                 }else{
                     $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
                 }
+        });
+}
+function cheked_center(id) {
+       var id;
+       // alert(id);
+           $.post( "/bl_st_confirm_center", { id: id })
+           .done(function( data ) {
+                 document.getElementById('status_center_'+id).innerHTML = '<label class="label label-success">Center</label> <button   name="WOFButton" onclick=dell_center("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+    
+       });
+}
+
+function dell_center(id) {
+       var id;
+       // alert(id);
+          $.post( "/bl_st_confirm_delete_center", { id: id })
+            .done(function( data ) {
+                 document.getElementById('status_center_'+id).innerHTML =      '<button   name="WOFButton" onclick=cheked_center("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
+    
         });
 }
 
