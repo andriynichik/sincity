@@ -226,7 +226,7 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
             r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                       # r.json()
             respo = r.json()
-            print (respo['id'])
+            print (respo)
 
                 # db.internal.update_one(
                 #                   {"_id": row['_id'] },
