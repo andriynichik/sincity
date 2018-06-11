@@ -13,15 +13,13 @@ mongo_config = config.get('mongodb')
 conn =  MongoClient(mongo_config['host'], mongo_config['port'])
 db = conn.location
 coll = db.SPAININE
-print (db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ).count())
-for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
+print (db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ).count())
+for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
     
-    if not 'sinoptik_db_id' in row :
+    if  'sinoptik_db_id' in row :
 
         try:
-            if row['25_SNIG_TIPO'] == 'Entidad singular' or row['25_SNIG_TIPO'] == 'Otras entidades' or row['25_SNIG_TIPO'] == 'Capital de municipio':
-        
-                region = {
+            region = {
                       '1':'1917',
                       '2':'1923',
                       '3':'1910',
@@ -76,10 +74,9 @@ for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
                     '51':'4734',
                     '52':'1925',
                   }
-                sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
-                print(sinoptok_region_id)
-                data = {  
-                         "event":"Create",
+            data = {  
+                         "event":"Update",
+                         "id":row['sinoptik_db_id'],
                          "current_sea_id":"0",
                          "lang":"es",
                          "region":"",
@@ -88,7 +85,7 @@ for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
                          "district_id":"",
                          "mod_status":"1",
                          "country_id":"186",
-                         "region_id":sinoptok_region_id,
+                        
                          "geotype_id":"",
                          "parent_id_title":"",
                          "parent_id":"",
@@ -137,7 +134,7 @@ for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
                          "slug_de":"",
                          "slug_301_de":"",
                          "title_es":row['08_INE_Name_w_Article'],
-                         "old_title_es":"",
+                         "old_title_es":row['08_INE_Name_w_Article'],
                          "titleIn_es":row['08_INE_Name_w_Article'],
                          "old_titleIn_es":"",
                          "slug_es":"",
@@ -225,22 +222,22 @@ for row in db.internal.find( { '25_SNIG_TIPO' : {'$exists': True } } ):
                          "version_gb":"1",
                          "accepted":"1"
                       }
-                print (row)
-                r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
+            print (row)
+            r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                       # r.json()
-                respo = r.json()
-                print (respo['id'])
+            respo = r.json()
+            print (respo['id'])
 
-                db.internal.update_one(
-                                  {"_id": row['_id'] },
-                                      {
-                                          "$set": {
-                                          "sinoptik_db_id":respo['id'],
-                                          # "status":0,
+                # db.internal.update_one(
+                #                   {"_id": row['_id'] },
+                #                       {
+                #                           "$set": {
+                #                           "sinoptik_db_id":respo['id'],
+                #                           # "status":0,
                                           
-                                      }
-                                 }
-                          )
+                #                       }
+                #                  }
+                #           )
         except Exception as e:
                 print (str(e))
  
