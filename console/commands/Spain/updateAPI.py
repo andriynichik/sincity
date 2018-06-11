@@ -74,6 +74,8 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
                     '51':'4734',
                     '52':'1925',
                   }
+            sinoptok_region_id = region[str(row['20_SNIG_COD_PROV'])]
+            print(sinoptok_region_id)
             data = {  
                          "event":"Update",
                          "id":row['sinoptik_db_id'],
@@ -85,7 +87,7 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
                          "district_id":"",
                          "mod_status":"1",
                          "country_id":"186",
-                        
+                         "region_id":sinoptok_region_id,
                          "geotype_id":"",
                          "parent_id_title":"",
                          "parent_id":"",
