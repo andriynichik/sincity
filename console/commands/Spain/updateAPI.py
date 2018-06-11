@@ -99,8 +99,8 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
                          "lng":row['29_SNIG_LONGITUD_ETRS89'],
                          "altitude":row['27_SNIG_ALTITUD'],
                          "population":row['09_INE_Población'],
-                         "gmt_offset":"",
-                         "dst_offset":"",
+                         "gmt_offset":"1.00",
+                         "dst_offset":"2.00",
                          "timezone_id":"336",
                          "is_resort":"0",
                          "mountain_id":"0",
@@ -224,7 +224,7 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
                          "version_gb":"1",
                          "accepted":"1"
                       }
-            print (row)
+            print (data)
             r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                       # r.json()
             respo = r.json()
