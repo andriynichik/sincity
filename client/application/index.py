@@ -36,6 +36,15 @@ import urllib.parse
 def escape(val):
     return re.escape(str(val))
 
+@app.route("/change_limit", methods=['GET', 'POST'] )
+@login_required
+def Limites():
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.local
+    db.keygen.update_one({'key':request.form['key'] }, {'$set': {'geocode': 0, "place":0, "distance":0}}, False, True)
+    return request.form['key']
 
 @app.route("/")
 @login_required
@@ -43,7 +52,7 @@ def index():
     return render_template('admin/index.html')
 
 def generate_code():
-    return str(random.randrange(100000, 999999))
+    return str(random.randrange(1000, 9999))
 
 def send_confirmation_code(to_number):
     verification_code = generate_code()

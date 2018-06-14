@@ -22,6 +22,7 @@
                                     <th>геокодинг</th>
                                     <th>плейсес</th>
                                     <th>дістанс</th>
+                                    <th>Операції</th>
                                     
                                 </tr>
                                 </thead>
@@ -31,15 +32,18 @@
                                     <th>геокодинг</th>
                                     <th>плейсес</th>
                                     <th>дістанс</th>
+                                    <th>Операції</th>
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                     {% for item in data %}
                                         <tr>
-                                            <td>{{ item.get("key") }}</td>
+                                            <td>{{ item.get("key") }} </td>
                                             <td>{{ item.get("geocode") }}</td>
                                             <td>{{ item.get("place") }}</td>
                                             <td>{{ item.get("distance") }}</td>
+                                             <td> <button onclick="limites('{{item['key']}}')" type="button" class="btn btn-primary btn-xs" ><i class="glyphicon glyphicon-history"></i>Анулювати</button> </td>
+
                                            
                                             
                                         </tr>
@@ -57,4 +61,16 @@
 </section>
 
 <script src="/js/pages/tables/jquery-datatable.js"></script>
+<script type="text/javascript">
+    function limites(key) {
+       var key;
+
+           $.post( "/change_limit", { key: key })
+           .done(function( data ) {
+                alert('ліміти оновлені');
+       });
+}
+
+
+</script>
 {% endblock %}

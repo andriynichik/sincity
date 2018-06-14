@@ -136,7 +136,7 @@ for row in db.internal.find( { 'sinoptik_db_id' : {'$exists': True } } ):
                          "slug_de":"",
                          "slug_301_de":"",
                          "title_es":row['08_INE_Name_w_Article'],
-                         "old_title_es":row['08_INE_Name_w_Article'],
+                         "old_title_es":"",
                          "titleIn_es":row['08_INE_Name_w_Article'],
                          "old_titleIn_es":"",
                          "slug_es":"",
