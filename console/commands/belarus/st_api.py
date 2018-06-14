@@ -262,7 +262,7 @@ for row in db.belarus_st.find({}, no_cursor_timeout=True):
                     respo = r.json()
                     print (respo)
 
-                    db.belarus.update_one(
+                    db.belarus_st.update_one(
                                           {"_id": row['_id'] },
                                               {
                                                   "$set": {
