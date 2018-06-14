@@ -260,7 +260,7 @@ for row in db.belarus_st.find({}, no_cursor_timeout=True):
                     r = requests.post('https://55-devsin.ukr.net/admin/api_settle.php', json=data)
                               # r.json()
                     respo = r.json()
-                    print (respo['id'])
+                    print (respo)
 
                     db.belarus.update_one(
                                           {"_id": row['_id'] },
