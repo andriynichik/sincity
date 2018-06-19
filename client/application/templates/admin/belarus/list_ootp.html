@@ -1,0 +1,436 @@
+{% extends "admin/layout.html" %}
+{% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+    var table = $('.js-exportable').css("width", "auto").DataTable( {
+        "lengthMenu": [[10, 100, 1000, -1], [10, 100, 1000, "All"]],
+        
+        dom: 'Bflrtip',
+        buttons: [
+            'csv', 'excel', 
+        ],
+
+    } );
+
+
+     $('#dropdown1').on('change', function () {
+                    table.columns(30).search( this.value ).draw();
+                } );
+     $('#dropdown2').on('change', function () {
+                    table.columns(31).search( this.value ).draw();
+                } );
+    $('#dropdown3').on('change', function () {
+                    table.columns(32).search( this.value ).draw();
+                } ); 
+
+
+
+
+
+    $('a.toggle-link-vis').on( 'click', function (e) {
+        e.preventDefault();
+        var column = table.column($(this).attr('data-column'));
+        column.visible(!column.visible());
+
+        if( $(this).css('color') == 'rgb(255, 0, 0)' )  { 
+           
+            $(this).removeAttr("style");
+         
+        } 
+        else { 
+
+            $(this).css('color', 'red');
+
+        }   
+
+        
+    } );
+
+        $('#dataTable').css("width", "auto");
+        $('#edit-modal').on('show.bs.modal', function(e) {
+            
+            var $modal = $(this),
+                esseyId = e.relatedTarget.id;
+                 txt = '<span class="mongo_pars_is">'+esseyId+'</span><form>';
+                 $modal.find('.edit-content').html(txt);
+            
+//            $.ajax({
+//                cache: false,
+//                type: 'POST',
+//                url: 'backend.php',
+//                data: 'EID='+essay_id,
+//                success: function(data) 
+//                {
+                    
+//                }
+//            });
+            
+        })
+
+                $('#wiki-modal').on('show.bs.modal', function(e) {
+                               var $modal = $(this),
+                    esseyId = e.relatedTarget.id;
+                     txt = '<span class="wiki_mongo">'+esseyId+'</span><form>';
+                            $modal.find('.edit-content').html(txt);
+
+                    });
+// $('[name="WOFButton"]').on('click', function(event) {
+//     alert("clicked");
+//     // $('.Main').load('wof.html');
+// });
+// $('[name="WOFButton"]').on('click', function(event) {
+
+
+//     $.post( "/matching-spain-update", { id: $(this).attr('id') })
+//         .done(function( data ) {
+    
+//   });
+// });
+        $('.search-input-text').on( 'keyup click', function () {   // for text boxes
+    var i =$(this).attr('data-column');  // getting column index
+    var v =$(this).val();  // getting search input value
+    table.columns(i).search(v).draw();
+} );
+
+} );
+
+</script>
+<section class="content">
+    <div class="container-fluid">
+        <div class="block-header">
+          
+        </div>
+        <!-- Exportable Table -->
+        <div class="row clearfix">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="card">
+                    <div class="header">
+                        <h2>
+                            {{city_name}}
+                        </h2>
+                    </div>
+                                 <div class="text">
+                        Toggle column :
+                                 
+                        - <a class="toggle-link-vis" data-column="1">OBJECTNUMBER</a>
+                        - <a class="toggle-link-vis" data-column="2">NAMEOBJECT</a>
+                        - <a class="toggle-link-vis" data-column="3">NAMEOBJECT_Edited</a>
+                        - <a class="toggle-link-vis" data-column="4">Name_Type</a>
+                        - <a class="toggle-link-vis" data-column="5">NAMEREGION</a>
+                        - <a class="toggle-link-vis" data-column="6">NAMEDISTR</a>
+                        - <a class="toggle-link-vis" data-column="7">SOATO</a>
+                        - <a class="toggle-link-vis" data-column="8">coordinate</a>
+                
+                          - <a class="toggle-link-vis" data-column="9">gmap_name</a>
+                         - <a class="toggle-link-vis" data-column="10">"gmap_type"</a>
+                        - <a class="toggle-link-vis" data-column="11" style="color: red;" data-hide>"gmap_admin_hierarchy"</a>
+                        - <a class="toggle-link-vis" data-column="12" style="color: red;" data-hide>"gmap_center"</a>
+                        - <a class="toggle-link-vis" data-column="13" style="color: red;" data-hide>"gmap_bounds"</a>
+                      - <a class="toggle-link-vis" data-column="14" style="color: red;" data-hide>"gmap_postal_code"</a>
+                        - <a class="toggle-link-vis" data-column="15" style="color: red;" data-hide>"gmap_requests"</a>
+             <!--  - <a class="toggle-link-vis" data-column="16">"distance"</a>
+                      - <a class="toggle-link-vis" data-column="17">NameOblect_C50"</a>
+
+        - <a class="toggle-link-vis" data-column="18">NameSettle_C50"</a>
+         - <a class="toggle-link-vis" data-column="19">my_gmap_center"</a> -->
+
+
+                        <a class="toggle-link-vis" data-column="100500" style="color: red;" data-hide></a>
+                    </div>
+                    
+               
+                    <div class="body">
+                        <div class="table-responsive">
+                            <table id = "dataTable" class="table table-bordered table-striped table-hover dataTable js-exportable" width="100%" cellspacing="0">
+                                <thead>
+                                <tr>
+                                    <th><input type="text" data-column="0"  class="search-input-text">status</th>
+                                    <th><input type="text" data-column="1"  class="search-input-text">OBJECTNUMBER</th>
+                                    <th><input type="text" data-column="2"  class="search-input-text">NAMEOBJECT</th>
+                                    <th><input type="text" data-column="3"  class="search-input-text">NAMEOBJECT_Edited</th>
+                                    <th><input type="text" data-column="4"  class="search-input-text">Name_Type</th>
+                                    <th><input type="text" data-column="5"  class="search-input-text">NAMEREGION</th>
+                                    <th><input type="text" data-column="6"  class="search-input-text">NAMEDISTR</th>
+                                    <th><input type="text" data-column="7"  class="search-input-text">SOATO</th>
+                                    <th><input type="text" data-column="8"  class="search-input-text">coordinate</th>
+                                    
+                                    <th><input type="text" data-column="9"  class="search-input-text">gmap_name</th>
+                                   <th><input type="text" data-column="10"  class="search-input-text">gmap_type</th>
+                                   <th><input type="text" data-column="11"  class="search-input-text">gmap_admin_hierarchy</th>
+                                   <th><input type="text" data-column="12"  class="search-input-text">gmap_center</th>
+                                   <th><input type="text" data-column="13"  class="search-input-text">gmap_bounds</th>
+                                   <th><input type="text" data-column="14"  class="search-input-text">gmap_postal_code</th>
+                                   <th><input type="text" data-column="15"  class="search-input-text">gmap_requests</th>
+                                    <th><input type="text" data-column="16"  class="search-input-text">distance</th>
+           <!--                           <th><input type="text" data-column="17"  class="search-input-text">NameOblect_C50</th>
+                                      <th><input type="text" data-column="18"  class="search-input-text">NameSettle_C50</th> -->
+                                   <!--    <th><input type="text" data-column="19"  class="search-input-text">my_gmap_center</th> -->
+                                                      
+                            
+
+
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                    {% for item in data %}
+                                        {% set com = 0 %}
+                                        <tr id="field_{{item['_id']}}">        
+                  
+
+
+
+
+                                         
+
+
+                                                 
+                                             <td   id="status_{{item['_id']}}">
+                                             {% if 'status_snig' in item and item['status_snig'] == 1 %}
+                                                <label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick="dell_('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>
+                                                {% else %}
+                                                 <button   name="WOFButton" onclick= "cheked_('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
+                                            {% endif %}
+
+                                                
+
+
+                                        </td>
+                                                    <td>{{item['OBJECTNUMBER']}} </td>
+
+                                                    <td>{{item['NAMEOBJECT']}} <!-- <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div> --></td>
+                                                      <td>{{item['NAMEOBJECT']}}</td>
+                                                    <td>{{item['NAME_Type ']}}</td>
+                                                    <td>{{item['NAMEREGION']}}</td>
+
+                                                   
+
+                                       
+                                                    <td>{{item['NAMEDISTR']}}</td>
+                                                    <td>{{item['SOATO']}}</td>
+                                                     <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['lat']}},{{item['lng']}}">{{item['lat']}},{{item['lng']}}</a> </td>
+                           
+                                        {% if 'status_center' in item and item['status_center'] == 1 %}
+                                               
+                                                 <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}  <div id="status_center_{{item['_id']}}">  <label class="label label-success">Center</label> <button   name="WOFButton" onclick="dell_center('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button></div></td>
+                                                {% else %}
+                                                  <td class="gmap_name_{{item['_id']}}">{{item['gmap_name']}}<!-- <div id="status_center_{{item['_id']}}"> <button   name="WOFButton" onclick= "cheked_center('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i></div> --></td>
+                                                
+                                            {% endif %}
+
+                                 
+
+                                   
+                                   <td class="gmap_type_{{item['_id']}}">{{item['gmap_type']}}</td>
+                                   <td>{{item['gmap_admin_hierarchy']}}</td>
+                                 
+              {% if 'gmap_center' in item %}
+                                                    <td><a target="_blank" href="https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}">{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}</a></td>
+                                                    {% else %}
+                                                    <td></td>
+                                                    {% endif %}
+
+
+
+
+                                   <td>{{item['gmap_bounds']}}</td>
+                                   <td>{{item['gmap_postal_code']}}</td>
+                                   <td>{{item['gmap_requests']}}</td>
+
+                                           {% if 'gmap_st_distance' in  item   and  item['gmap_st_distance']  <  2 %}
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #9efb9e;"><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['XCoord']}},{{item['YCoord']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_st_distance']}}</a> </td>
+                                                        
+                                                    {% elif 'gmap_st_distance' in  item  %}
+
+                                                        <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" ><a target="_blank" href="https://www.google.com.ua/maps/dir/{{item['gmap_center']['lat']}},{{item['gmap_center']['lng']}}/{{item['XCoord']}},{{item['YCoord']}}/data=!3m1!4b1!4m2!4m1!3e2">{{item['gmap_st_distance']}}</a> </td>
+                                                        {% set dist = false %}
+                    {% else %}
+                    
+                                                                         <td class="gmap_comp_status_{{item['_id']}}" style="background-color: #f0b7ab;" > </td>
+                                                    {% endif %}
+                      
+                                                                                
+                                        </tr>
+                                       
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- #END# Exportable Table -->
+
+    </div>
+
+
+   <div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="place_id_reparse" name="place_id_reparse" placeholder="Новий place_id">
+                   <button type="button"  class="btn btn-primary" onclick="by_my_place()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+   <div id="wiki-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                </div>
+   
+                <form>
+                   
+                    <div class="modal-body edit-content">
+                    ...
+
+                    </div>
+                   <input type="text" id="my_lat" name="my_lat" placeholder="lat">
+                   <input type="text" id="my_lng" name="my_lng" placeholder="lng">
+                   <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
+                </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</section>
+
+<script src="/js/pages/tables/jquery-datatable.js"></script>
+<script type="text/javascript">
+
+
+function by_my_place() {
+    var place_id = $('#place_id_reparse').val();
+    var mongo_id =  $('.mongo_pars_is').text();
+
+    repars(mongo_id, place_id);
+
+}
+
+function repars(mongo_id, place_id) {
+        $.post( "/belarus-st_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+            .done(function( data ) {
+                arr = JSON.parse(data)
+                // console.log(pcs)
+                $('#place_id_reparse').val('');
+                $('#edit-modal').modal('toggle');
+                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+
+                var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+                $('.gmap_name_'+mongo_id).html(gmname);
+
+                $('.gmap_type_'+mongo_id).html(arr['gmap_type']);
+                $('.gmap_comp_status_'+mongo_id).html(gm_comp);
+                 // $('.gmap_type_'+mongo_id).html(gm_comp);
+
+             
+
+                if (arr['distance_status']) {
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#9efb9e' );
+                }else{
+                    $('.gmap_comp_status_'+mongo_id).css('background-color','#f0b7ab' ); 
+                }
+        });
+}
+function cheked_center(id) {
+       var id;
+       // alert(id);
+           $.post( "/bl_st_confirm_center", { id: id })
+           .done(function( data ) {
+                 document.getElementById('status_center_'+id).innerHTML = '<label class="label label-success">Center</label> <button   name="WOFButton" onclick=dell_center("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+    
+       });
+}
+
+function dell_center(id) {
+       var id;
+       // alert(id);
+          $.post( "/bl_st_confirm_delete_center", { id: id })
+            .done(function( data ) {
+                 document.getElementById('status_center_'+id).innerHTML =      '<button   name="WOFButton" onclick=cheked_center("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
+    
+        });
+}
+
+function cheked(id) {
+       var id;
+       // alert(id);
+           $.post( "/bl_st_confirm", { id: id })
+           .done(function( data ) {
+                 document.getElementById('status_'+id).innerHTML = '<label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
+    
+       });
+}
+
+function dell(id) {
+       var id;
+       // alert(id);
+          $.post( "/bl_st_confirm_delete", { id: id })
+            .done(function( data ) {
+                 document.getElementById('status_'+id).innerHTML =      '<button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
+    
+        });
+}
+
+function repars_wiki() {
+    var my_lat = $('#my_lat').val();
+    var my_lng = $('#my_lng').val();
+    var wiki_mongo =  $('.wiki_mongo').text();
+    console.log(my_lat);
+     console.log(my_lng);
+     console.log(wiki_mongo);
+     $('#my_lat').val('');
+     $('#my_lng').val('');
+
+
+         $.post( "/belarus_st_my_coordinate", { id: wiki_mongo, my_lat: my_lat, my_lng:my_lng })
+            .done(function( data ) {
+                $('#wiki-modal').modal('toggle');
+                arr = JSON.parse(data);
+                console.log(data);
+                var mycenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+my_lat+","+my_lng+"'>"+my_lat+","+my_lng+"</a>";
+                $('.wiki_center_'+wiki_mongo).html(mycenret);
+            //     var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"</a>";
+            //     var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
+            //    var wiki_name = "<a target='_blank' href='"+wiki_url+"'>"+arr['wiki_name']+"</a>";
+            //     $('.gmap_comp_status_'+wiki_mongo).html(gm_comp);
+            //     $('.wiki_name_'+wiki_mongo).html(wiki_name);
+            //     $('.wiki_center_'+wiki_mongo).html(wikicenret);
+            // console.log(data);
+            //     if (arr['distance_status']) {
+            //         $('.gmap_comp_status_'+wiki_mongo).css('background-color','#9efb9e' );
+            //     }else{
+            //         $('.gmap_comp_status_'+wiki_mongo).css('background-color','#f0b7ab' ); 
+                }
+        );
+  
+}
+</script>
+
+{% endblock %}

@@ -1212,6 +1212,17 @@ def belarus_st(region=None, provincia=None):
     return render_template('admin/belarus/list_st.html', com = 0,  data=data)
 
 
+@app.route('/belarus_ootp')
+@login_required
+def belarus_belarus_oopt(region=None, provincia=None):
+    config = Config('./config/config.yml')
+    mongo_config = config.get('mongodb')
+    connection = MongoClient(mongo_config['host'], mongo_config['port'])
+    db = connection.location
+    data =  db.belarus_oopt.find()
+    return render_template('admin/belarus/list_ootp.html', com = 0,  data=data)
+
+
 
 @app.route('/bl_st_confirm', methods=['GET', 'POST'])
 @login_required
