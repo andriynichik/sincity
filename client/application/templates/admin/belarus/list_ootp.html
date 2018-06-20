@@ -187,9 +187,9 @@
                                                  
                                              <td   id="status_{{item['_id']}}">
                                              {% if 'status_snig' in item and item['status_snig'] == 1 %}
-                                                <label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick="dell_('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>
+                                                <label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick="dell('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>
                                                 {% else %}
-                                                 <button   name="WOFButton" onclick= "cheked_('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
+                                                 <button   name="WOFButton" onclick= "cheked('{{item['_id']}}')"  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button></i>
                                             {% endif %}
 
                                                 
@@ -198,8 +198,12 @@
                                         </td>
                                                     <td>{{item['OBJECTNUMBER']}} </td>
 
-                                                    <td>{{item['NAMEOBJECT']}} <!-- <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div> --></td>
-                                                      <td>{{item['NAMEOBJECT']}}</td>
+                                                    <td>{{item['NAMEOBJECT']}} <div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#edit-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div></td>
+                                                      {% if 'nawname' in item %}
+                                                      <td id="nawname_{{item['_id']}}">{{item['nawname']}}<div ><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div></td>
+                                                      {% else %}
+                                                      <td id="nawname_{{item['_id']}}">{{item['NAMEOBJECT']}}<div><a href="#myModal" data-toggle="modal" id="{{item['_id']}}" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div></td>
+                                                       {% endif %}
                                                     <td>{{item['NAME_Type ']}}</td>
                                                     <td>{{item['NAMEREGION']}}</td>
 
@@ -270,7 +274,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title" id="myModalLabel">EDIT</h4>
+                    <h4 class="modal-title" id="myModalLabel">edit by GOOGLE PLACE ID</h4>
                 </div>
    
                 <form>
@@ -305,8 +309,8 @@
                     ...
 
                     </div>
-                   <input type="text" id="my_lat" name="my_lat" placeholder="lat">
-                   <input type="text" id="my_lng" name="my_lng" placeholder="lng">
+                   <input type="text" id="nawname" name="nawname" placeholder="Нова назва">
+ 
                    <button type="button"  class="btn btn-primary" onclick="repars_wiki()">Save changes</button>
                 </form>
                 <div class="modal-footer">
@@ -334,13 +338,13 @@ function by_my_place() {
 }
 
 function repars(mongo_id, place_id) {
-        $.post( "/belarus-st_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
+        $.post( "/belarus-ootp_by_geocode", { id: mongo_id, type: 'geocoder', place_id:place_id })
             .done(function( data ) {
                 arr = JSON.parse(data)
                 // console.log(pcs)
                 $('#place_id_reparse').val('');
                 $('#edit-modal').modal('toggle');
-                var gmname = "<div><a href='#myModal' data-toggle='modal' id="+mongo_id+" data-target='#edit-modal'><i class='glyphicon glyphicon-repeat'></i></a></div>"+ arr['gmap_name'] ;
+                var gmname =  arr['gmap_name'] ;
 
                 var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
                 $('.gmap_name_'+mongo_id).html(gmname);
@@ -381,7 +385,7 @@ function dell_center(id) {
 function cheked(id) {
        var id;
        // alert(id);
-           $.post( "/bl_st_confirm", { id: id })
+           $.post( "/bl_ootp_confirm", { id: id })
            .done(function( data ) {
                  document.getElementById('status_'+id).innerHTML = '<label class="label label-success">Confirmed</label> <button   name="WOFButton" onclick=dell("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-off"></i></button>';
     
@@ -391,7 +395,7 @@ function cheked(id) {
 function dell(id) {
        var id;
        // alert(id);
-          $.post( "/bl_st_confirm_delete", { id: id })
+          $.post( "/bl_ootp_confirm_delete", { id: id })
             .done(function( data ) {
                  document.getElementById('status_'+id).innerHTML =      '<button   name="WOFButton" onclick=cheked("'+id+'")  type="button" class="btn btn-primary btn-xs"><i class="glyphicon glyphicon-ok"></i></button>';
     
@@ -399,23 +403,25 @@ function dell(id) {
 }
 
 function repars_wiki() {
-    var my_lat = $('#my_lat').val();
-    var my_lng = $('#my_lng').val();
+    var nawname = $('#nawname').val();
+   
     var wiki_mongo =  $('.wiki_mongo').text();
-    console.log(my_lat);
-     console.log(my_lng);
+
+     console.log(nawname);
      console.log(wiki_mongo);
-     $('#my_lat').val('');
-     $('#my_lng').val('');
+     $('#nawname').val('');
 
 
-         $.post( "/belarus_st_my_coordinate", { id: wiki_mongo, my_lat: my_lat, my_lng:my_lng })
+
+         $.post( "/belarus_ootp_my_coordinate", { id: wiki_mongo, nawname: nawname })
             .done(function( data ) {
                 $('#wiki-modal').modal('toggle');
                 arr = JSON.parse(data);
                 console.log(data);
-                var mycenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+my_lat+","+my_lng+"'>"+my_lat+","+my_lng+"</a>";
-                $('.wiki_center_'+wiki_mongo).html(mycenret);
+                data = nawname+'<div ><a href="#myModal" data-toggle="modal" id="'+wiki_mongo+'" data-target="#wiki-modal"><i  class="glyphicon glyphicon-repeat"></i></a></div>'
+                                  
+                $('#nawname_'+wiki_mongo).html(data);
+                                  //     $('.wiki_center_'+wiki_mongo).html(wikicenret);
             //     var wikicenret = "<a target='_blank' href='https://google-developers.appspot.com/maps/documentation/utils/geocoder/?hl=ru#q%3D"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"'>"+arr['wiki_center']['lat']+","+arr['wiki_center']['lng']+"</a>";
             //     var gm_comp = "<a target='_blank' href='"+arr['gmap_comparison_url']+"'>"+arr['distance']+"</a>";
             //    var wiki_name = "<a target='_blank' href='"+wiki_url+"'>"+arr['wiki_name']+"</a>";
